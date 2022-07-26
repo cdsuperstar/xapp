@@ -76,7 +76,7 @@ export const useZeroStore = defineStore("zero", {
         if (module[0].name) {
           aCfgs[module[0].name] = module[0] === undefined ? null : module[0];
         }
-      });
+      }, this);
 
       return new Promise((resolve, reject) => {
         resolve(aCfgs);

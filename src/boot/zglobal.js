@@ -1,5 +1,7 @@
 // import Vue from 'vue'
 import { boot } from "quasar/wrappers";
+import { Notify } from "quasar";
+
 if (process.env.DEV) {
   console.log("boot zglobl.js excuted");
 }
@@ -67,7 +69,7 @@ const zglobal = {
     ],
   },
   showMessage(color, position, msgval) {
-    this.self.$q.notify({
+    Notify.create({
       message: msgval,
       color: color,
       textColor: "white",

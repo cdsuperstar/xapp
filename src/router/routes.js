@@ -37,7 +37,15 @@ const routes = [
   {
     path: "/:catchAll(.*)*",
     name: "not-found",
-    component: () => import("pages/Error404.vue"),
+    component: () => import("layouts/DashboardLayout.vue"),
+    children: [
+      {
+        path: "dashboard",
+        name: "dashboard",
+        component: () => import("pages/Index.vue"),
+      },
+    ],
+    // component: () => import("pages/Error404.vue"),
   },
 ];
 

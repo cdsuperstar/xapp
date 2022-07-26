@@ -126,9 +126,11 @@
 
 <script>
 // import { mapActions, mapState } from "vuex";
+import { useZeroStore } from "stores/zero";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import { api } from "boot/axios";
 
 export default {
   name: "Roles",
@@ -154,12 +156,70 @@ export default {
       mPermissions: [],
     };
   },
-  computed: {
-    // ...mapState("zero", ["ZPermissions"]),
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+    };
+  },
+  computed: {},
+  beforeCreate() {
+    const preq = [
+      {
+        module: "role",
+        name: "role.badd",
+        syscfg: {
+          required: false,
+          type: "Boolean",
+          default: null,
+        },
+        title: this.$t("roles.badd"),
+      },
+      {
+        module: "role",
+        name: "role.bDelete",
+        syscfg: {
+          required: false,
+          type: "Boolean",
+          default: null,
+        },
+        title: this.$t("roles.bDelete"),
+      },
+      {
+        module: "role",
+        name: "role.bmodify",
+        syscfg: {
+          required: false,
+          type: "Boolean",
+          default: null,
+        },
+        title: this.$t("roles.bmodify"),
+      },
+      {
+        module: "role",
+        name: "role.bSetTree",
+        syscfg: {
+          required: false,
+          type: "Boolean",
+          default: null,
+        },
+        title: this.$t("roles.bSetTree"),
+      },
+    ];
+    this.store
+      .reqThePermission(preq)
+      .then((res) => {
+        this.mPermissions = res;
+      })
+      .catch((e) => {
+        // console.log(e)
+      });
   },
   created() {
-    this.$router.app.$http
-      .get("/z_role/getSelfOrLowRoles/" + this.ZPermissions.currectrole.id)
+    api
+      .get(
+        "/z_role/getSelfOrLowRoles/" + this.store.ZPermissions.currectrole.id
+      )
       .then((res) => {
         if (res.data.success) {
           this.rowData = res.data.data;
@@ -174,62 +234,10 @@ export default {
   mounted() {
     this.gridApi = this.gridOptions.api;
     this.gridColumnApi = this.gridOptions.columnApi;
-    this.initPermissions();
   },
   methods: {
     // ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
-    initPermissions() {
-      const preq = [
-        {
-          module: "role",
-          name: "role.badd",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("roles.badd"),
-        },
-        {
-          module: "role",
-          name: "role.bDelete",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("roles.bDelete"),
-        },
-        {
-          module: "role",
-          name: "role.bmodify",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("roles.bmodify"),
-        },
-        {
-          module: "role",
-          name: "role.bSetTree",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("roles.bSetTree"),
-        },
-      ];
-
-      this.reqThePermission(preq)
-        .then((res) => {
-          this.mPermissions = res;
-        })
-        .catch((e) => {
-          // console.log(e)
-        });
-    },
+    initPermissions() {},
     initGrid() {
       this.gridOptions = {
         rowHeight: 32,
@@ -295,7 +303,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              this.$router.app.$http
+              api
                 .delete("/z_role/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -345,7 +353,7 @@ export default {
       const selectedData = this.gridApi.getSelectedRows();
       selectedData.forEach((val) => {
         if (val.id === undefined) {
-          this.$router.app.$http
+          api
             .post("/z_role", val)
             .then((res) => {
               // console.log(res.data.data)
@@ -368,7 +376,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          api
             .put("/z_role" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -400,24 +408,22 @@ export default {
       if (selectedData.length === 1 && selectedData[0].id !== undefined) {
         this.loading = true;
         this.rolename = selectedData[0].name;
-        this.Roledata = this.ZPermissions.moduletree;
+        this.Roledata = this.store.ZPermissions.moduletree;
         this.$nextTick(() => {
           this.$refs.myroletree.setExpanded(1, true);
         });
-        this.$router.app.$http
-          .get("/zero/getRoleModules/" + selectedData[0].id)
-          .then((resmy) => {
-            if (resmy.data.success) {
-              this.roleticked = resmy.data.data;
-              this.loading = false;
-              this.$zglobal.showMessage(
-                "positive",
-                "center",
-                this.$t("roles.getrowssuccess")
-              );
-            } else {
-            }
-          });
+        api.get("/zero/getRoleModules/" + selectedData[0].id).then((resmy) => {
+          if (resmy.data.success) {
+            this.roleticked = resmy.data.data;
+            this.loading = false;
+            this.$zglobal.showMessage(
+              "positive",
+              "center",
+              this.$t("roles.getrowssuccess")
+            );
+          } else {
+          }
+        });
       } else {
         this.$zglobal.showMessage(
           "red-5",
@@ -431,7 +437,7 @@ export default {
       this.loading = true;
       var selectedData = this.gridApi.getSelectedRows();
       if (selectedData.length === 1 && selectedData[0].id !== undefined) {
-        this.$router.app.$http
+        api
           .post("/zero/setRoleModules/" + selectedData[0].id, {
             modules: this.roleticked,
           })
@@ -469,7 +475,7 @@ export default {
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .Role-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -493,6 +499,6 @@ export default {
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>
