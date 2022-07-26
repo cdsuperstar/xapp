@@ -41,8 +41,6 @@
     v-bind="dragOptions"
     tag="div"
     class="item-container"
-    @start="onStart"
-    @end="onEnd"
     :list="list"
     :value="value"
     @input="emitter"

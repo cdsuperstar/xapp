@@ -141,7 +141,6 @@
           ></treemenu>
         </div>
       </q-list>
-      <!--      <nested-test v-if="false" v-model="menutree" class="col-8" />-->
       <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
         <q-btn
           dense
@@ -324,10 +323,9 @@
 </template>
 
 <script>
-import { useZeroStore } from "stores/zero";
-
-import treemenu from "../pages/modules/treemenu";
 // import NestedTest from "../pages/modules/nested-tree";
+import { useZeroStore } from "stores/zero";
+import treemenu from "../pages/modules/treemenu";
 import { setCssVar } from "quasar";
 import { defineComponent } from "vue";
 
@@ -368,7 +366,7 @@ export default defineComponent({
   computed: {
     menutree: {
       get() {
-        console.log("Dash moduletree:", this.store.ZPermissions.moduletree);
+        // console.log("Dash moduletree:", this.store.ZPermissions.moduletree);
         return this.store.ZPermissions.moduletree;
       },
       set(value) {},

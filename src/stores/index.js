@@ -10,6 +10,9 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
+if (process.env.DEV) {
+  console.log("stores/index.js excuted");
+}
 
 export default store((/* { ssrContext } */) => {
   const pinia = createPinia();

@@ -15,6 +15,9 @@ import routes from "./routes";
  * async/await or return a Promise which resolves
  * with the Router instance.
  */
+if (process.env.DEV) {
+  console.log("router/index.js excuted");
+}
 
 export default route(function (app, store /* { , ssrContext } */) {
   const createHistory = process.env.SERVER

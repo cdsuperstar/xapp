@@ -44,8 +44,6 @@
       <draggable
         class="dragArea list-group"
         :list="[children]"
-        @start="onStart"
-        @end="onEnd"
         :group="{
           name: 'dragmod',
           pull: 'clone',
