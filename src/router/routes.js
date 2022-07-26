@@ -3,36 +3,18 @@ const routes = [
     path: "/",
     meta: { auth: false },
     component: () => import("layouts/GuestLayout.vue"),
-    children: [{ path: "", component: () => import("pages/auth/Login.vue") }],
-  },
-  {
-    path: "/login",
-    meta: { auth: false },
-    component: () => import("layouts/GuestLayout.vue"),
-    children: [{ path: "", component: () => import("pages/auth/Login.vue") }],
-  },
-  {
-    path: "/register",
-    meta: { auth: false },
-    component: () => import("layouts/GuestLayout.vue"),
     children: [
-      { path: "", component: () => import("pages/auth/Register.vue") },
-    ],
-  },
-  {
-    path: "/forgot",
-    meta: { auth: false },
-    component: () => import("layouts/GuestLayout.vue"),
-    children: [
-      { path: "", component: () => import("pages/auth/password/Forgot.vue") },
-    ],
-  },
-  {
-    path: "/reset",
-    meta: { auth: false },
-    component: () => import("layouts/GuestLayout.vue"),
-    children: [
-      { path: "", component: () => import("pages/auth/password/Reset.vue") },
+      { path: "", component: () => import("pages/auth/Login.vue") },
+      { path: "/login", component: () => import("pages/auth/Login.vue") },
+      { path: "/register", component: () => import("pages/auth/Register.vue") },
+      {
+        path: "/forgot",
+        component: () => import("pages/auth/password/Forgot.vue"),
+      },
+      {
+        path: "/reset",
+        component: () => import("pages/auth/password/Reset.vue"),
+      },
     ],
   },
   {
