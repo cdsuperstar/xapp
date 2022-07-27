@@ -105,7 +105,7 @@
         style="max-width: 120px"
         class="q-ml-md"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @change="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
@@ -145,12 +145,20 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 // import { mapActions } from "vuex";
 import NestedTest from "./nested-tree";
+import { api } from "boot/axios";
+import { useZeroStore } from "stores/zero";
 
 export default {
   name: "Units",
   components: {
     AgGridVue,
     NestedTest,
+  },
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+    };
   },
   data() {
     return {
@@ -171,7 +179,7 @@ export default {
     };
   },
   created() {
-    this.$router.app.$http
+    api
       .get("/z_unit/")
       .then((res) => {
         if (res.data.success) {
@@ -190,7 +198,7 @@ export default {
     this.initPermissions();
   },
   methods: {
-    ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
+    // ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
     initPermissions() {
       const preq = [
         {
@@ -245,7 +253,8 @@ export default {
         },
       ];
 
-      this.reqThePermission(preq)
+      this.store
+        .reqThePermission(preq)
         .then((res) => {
           this.mPermissions = res;
         })
@@ -336,7 +345,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              this.$router.app.$http
+              api
                 .delete("/z_unit/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -394,7 +403,7 @@ export default {
       const selectedData = this.gridApi.getSelectedRows();
       selectedData.forEach((val) => {
         if (val.id === undefined) {
-          this.$router.app.$http
+          api
             .post("/z_unit/", val)
             .then((res) => {
               if (res.data.success) {
@@ -416,7 +425,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          api
             .put("/z_unit/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -444,7 +453,7 @@ export default {
     Unittree() {
       this.loading = true;
       this.DUnitTree = true;
-      this.$router.app.$http
+      api
         .get("/z_unit/getUnitTree")
         .then((res) => {
           if (res.data.success) {
@@ -467,7 +476,7 @@ export default {
     },
     EditUnittree() {
       this.loading = true;
-      this.$router.app.$http
+      api
         .post("/z_unit/setUnitTree/" + this.Unitdata[0].id, this.Unitdata)
         .then((res) => {
           if (res.data.success) {
@@ -493,7 +502,7 @@ export default {
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .Units-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -517,6 +526,6 @@ export default {
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>

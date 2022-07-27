@@ -197,7 +197,7 @@
         style="max-width: 120px"
         class="q-ml-md"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged"
+        @change="onQuickFilterChanged"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
