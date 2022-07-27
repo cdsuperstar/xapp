@@ -164,9 +164,7 @@ export default {
     };
   },
   computed: {},
-  beforeCreate() {
-    this.initPermissions();
-  },
+  beforeCreate() {},
   created() {
     api
       .get(
@@ -184,6 +182,7 @@ export default {
     this.initGrid();
   },
   mounted() {
+    this.initPermissions();
     this.gridApi = this.gridOptions.api;
     this.gridColumnApi = this.gridOptions.columnApi;
   },
