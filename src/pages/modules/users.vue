@@ -26,27 +26,27 @@
             type="text"
             autofocus
             :label="this.$t('auth.register.name')"
-            :error="$v.data.data.name.$error"
+            :error="v$.data.data.name.$error"
             :error-message="this.$t('auth.errors.namenull')"
-            @blur="$v.data.data.name.$touch"
+            @blur="v$.data.data.name.$touch"
           />
           <q-input
             v-model.trim="data.data.email"
             color="secondary"
             type="email"
             :label="this.$t('auth.register.email')"
-            :error="$v.data.data.email.$error"
+            :error="v$.data.data.email.$error"
             :error-message="this.$t('auth.errors.email')"
-            @blur="$v.data.data.email.$touch"
+            @blur="v$.data.data.email.$touch"
           />
           <q-input
             v-model.trim="data.data.password"
             color="secondary"
             type="text"
             :label="this.$t('auth.register.password')"
-            :error="$v.data.data.password.$error"
+            :error="v$.data.data.password.$error"
             :error-message="this.$t('auth.errors.password_length')"
-            @blur="$v.data.data.password.$touch"
+            @blur="v$.data.data.password.$touch"
           />
         </q-card-section>
 
@@ -82,7 +82,7 @@
             flat
             icon="save"
             :label="this.$t('buttons.confirm')"
-            @click="EditUserPermission()"
+            @click="EditUserPermission"
           />
         </q-toolbar>
         <q-separator color="accent" />
@@ -90,11 +90,7 @@
           <q-list v-for="modeule in PermissData" :key="modeule.id" dense>
             <q-item-label
               header
-              style="
-                text-align: left;
-                border-bottom: 3px solid var(--q-color-secondary);
-                padding: 12px;
-              "
+              style="text-align: left; border-bottom: 3px solid; padding: 12px"
               ><q-icon
                 name="widgets"
                 size="25px"
@@ -178,7 +174,7 @@
         class="q-ma-xs"
         icon="person"
         :label="this.$t('buttons.setrole')"
-        @click="ShowRoletree()"
+        @click="ShowRoletree"
       />
       <q-btn
         v-if="mPermissions['users.bsetpermission']"
@@ -187,7 +183,7 @@
         class="q-ma-xs"
         icon="settings"
         :label="this.$t('buttons.setpermission')"
-        @click="SetUserPermisson()"
+        @click="SetUserPermisson"
       />
       <q-space />
       <q-separator
@@ -201,7 +197,7 @@
         style="max-width: 120px"
         class="q-ml-md"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @input="onQuickFilterChanged"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
@@ -249,7 +245,7 @@
             color="secondary"
             icon="save_alt"
             :label="this.$t('buttons.confirm')"
-            @click="EditRolelist()"
+            @click="EditRolelist"
           />
         </q-item-label>
         <q-separator color="accent" />
@@ -281,6 +277,8 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 // import { mapActions, mapState } from "vuex";
 import { email, required, minLength } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
+import { api } from "boot/axios";
+import { useZeroStore } from "stores/zero";
 
 export default {
   name: "Users",
@@ -315,12 +313,18 @@ export default {
       },
     };
   },
-  setup: () => ({ v$: useVuelidate() }),
+  setup() {
+    const store = useZeroStore();
+    return {
+      v$: useVuelidate(),
+      store,
+    };
+  },
   computed: {
-    ...mapState("zero", ["ZPermissions"]),
+    // ...mapState("zero", ["ZPermissions"]),
   },
   created() {
-    this.$router.app.$http
+    api
       .get("/users/")
       .then((res) => {
         if (res.data.success) {
@@ -340,7 +344,7 @@ export default {
     this.initPermissions();
   },
   methods: {
-    ...mapActions("zero", ["reqThePermission"]),
+    // ...mapActions("zero", ["reqThePermission"]),
     initPermissions() {
       const preq = [
         {
@@ -395,7 +399,8 @@ export default {
         },
       ];
 
-      this.reqThePermission(preq)
+      this.store
+        .reqThePermission(preq)
         .then((res) => {
           this.mPermissions = res;
         })
@@ -487,7 +492,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              this.$router.app.$http
+              api
                 .delete("/users/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -535,7 +540,7 @@ export default {
     },
     aDDNewUser() {
       // console.log(this.data.data)
-      this.$router.app.$http
+      api
         .post("/users/", this.data.data)
         .then((res) => {
           // console.log(res)
@@ -564,7 +569,13 @@ export default {
             }
           }
         })
-        .catch((e) => {});
+        .catch((e) => {
+          this.$zglobal.showMessage(
+            "red-7",
+            "center",
+            this.$t("operation.addfailed")
+          );
+        });
       this.DaddUser = false;
     },
     // Dialog end
@@ -573,7 +584,7 @@ export default {
       selectedData.forEach((val) => {
         // console.log(val)
         if (val.id === undefined) {
-          this.$router.app.$http
+          api
             .post("/users/", val)
             .then((res) => {
               if (res.data.success) {
@@ -595,7 +606,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          api
             .put("/users/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -628,8 +639,11 @@ export default {
         selectedData.length > 1
       ) {
         // 获取列表
-        this.$router.app.$http
-          .get("/z_role/getSelfOrLowRoles/" + this.ZPermissions.currectrole.id)
+        api
+          .get(
+            "/z_role/getSelfOrLowRoles/" +
+              this.store.ZPermissions.currectrole.id
+          )
           .then((res) => {
             if (res.data.success) {
               this.Roledata = res.data.data;
@@ -638,18 +652,16 @@ export default {
           });
         // end
         // 获得已有角色
-        this.$router.app.$http
-          .get("/users/getUserRoles/" + selectedData[0].id)
-          .then((resmy) => {
-            if (resmy.data.success) {
-              this.rolechecks = resmy.data.data.map(({ name, id }) => id);
-              this.$zglobal.showMessage(
-                "positive",
-                "center",
-                this.$t("roles.getrowssuccess")
-              );
-            }
-          });
+        api.get("/users/getUserRoles/" + selectedData[0].id).then((resmy) => {
+          if (resmy.data.success) {
+            this.rolechecks = resmy.data.data.map(({ name, id }) => id);
+            this.$zglobal.showMessage(
+              +"positive",
+              "center",
+              this.$t("roles.getrowssuccess")
+            );
+          }
+        });
       } else {
         this.$zglobal.showMessage(
           "red-7",
@@ -660,9 +672,9 @@ export default {
     },
     EditRolelist() {
       var selectedData = this.gridApi.getSelectedRows();
-      var selectarr = selectedData.map(({ name, id }) => id);
+      const selectarr = selectedData.map(({ name, id }) => id);
       // console.log(selectarr, '========', this.rolechecks)
-      this.$router.app.$http
+      api
         .post("/users/setUsersRoles/", {
           users: selectarr,
           roles: this.rolechecks,
@@ -693,7 +705,7 @@ export default {
         this.DaddPermission = true;
         // 获得已有权限
         var selectarr = selectedData.map(({ name, id }) => id);
-        this.$router.app.$http
+        api
           .post("/users/getUsersPermisstionCfgs/", {
             users: selectarr,
           })
@@ -730,7 +742,7 @@ export default {
           }))
         )
         .flat();
-      this.$router.app.$http
+      api
         .post("/users/setUsersPermissionCfgs", {
           users: selectarr,
           permissions: per,
@@ -769,7 +781,7 @@ function pwdMask(params) {
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .User-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -793,6 +805,6 @@ function pwdMask(params) {
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>
