@@ -52,7 +52,7 @@
         style="max-width: 120px"
         class="q-ml-md"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @change="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
@@ -106,13 +106,14 @@
             class="scroll"
           >
             <q-tree
+              class="col-12 col-sm-6"
               ref="myroletree"
               node-key="id"
               label-key="title"
               tick-strategy="strict"
               control-color="warning"
               :nodes="Roledata"
-              :ticked="roleticked"
+              v-model:ticked="roleticked"
             />
           </q-card-section>
           <q-inner-loading :showing="loading">
@@ -164,56 +165,7 @@ export default {
   },
   computed: {},
   beforeCreate() {
-    const preq = [
-      {
-        module: "role",
-        name: "role.badd",
-        syscfg: {
-          required: false,
-          type: "Boolean",
-          default: null,
-        },
-        title: this.$t("roles.badd"),
-      },
-      {
-        module: "role",
-        name: "role.bDelete",
-        syscfg: {
-          required: false,
-          type: "Boolean",
-          default: null,
-        },
-        title: this.$t("roles.bDelete"),
-      },
-      {
-        module: "role",
-        name: "role.bmodify",
-        syscfg: {
-          required: false,
-          type: "Boolean",
-          default: null,
-        },
-        title: this.$t("roles.bmodify"),
-      },
-      {
-        module: "role",
-        name: "role.bSetTree",
-        syscfg: {
-          required: false,
-          type: "Boolean",
-          default: null,
-        },
-        title: this.$t("roles.bSetTree"),
-      },
-    ];
-    this.store
-      .reqThePermission(preq)
-      .then((res) => {
-        this.mPermissions = res;
-      })
-      .catch((e) => {
-        // console.log(e)
-      });
+    this.initPermissions();
   },
   created() {
     api
@@ -236,8 +188,58 @@ export default {
     this.gridColumnApi = this.gridOptions.columnApi;
   },
   methods: {
-    // ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
-    initPermissions() {},
+    initPermissions() {
+      const preq = [
+        {
+          module: "role",
+          name: "role.badd",
+          syscfg: {
+            required: false,
+            type: "Boolean",
+            default: null,
+          },
+          title: this.$t("roles.badd"),
+        },
+        {
+          module: "role",
+          name: "role.bDelete",
+          syscfg: {
+            required: false,
+            type: "Boolean",
+            default: null,
+          },
+          title: this.$t("roles.bDelete"),
+        },
+        {
+          module: "role",
+          name: "role.bmodify",
+          syscfg: {
+            required: false,
+            type: "Boolean",
+            default: null,
+          },
+          title: this.$t("roles.bmodify"),
+        },
+        {
+          module: "role",
+          name: "role.bSetTree",
+          syscfg: {
+            required: false,
+            type: "Boolean",
+            default: null,
+          },
+          title: this.$t("roles.bSetTree"),
+        },
+      ];
+      this.store
+        .reqThePermission(preq)
+        .then((res) => {
+          this.mPermissions = res;
+        })
+        .catch((e) => {
+          // console.log(e)
+        });
+    },
     initGrid() {
       this.gridOptions = {
         rowHeight: 32,
@@ -377,7 +379,7 @@ export default {
             .catch((e) => {});
         } else {
           api
-            .put("/z_role" + val.id, val)
+            .put("/z_role/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({

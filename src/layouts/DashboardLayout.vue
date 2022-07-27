@@ -358,11 +358,13 @@ export default defineComponent({
   },
   setup() {
     const store = useZeroStore();
+
     return {
       // you can return the whole store instance to use it in the template
       store,
     };
   },
+  beforeCreate() {},
   computed: {
     menutree: {
       get() {
@@ -411,40 +413,41 @@ export default defineComponent({
     if (this.$auth.user().usercfg) {
       this.usercfg = JSON.parse(this.$auth.user().usercfg);
     }
-    this.store
-      .getMyPermissions({
-        role: "",
-      })
-      .then((res) => {
-        this.MyRoleList = res.roles;
-        this.routearr = res.modules;
-        if (Array.isArray(this.routearr)) {
-          this.routearr.forEach(function (val) {
-            // push url to router by Luke
-            if (val.url !== "" && val.url !== null) {
-              if (!this.$router.hasRoute(val.name)) {
-                this.$router.addRoute("user", {
-                  path: val.url,
-                  name: val.name,
-                  component: () =>
-                    import("../pages/modules/" + val.url + ".vue"),
-                });
-                // console.log("Route added test:", val);
+    this.$nextTick(() => {
+      this.store
+        .getMyPermissions({
+          role: "",
+        })
+        .then((res) => {
+          this.MyRoleList = res.roles;
+          this.routearr = res.modules;
+          if (Array.isArray(this.routearr)) {
+            this.routearr.forEach(function (val) {
+              // push url to router by Luke
+              if (val.url !== "" && val.url !== null) {
+                if (!this.$router.hasRoute(val.name)) {
+                  this.$router.addRoute("user", {
+                    path: val.url,
+                    name: val.name,
+                    component: () =>
+                      import("../pages/modules/" + val.url + ".vue"),
+                  });
+                  // console.log("Route added test:", val);
+                }
               }
-            }
-          }, this);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+            }, this);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    });
 
     if (this.usercfg?.theme) this.applytheme(this.usercfg?.theme);
     if (this.usercfg?.dark) this.applydarkmode();
   },
   created() {},
   methods: {
-    // ...mapActions("zero", ["getMyPermissions"]),
     setlanguage(lang) {
       this.lang = lang;
     },
@@ -542,6 +545,6 @@ export default defineComponent({
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>
