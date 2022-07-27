@@ -168,7 +168,7 @@ export default {
   created() {
     api
       .get(
-        "/z_role/getSelfOrLowRoles/" + this.store.ZPermissions.currectrole.id
+        "/z_role/getSelfOrLowRoles/" + this.store.ZPermissions?.currectrole?.id
       )
       .then((res) => {
         if (res.data.success) {

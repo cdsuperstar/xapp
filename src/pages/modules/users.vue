@@ -642,7 +642,7 @@ export default {
         api
           .get(
             "/z_role/getSelfOrLowRoles/" +
-              this.store.ZPermissions.currectrole.id
+              this.store.ZPermissions?.currectrole?.id
           )
           .then((res) => {
             if (res.data.success) {
