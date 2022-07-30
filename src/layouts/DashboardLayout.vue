@@ -328,7 +328,6 @@ import { useZeroStore } from "stores/zero";
 import treemenu from "../pages/modules/treemenu";
 import { setCssVar } from "quasar";
 import { defineComponent } from "vue";
-import { storeToRefs } from "pinia";
 
 export default defineComponent({
   name: "Dashboardlayout",

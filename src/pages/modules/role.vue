@@ -126,13 +126,13 @@
 </template>
 
 <script>
-// import { mapActions, mapState } from "vuex";
 import { useZeroStore } from "stores/zero";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "Roles",
   components: {
     AgGridVue,
@@ -472,7 +472,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/

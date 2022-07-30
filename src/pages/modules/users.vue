@@ -274,10 +274,8 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-// import { mapActions, mapState } from "vuex";
 import { email, required, minLength } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
-import { api } from "boot/axios";
 import { useZeroStore } from "stores/zero";
 
 export default {
@@ -324,7 +322,7 @@ export default {
     // ...mapState("zero", ["ZPermissions"]),
   },
   created() {
-    api
+    this.$api
       .get("/users/")
       .then((res) => {
         if (res.data.success) {
@@ -492,7 +490,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              api
+              this.$api
                 .delete("/users/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -540,7 +538,7 @@ export default {
     },
     aDDNewUser() {
       // console.log(this.data.data)
-      api
+      this.$api
         .post("/users/", this.data.data)
         .then((res) => {
           // console.log(res)
@@ -584,7 +582,7 @@ export default {
       selectedData.forEach((val) => {
         // console.log(val)
         if (val.id === undefined) {
-          api
+          this.$api
             .post("/users/", val)
             .then((res) => {
               if (res.data.success) {
@@ -606,7 +604,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          api
+          this.$api
             .put("/users/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -639,7 +637,7 @@ export default {
         selectedData.length > 1
       ) {
         // 获取列表
-        api
+        this.$api
           .get(
             "/z_role/getSelfOrLowRoles/" +
               this.store.ZPermissions?.currectrole?.id
@@ -652,16 +650,18 @@ export default {
           });
         // end
         // 获得已有角色
-        api.get("/users/getUserRoles/" + selectedData[0].id).then((resmy) => {
-          if (resmy.data.success) {
-            this.rolechecks = resmy.data.data.map(({ name, id }) => id);
-            this.$zglobal.showMessage(
-              +"positive",
-              "center",
-              this.$t("roles.getrowssuccess")
-            );
-          }
-        });
+        this.$api
+          .get("/users/getUserRoles/" + selectedData[0].id)
+          .then((resmy) => {
+            if (resmy.data.success) {
+              this.rolechecks = resmy.data.data.map(({ name, id }) => id);
+              this.$zglobal.showMessage(
+                +"positive",
+                "center",
+                this.$t("roles.getrowssuccess")
+              );
+            }
+          });
       } else {
         this.$zglobal.showMessage(
           "red-7",
@@ -674,7 +674,7 @@ export default {
       var selectedData = this.gridApi.getSelectedRows();
       const selectarr = selectedData.map(({ name, id }) => id);
       // console.log(selectarr, '========', this.rolechecks)
-      api
+      this.$api
         .post("/users/setUsersRoles/", {
           users: selectarr,
           roles: this.rolechecks,
@@ -705,7 +705,7 @@ export default {
         this.DaddPermission = true;
         // 获得已有权限
         var selectarr = selectedData.map(({ name, id }) => id);
-        api
+        this.$api
           .post("/users/getUsersPermisstionCfgs/", {
             users: selectarr,
           })
@@ -742,7 +742,7 @@ export default {
           }))
         )
         .flat();
-      api
+      this.$api
         .post("/users/setUsersPermissionCfgs", {
           users: selectarr,
           permissions: per,

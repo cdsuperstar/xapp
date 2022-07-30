@@ -14,8 +14,8 @@
           />
           <q-toolbar-title>
             <span class="text-subtitle1 text-weight-bold">
-              {{ $t("modules.editmodeltree") }}</span
-            >
+              {{ $t("modules.editmodeltree") }}
+            </span>
           </q-toolbar-title>
           <q-btn
             flat
@@ -30,7 +30,7 @@
           style="min-height: 10vh; max-height: 80vh"
           class="scroll"
         >
-          <nested-test v-if="true" v-model="Modeldata" class="col-8" />
+          <nested-test v-if="true" v-model:value="Modeldata" class="col-8" />
         </q-card-section>
         <q-separator color="accent" />
         <q-inner-loading :showing="loading">
@@ -115,7 +115,7 @@
         style="max-width: 100px"
         class="q-ml-xs"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @change="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
@@ -154,10 +154,12 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-// import { mapActions, mapState } from "vuex";
 import XLSX from "xlsx";
 import NestedTest from "./nested-tree";
-export default {
+import { defineComponent } from "vue";
+import { useZeroStore } from "stores/zero";
+
+export default defineComponent({
   name: "Modules",
   components: {
     AgGridVue,
@@ -182,12 +184,19 @@ export default {
       mPermissions: [],
     };
   },
-  computed: {
-    ...mapState("zero", ["ZModules", "ZPermissions"]),
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+    };
   },
+  computed: {},
   created() {
-    this.$router.app.$http
-      .get("/z_module/getSelfLowModules/" + this.ZPermissions.currectrole.id)
+    this.$api
+      .get(
+        "/z_module/getSelfLowModules/" +
+          this.store?.ZPermissions?.currectrole?.id
+      )
       .then((res) => {
         if (res.data.success) {
           // console.log(res.data.data)
@@ -201,13 +210,11 @@ export default {
     this.initGrid();
   },
   mounted() {
-    // console.log(this.ZModules)
     this.gridApi = this.gridOptions.api;
     this.gridColumnApi = this.gridOptions.columnApi;
     this.initPermissions();
   },
   methods: {
-    ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
     initPermissions() {
       const preq = [
         {
@@ -272,7 +279,8 @@ export default {
         },
       ];
 
-      this.reqThePermission(preq)
+      this.store
+        .reqThePermission(preq)
         .then((res) => {
           this.mPermissions = res;
         })
@@ -416,7 +424,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              this.$router.app.$http
+              this.$api
                 .delete("/z_module/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -477,7 +485,7 @@ export default {
       selectedData.forEach((val) => {
         // console.log(val)
         if (val.id === undefined) {
-          this.$router.app.$http
+          this.$api
             .post("/z_module/", val)
             .then((res) => {
               if (res.data.success) {
@@ -499,7 +507,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          this.$api
             .put("/z_module/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -527,11 +535,11 @@ export default {
     Modeltree() {
       this.loading = true;
       this.DModelTree = true;
-      this.$router.app.$http
-        .get("/z_module/getMyMenu/" + this.ZPermissions.currectrole.id)
+      this.$api
+        .get("/z_module/getMyMenu/" + this.store.ZPermissions?.currectrole?.id)
         .then((res) => {
           if (res.data.success) {
-            // console.log(res.data.data)
+            // console.log("modules.vue getMyMenu: ", res.data.data);
             this.Modeldata = res.data.data;
             this.loading = false;
           } else {
@@ -549,12 +557,14 @@ export default {
     },
     EditModeltree() {
       this.loading = true;
-      this.$router.app.$http
+      this.$api
         .post("/z_module/setModuleTree/" + this.Modeldata[0].id, this.Modeldata)
         .then((res) => {
           if (res.data.success) {
             this.loading = false;
-            this.getMyPermissions({ role: this.ZPermissions.currectrole.name });
+            this.store.getMyPermissions({
+              role: this.store.ZPermissions?.currectrole?.name,
+            });
             this.DModelTree = false;
             this.$zglobal.showMessage("positive", "center", this.$t("success"));
           }
@@ -571,7 +581,7 @@ export default {
         });
     },
   },
-};
+});
 </script>
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
