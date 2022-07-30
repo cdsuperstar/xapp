@@ -45,7 +45,7 @@
                 padding: 6px;
               "
               :class="
-                ro.name == store.ZPermissions.currectrole.name
+                ro.name == store?.ZPermissions?.currectrole?.name
                   ? 'text-primary'
                   : 'text-grey-7'
               "
@@ -328,6 +328,7 @@ import { useZeroStore } from "stores/zero";
 import treemenu from "../pages/modules/treemenu";
 import { setCssVar } from "quasar";
 import { defineComponent } from "vue";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   name: "Dashboardlayout",
@@ -335,7 +336,8 @@ export default defineComponent({
   data() {
     return {
       routearr: [],
-      MyRoleList: null,
+      MyRoleList: [],
+      blRouterReady: false,
       usercfg: { theme: "blue", dark: false },
       themeoptions: this.$tm("menu.themeoptions"),
       left: false,
@@ -360,24 +362,25 @@ export default defineComponent({
     const store = useZeroStore();
 
     return {
-      // you can return the whole store instance to use it in the template
       store,
+      // you can return the whole store instance to use it in the template
     };
   },
   beforeCreate() {},
   computed: {
     menutree: {
       get() {
-        // console.log("Dash moduletree:", this.store.ZPermissions.moduletree);
-        return this.store.ZPermissions.moduletree;
+        if (this.blRouterReady) {
+          return this.store?.ZPermissions?.moduletree;
+        } else {
+          return [];
+        }
       },
-      set(value) {},
     },
     MyHistoryList: {
       get() {
         let tmphistory = [];
-        // if (this.ZOptHist.length > 0) {
-        if (-1 > 0) {
+        if (this.store?.ZOptHist?.length > 0) {
           tmphistory = this.store.ZOptHist;
         }
         return tmphistory;
@@ -386,13 +389,13 @@ export default defineComponent({
     },
     menuB: {
       get() {
-        return this.store.ZPermissions.modules;
+        return this.store?.ZPermissions?.modules;
       },
       set(value) {},
     },
     currectRole: {
       get() {
-        return this.store.ZPermissions.currectrole;
+        return this.store?.ZPermissions?.currectrole;
       },
     },
   },
@@ -413,7 +416,7 @@ export default defineComponent({
     if (this.$auth.user().usercfg) {
       this.usercfg = JSON.parse(this.$auth.user().usercfg);
     }
-    this.$nextTick(() => {
+    this.$router.isReady().then(() => {
       this.store
         .getMyPermissions({
           role: "",
@@ -436,10 +439,12 @@ export default defineComponent({
                 }
               }
             }, this);
+            this.blRouterReady = true;
           }
+          // this.store.getMyPermissions({ role: "" });
         })
         .catch((e) => {
-          console.log(e);
+          console.log("Dashboard getMyPermissions ERROR", e);
         });
     });
 

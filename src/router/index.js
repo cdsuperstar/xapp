@@ -1,6 +1,8 @@
 import { route } from "quasar/wrappers";
+
 import {
   createRouter,
+  useRoute,
   createMemoryHistory,
   createWebHistory,
   createWebHashHistory,
@@ -18,8 +20,9 @@ import routes from "./routes";
 if (process.env.DEV) {
   console.log("router/index.js excuted");
 }
+const Route = useRoute();
 
-export default route(function (app, store /* { , ssrContext } */) {
+export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : process.env.VUE_ROUTER_MODE === "history"
@@ -36,21 +39,6 @@ export default route(function (app, store /* { , ssrContext } */) {
     history: createHistory(
       process.env.MODE === "ssr" ? void 0 : process.env.VUE_ROUTER_BASE
     ),
-  });
-
-  Router.beforeEach((to, from, next) => {
-    if (process.env.DEV) {
-      console.log("router/index.s From to check:", from.name, to.name); //, app.auth.check());
-    }
-    if (
-      to.matched.some((record) => record.meta.requireAuth) &&
-      !store.getters["auth/isSignedIn"]
-    ) {
-      // next({ name: "account-signin", query: { next: to.fullPath } });
-      next({ name: "dashboard" });
-    } else {
-      next();
-    }
   });
 
   return Router;

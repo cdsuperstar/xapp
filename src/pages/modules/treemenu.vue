@@ -64,7 +64,8 @@
 </template>
 <script>
 import { VueDraggableNext } from "vue-draggable-next";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "Treemenu",
   components: { draggable: VueDraggableNext },
   props: ["children", "depth"],
@@ -86,5 +87,5 @@ export default {
       return true;
     },
   },
-};
+});
 </script>

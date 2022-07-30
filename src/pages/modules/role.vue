@@ -131,7 +131,6 @@ import { useZeroStore } from "stores/zero";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import { api } from "boot/axios";
 
 export default {
   name: "Roles",
@@ -166,7 +165,7 @@ export default {
   computed: {},
   beforeCreate() {},
   created() {
-    api
+    this.$api
       .get(
         "/z_role/getSelfOrLowRoles/" + this.store.ZPermissions?.currectrole?.id
       )
@@ -354,7 +353,7 @@ export default {
       const selectedData = this.gridApi.getSelectedRows();
       selectedData.forEach((val) => {
         if (val.id === undefined) {
-          api
+          this.$api
             .post("/z_role", val)
             .then((res) => {
               // console.log(res.data.data)
@@ -413,18 +412,20 @@ export default {
         this.$nextTick(() => {
           this.$refs.myroletree.setExpanded(1, true);
         });
-        api.get("/zero/getRoleModules/" + selectedData[0].id).then((resmy) => {
-          if (resmy.data.success) {
-            this.roleticked = resmy.data.data;
-            this.loading = false;
-            this.$zglobal.showMessage(
-              "positive",
-              "center",
-              this.$t("roles.getrowssuccess")
-            );
-          } else {
-          }
-        });
+        this.$api
+          .get("/zero/getRoleModules/" + selectedData[0].id)
+          .then((resmy) => {
+            if (resmy.data.success) {
+              this.roleticked = resmy.data.data;
+              this.loading = false;
+              this.$zglobal.showMessage(
+                "positive",
+                "center",
+                this.$t("roles.getrowssuccess")
+              );
+            } else {
+            }
+          });
       } else {
         this.$zglobal.showMessage(
           "red-5",

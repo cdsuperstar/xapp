@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import { boot } from "quasar/wrappers";
 import { Notify } from "quasar";
+import { useZeroStore } from "stores/zero";
 
 if (process.env.DEV) {
   console.log("boot zglobl.js excuted");
@@ -92,6 +93,39 @@ const zglobal = {
     }
   },
 };
-export default boot(({ app }) => {
+export default boot(async ({ app, router, store }) => {
+  router.beforeEach((to, from, next) => {
+    if (process.env.DEV) {
+      console.log(
+        "boot/zglobal.js From-to check: ",
+        from.name,
+        "-->",
+        to.name,
+        " Authed check: ",
+        app.config.globalProperties.$auth.check()
+      );
+    }
+    const zero = useZeroStore();
+    // 加入历史记录
+    zero.setZOptHist(to.name);
+
+    if (
+      to.matched.some((record) => record.meta.requireAuth) &&
+      !app.config.globalProperties.$auth.check()
+    ) {
+      // next({ name: "account-signin", query: { next: to.fullPath } });
+      next({ name: "login" });
+    } else if (
+      app.config.globalProperties.$auth.check() &&
+      to.name === "not-found"
+    ) {
+      next({
+        name: "dashboard",
+      });
+    } else {
+      console.log("boot/zglobal.js: Router in matched to:", to.name);
+      next();
+    }
+  });
   app.config.globalProperties.$zglobal = zglobal;
 });

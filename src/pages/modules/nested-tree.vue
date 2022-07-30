@@ -58,7 +58,8 @@
 
 <script>
 import { VueDraggableNext } from "vue-draggable-next";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "NestedTree",
   components: {
     draggable: VueDraggableNext,
@@ -95,5 +96,5 @@ export default {
       this.$emit("input", value);
     },
   },
-};
+});
 </script>
