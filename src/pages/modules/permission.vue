@@ -30,16 +30,11 @@
           style="min-height: 10vh; max-height: 80vh"
           class="scroll"
         >
-          <JsonEditor
+          <JsonEditorVue
             v-model="jsonData"
             style="border: 1px dashed #b5b5b5; padding-left: 1px"
-            :options="{
-              confirmText: 'confirm',
-              cancelText: 'cancel',
-            }"
-            :obj-data="jsonData"
           >
-          </JsonEditor>
+          </JsonEditorVue>
         </q-card-section>
         <q-separator color="accent" />
         <q-inner-loading :showing="loading">
@@ -152,7 +147,7 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-// import { mapActions } from "vuex";
+import { useZeroStore } from "stores/zero";
 
 export default {
   name: "Permission",
@@ -176,8 +171,14 @@ export default {
       mPermissions: [],
     };
   },
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+    };
+  },
   created() {
-    this.$router.app.$http
+    this.$api
       .get("/z_permission/")
       .then((res) => {
         if (res.data.success) {
@@ -196,7 +197,6 @@ export default {
     this.initPermissions();
   },
   methods: {
-    ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
     initPermissions() {
       const preq = [
         {
@@ -251,7 +251,8 @@ export default {
         },
       ];
 
-      this.reqThePermission(preq)
+      this.store
+        .reqThePermission(preq)
         .then((res) => {
           this.mPermissions = res;
         })
@@ -346,7 +347,7 @@ export default {
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              this.$router.app.$http
+              this.$api
                 .delete("/z_permission/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -404,7 +405,7 @@ export default {
       const selectedData = this.gridApi.getSelectedRows();
       selectedData.forEach((val) => {
         if (val.id === undefined) {
-          this.$router.app.$http
+          this.$api
             .post("/z_permission/", val)
             .then((res) => {
               if (res.data.success) {
@@ -426,7 +427,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          this.$api
             .put("/z_permission/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -467,7 +468,14 @@ export default {
       }
       this.loading = false;
     },
-    EditJSON() {},
+    EditJSON() {
+      var selectedData = this.gridApi.getSelectedRows();
+      if (selectedData.length === 1 && selectedData[0].id !== undefined) {
+        selectedData[0].syscfg = JSON.stringify(this.jsonData);
+        this.gridApi.refreshCells();
+        this.DJsonEditor = false;
+      }
+    },
     // JSON format print
   },
 };
@@ -475,7 +483,7 @@ export default {
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .Permission-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -499,6 +507,6 @@ export default {
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>

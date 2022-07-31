@@ -2,6 +2,8 @@
 import { boot } from "quasar/wrappers";
 import { Notify } from "quasar";
 import { useZeroStore } from "stores/zero";
+import { Print } from "vue-print-nb";
+import JsonEditorVue from "json-editor-vue";
 
 if (process.env.DEV) {
   console.log("boot zglobl.js excuted");
@@ -127,5 +129,8 @@ export default boot(async ({ app, router, store }) => {
       next();
     }
   });
+  app.use(JsonEditorVue);
+  app.use(Print);
+
   app.config.globalProperties.$zglobal = zglobal;
 });
