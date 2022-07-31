@@ -472,7 +472,7 @@ export default {
       var selectedData = this.gridApi.getSelectedRows();
       if (selectedData.length === 1 && selectedData[0].id !== undefined) {
         selectedData[0].syscfg = JSON.stringify(this.jsonData);
-        this.gridApi.refreshCells();
+        this.gridApi.refreshCells(selectedData[0]);
         this.DJsonEditor = false;
       }
     },
