@@ -2,42 +2,42 @@
   <draggable
     v-bind="dragOptions"
     tag="div"
-    @start="dragging = true"
-    @end="dragging = false"
     class="item-container"
-    :list="list"
-    :value="value"
+    :list="lists"
+    item-key="id"
     @change="emitter"
   >
-    <div v-for="el in realValue" :key="el.id" class="item-group">
-      <div v-ripple class="item">
-        <i class="material-icons" style="font-size: 1.5rem"> {{ el.icon }} </i
-        >&nbsp;&nbsp;
-        <b>{{ el.title }}</b>
+    <template #item="{ element }">
+      <div>
+        <div v-ripple class="item">
+          <i class="material-icons" style="font-size: 1.5rem">
+            {{ element.icon }} </i
+          >&nbsp;&nbsp;
+          <b>{{ element.title }}</b>
+        </div>
+        <nested-tree class="item-sub" v-model:lists="element.children" />
       </div>
-      <nested-tree class="item-sub" v-model:list="el.children" />
-    </div>
+    </template>
   </draggable>
 </template>
 
 <script>
-import { VueDraggableNext } from "vue-draggable-next";
+import draggable from "vuedraggable";
 
 export default {
   name: "NestedTree",
   components: {
-    draggable: VueDraggableNext,
+    draggable,
   },
-  data() {
-    dragging: false;
-  },
+  data() {},
+  mounted() {},
   props: {
     value: {
       required: false,
       type: Array,
       default: null,
     },
-    list: {
+    lists: {
       required: false,
       type: Array,
       default: null,
@@ -49,6 +49,7 @@ export default {
         animation: 0,
         group: "description",
         disabled: false,
+        ghostClass: "ghost",
       };
     },
     // this.value when input = v-model
@@ -103,5 +104,9 @@ export default {
 }
 .material-icons {
   color: var(--q-primary);
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
 }
 </style>

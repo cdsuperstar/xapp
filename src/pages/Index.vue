@@ -12,24 +12,35 @@
           style="width: 2rem; height: 2rem"
           filter="ignore-elements"
           :list="droplist"
-          group="dragmod"
+          :group="{
+            name: 'dragmod',
+          }"
         >
-          <q-card flat>
-            <q-card-section horizontal align="center">
-              <q-list padding>
-                <q-item-section
-                  class="rounded-borders"
-                  style="width: 2rem; height: 2rem; border: 1px dashed #ebebeb"
-                >
-                  <q-icon
-                    name="delete_sweep"
-                    color="blue-grey-3"
-                    style="font-size: 2rem; padding: 5px"
-                  ></q-icon>
-                </q-item-section>
-              </q-list>
-            </q-card-section>
-          </q-card>
+          <template #item="{ element }">
+            <div :name="element.name"></div>
+          </template>
+          <template #footer>
+            <q-card flat>
+              <q-card-section horizontal align="center">
+                <q-list padding>
+                  <q-item-section
+                    class="rounded-borders"
+                    style="
+                      width: 2rem;
+                      height: 2rem;
+                      border: 1px dashed #ebebeb;
+                    "
+                  >
+                    <q-icon
+                      name="delete_sweep"
+                      color="blue-grey-4"
+                      style="font-size: 2rem; padding: 5px"
+                    ></q-icon>
+                  </q-item-section>
+                </q-list>
+              </q-card-section>
+            </q-card>
+          </template>
         </draggable>
       </q-toolbar>
       <q-card-section
@@ -45,38 +56,43 @@
           class="row"
           style="width: 300px; min-height: 83px; margin-top: 5px"
           :list="modulelist"
+          item-key="id"
           delay="1000"
+          ghost-class="ghost"
           touchStartThreshold="5"
-          group="dragmod"
+          :sort="true"
+          :group="{
+            name: 'dragmod',
+          }"
           @change="dataunique"
           @remove="delmodu"
         >
-          <q-card
-            v-for="element in modulelist"
-            :key="element.id"
-            flat
-            class="col-3"
-            style="cursor: pointer"
-            @click="linktoURL(element.url)"
-          >
-            <q-card-section horizontal align="center">
-              <q-list padding>
-                <q-item-section
-                  class="rounded-borders bg-primary"
-                  style="width: 3rem; height: 3rem"
-                >
-                  <q-icon
-                    :name="element.icon"
-                    color="white"
-                    style="font-size: 2rem; padding: 5px"
-                  ></q-icon>
-                </q-item-section>
-                <q-item-section style="margin-left: 1px; font-size: xx-small">
-                  {{ element.title }}
-                </q-item-section>
-              </q-list>
-            </q-card-section>
-          </q-card>
+          <template #item="{ element }">
+            <q-card
+              flat
+              class="col-3"
+              style="cursor: pointer"
+              @click="linktoURL(element.url)"
+            >
+              <q-card-section horizontal align="center">
+                <q-list padding>
+                  <q-item-section
+                    class="rounded-borders bg-primary"
+                    style="width: 3rem; height: 3rem"
+                  >
+                    <q-icon
+                      :name="element.icon"
+                      color="white"
+                      style="font-size: 2rem; padding: 5px"
+                    ></q-icon>
+                  </q-item-section>
+                  <q-item-section style="margin-left: 1px; font-size: xx-small">
+                    {{ element.title }}
+                  </q-item-section>
+                </q-list>
+              </q-card-section>
+            </q-card>
+          </template>
         </draggable>
       </q-card-section>
     </q-card>
@@ -117,14 +133,13 @@
 <script>
 // import { mapState } from "vuex";
 import { useZeroStore } from "stores/zero";
-import { VueDraggableNext } from "vue-draggable-next";
+import draggable from "vuedraggable";
 import { defineComponent } from "vue";
 // import VeRadar from "v-charts/lib/radar.common.js";
 // import VePie from "v-charts/lib/pie.common.js";
 // import VeMap from "v-charts/lib/map.common.js";
 // import VeHistogram from "v-charts/lib/histogram.common.js";
 // import VeLine from "v-charts/lib/line.common.js";
-import { api } from "boot/axios";
 
 // branch test
 export default defineComponent({
@@ -135,7 +150,7 @@ export default defineComponent({
     // VeMap,
     // VeLine,
     // VeRadar,
-    draggable: VueDraggableNext,
+    draggable,
   },
   data() {
     return {
@@ -162,7 +177,6 @@ export default defineComponent({
     };
   },
   computed: {
-    // ...mapState("zero", ["ZPermissions"]),
     modulelist: {
       get: function () {
         let tmpObjs = [];
@@ -170,7 +184,7 @@ export default defineComponent({
           this.usercfg?.quickapplication !== undefined &&
           this.store.ZPermissions?.modules !== undefined
         ) {
-          tmpObjs = this.usercfg?.quickapplication?.filter(
+          tmpObjs = this.usercfg.quickapplication.filter(
             (obj) =>
               this.store.ZPermissions.modules.filter((ob) => ob.id === obj.id)
                 .length === 1
@@ -284,7 +298,7 @@ export default defineComponent({
       if (tmpUsercfg === null) tmpUsercfg = {};
       tmpUsercfg.quickapplication = this.modulelist;
       if (tmpUsercfg.quickapplication !== null) {
-        api
+        this.$api
           .post("/zero/setMyUsercfg/", {
             usercfg: JSON.stringify(tmpUsercfg),
           })
@@ -313,7 +327,7 @@ export default defineComponent({
       }
     },
     delmodu(evt) {
-      // console.log(this.droplist, '++++++++++del')
+      this.usercfg.quickapplication.splice(evt.oldIndex, 1);
     },
   },
 });
@@ -323,5 +337,9 @@ export default defineComponent({
   margin: 20px auto;
   width: 350px;
   height: 400px;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
 }
 </style>

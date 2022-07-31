@@ -50,12 +50,15 @@
           put: false,
           touchStartThreshold: 50,
         }"
+        item-key="id"
       >
-        <div :key="children.id" class="list-group-item">
-          <q-item-section avatar>
-            <q-icon :name="children.icon" />
-          </q-item-section>
-        </div>
+        <template #item="{ element }">
+          <div :key="element.id" class="list-group-item">
+            <q-item-section avatar>
+              <q-icon :name="element.icon" />
+            </q-item-section>
+          </div>
+        </template>
       </draggable>
 
       <q-item-section>{{ children.title }}</q-item-section>
@@ -63,11 +66,10 @@
   </div>
 </template>
 <script>
-import { VueDraggableNext } from "vue-draggable-next";
-import { defineComponent } from "vue";
-export default defineComponent({
+import draggable from "vuedraggable";
+export default {
   name: "Treemenu",
-  components: { draggable: VueDraggableNext },
+  components: { draggable },
   props: ["children", "depth"],
   data() {
     return {
@@ -87,5 +89,5 @@ export default defineComponent({
       return true;
     },
   },
-});
+};
 </script>

@@ -30,7 +30,7 @@
           style="min-height: 10vh; max-height: 80vh"
           class="scroll"
         >
-          <nested-test v-if="true" v-model:value="Modeldata" class="col-8" />
+          <nested-test v-if="true" v-model:lists="Modeldata" class="col-8" />
         </q-card-section>
         <q-separator color="accent" />
         <q-inner-loading :showing="loading">
