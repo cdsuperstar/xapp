@@ -182,6 +182,7 @@ export default defineComponent({
       frameworkComponents: null,
       defaultColDef: null,
       mPermissions: [],
+      menuTypes: this.$tm("menu.types"),
     };
   },
   setup() {
@@ -343,7 +344,7 @@ export default defineComponent({
           sortable: true,
           filter: true,
           cellEditor: "agSelectCellEditor",
-          cellEditorParams: { values: Object.keys(this.$t("menu.types")) },
+          cellEditorParams: { values: Object.keys(this.$tm("menu.types")) },
           valueFormatter: this.getSelector,
         },
         {
@@ -406,8 +407,8 @@ export default defineComponent({
     },
     // 导入结束
     getSelector(params) {
-      const mapMenu = this.$t("menu.types");
-      return mapMenu[params.value];
+      // var mapMenu = this.$tm("menu.types");
+      return this.menuTypes[params.value];
     },
     delItems() {
       var selectedData = this.gridApi.getSelectedRows();
@@ -586,7 +587,7 @@ export default defineComponent({
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .Modules-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -610,6 +611,6 @@ export default defineComponent({
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>

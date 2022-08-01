@@ -303,7 +303,7 @@ export default defineComponent({
             selectedData.forEach((val) => {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
-              api
+              this.$api
                 .delete("/z_role/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
@@ -376,7 +376,7 @@ export default defineComponent({
             })
             .catch((e) => {});
         } else {
-          api
+          this.$api
             .put("/z_role/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -439,7 +439,7 @@ export default defineComponent({
       this.loading = true;
       var selectedData = this.gridApi.getSelectedRows();
       if (selectedData.length === 1 && selectedData[0].id !== undefined) {
-        api
+        this.$api
           .post("/zero/setRoleModules/" + selectedData[0].id, {
             modules: this.roleticked,
           })
