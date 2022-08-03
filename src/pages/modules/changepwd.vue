@@ -21,26 +21,26 @@
           v-model.trim="data.oldpwd"
           :label="this.$t('auth.password.change.currentpwd')"
           :type="isPwd ? 'password' : 'text'"
-          :error="$v.data.oldpwd.$error"
+          :error="v$.data.oldpwd.$error"
           :error-message="this.$t('auth.errors.password_length')"
-          @blur="$v.data.oldpwd.$touch"
+          @blur="v$.data.oldpwd.$touch"
         />
         <q-input
           v-model.trim="data.newpwd"
           :type="isPwd ? 'password' : 'text'"
           :label="this.$t('auth.password.change.newpwd')"
-          :error="$v.data.newpwd.$error"
+          :error="v$.data.newpwd.$error"
           :error-message="this.$t('auth.errors.password_length')"
-          @blur="$v.data.newpwd.$touch"
+          @blur="v$.data.newpwd.$touch"
         />
 
         <q-input
           v-model.trim="data.password_confirmation"
           :type="isPwd ? 'password' : 'text'"
           :label="this.$t('auth.register.repeat_password')"
-          :error="$v.data.password_confirmation.$error"
+          :error="v$.data.password_confirmation.$error"
           :error-message="this.$t('auth.errors.password_match')"
-          @blur="$v.data.password_confirmation.$touch"
+          @blur="v$.data.password_confirmation.$touch"
         />
       </q-card-section>
       <q-card-actions align="center">
@@ -80,10 +80,10 @@ export default {
   methods: {
     changepwd() {
       this.data.id = this.$auth.user().id;
-      this.$v.data.$touch();
-      if (!this.$v.data.$error) {
+      this.v$.data.$touch();
+      if (!this.v$.data.$error) {
         this.loading = true;
-        this.$router.app.$http
+        this.$api
           .post("/users/setMyPassword/", this.data)
           .then((res) => {
             this.loading = false;
@@ -121,8 +121,9 @@ export default {
         required,
       },
       password_confirmation: {
-        sameAsPassword: sameAs("newpwd"),
-        required,
+        sameAs: (val, p) => {
+          return p.password_confirmation === p.newpwd;
+        },
       },
     },
   },
