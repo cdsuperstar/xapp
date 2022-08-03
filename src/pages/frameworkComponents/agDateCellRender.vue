@@ -13,13 +13,11 @@
         <q-date
           dense
           mask="YYYY-MM-DD"
+          :landscape="$q.screen.gt.xs"
           :value="params.value"
-          @input="
-            (val) => {
-              params.setValue(val);
-              return false;
-            }
-          "
+          v-model="proxyDate"
+          today-btn
+          @update:model-value="updateDate"
         />
       </q-popup-proxy>
     </q-icon>
@@ -28,7 +26,20 @@
 </template>
 
 <script>
-import Vue from "vue";
+// import { defineComponent } from "vue";
 
-export default Vue.extend({});
+export default {
+  data() {
+    return {
+      proxyDate: this.params.value,
+    };
+  },
+  methods: {
+    updateDate(val) {
+      // console.log("celldebug:", val, this.params.value, this.proxyDate);
+      this.params.setValue(val);
+      return false;
+    },
+  },
+};
 </script>

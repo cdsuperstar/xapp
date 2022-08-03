@@ -114,7 +114,7 @@ export const useZeroStore = defineStore("zero", {
           }
           let histmodel = [];
           if (this.ZPermissions.modules !== undefined) {
-            histmodel = this.ZPermissions.modules.filter(
+            histmodel = this.ZPermissions.modules?.filter(
               (obj) => payload === obj.name
             );
           }

@@ -2,7 +2,7 @@
 import { boot } from "quasar/wrappers";
 import { Notify } from "quasar";
 import { useZeroStore } from "stores/zero";
-import { Print } from "vue-print-nb";
+import print from "vue3-print-nb";
 import JsonEditorVue from "json-editor-vue";
 
 if (process.env.DEV) {
@@ -130,7 +130,7 @@ export default boot(async ({ app, router, store }) => {
     }
   });
   app.use(JsonEditorVue);
-  app.use(Print);
+  app.use(print);
 
   app.config.globalProperties.$zglobal = zglobal;
 });
