@@ -20,9 +20,9 @@
           required
           autofocus
           :label="this.$t('auth.login.email')"
-          :error="this.$v.data.data.username.$error"
+          :error="this.v$.data.data.username.$error"
           :error-message="this.$t('auth.password.forgot.check_email')"
-          @blur="$v.data.data.username.$touch"
+          @blur="v$.data.data.username.$touch"
         />
       </q-card-section>
       <q-card-actions align="center">

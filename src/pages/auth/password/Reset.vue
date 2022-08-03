@@ -21,18 +21,18 @@
           color="light-green-7"
           type="email"
           :label="this.$t('auth.register.email')"
-          :error="$v.data.data.email.$error"
+          :error="v$.data.data.email.$error"
           :error-message="this.$t('auth.errors.email')"
-          @blur="$v.data.data.email.$touch"
+          @blur="v$.data.data.email.$touch"
         />
         <q-input
           v-model.trim="data.data.password"
           color="light-green-7"
           :type="isPwd ? 'password' : 'text'"
           :label="this.$t('auth.password.reset.newpwd')"
-          :error="$v.data.data.password.$error"
+          :error="v$.data.data.password.$error"
           :error-message="this.$t('auth.errors.password_length')"
-          @blur="$v.data.data.password.$touch"
+          @blur="v$.data.data.password.$touch"
         >
           <template v-slot:append>
             <q-icon
@@ -48,9 +48,9 @@
           color="light-green-7"
           :type="isPwd ? 'password' : 'text'"
           :label="this.$t('auth.register.repeat_password')"
-          :error="$v.data.data.password_confirmation.$error"
+          :error="v$.data.data.password_confirmation.$error"
           :error-message="this.$t('auth.errors.password_match')"
-          @blur="$v.data.data.password_confirmation.$touch"
+          @blur="v$.data.data.password_confirmation.$touch"
         >
           <template v-slot:append>
             <q-icon
