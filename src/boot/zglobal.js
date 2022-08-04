@@ -95,7 +95,7 @@ const zglobal = {
     }
   },
 };
-export default boot(async ({ app, router, store }) => {
+export default boot(({ app, router, store }) => {
   router.beforeEach((to, from, next) => {
     if (process.env.DEV) {
       console.log(
@@ -110,7 +110,6 @@ export default boot(async ({ app, router, store }) => {
     const zero = useZeroStore();
     // 加入历史记录
     zero.setZOptHist(to.name);
-
     if (
       to.matched.some((record) => record.meta.requireAuth) &&
       !app.config.globalProperties.$auth.check()
