@@ -412,43 +412,46 @@ export default defineComponent({
   },
   mounted() {
     this.lang = this.langs.filter((lan) => lan.value === this.lang)[0];
-    if (this.$auth.user().usercfg) {
-      this.usercfg = JSON.parse(this.$auth.user().usercfg);
-    }
-    this.$router.isReady().then(() => {
-      this.store
-        .getMyPermissions({
-          role: "",
-        })
-        .then((res) => {
-          this.MyRoleList = res.roles;
-          this.routearr = res.modules;
-          if (Array.isArray(this.routearr)) {
-            this.routearr.forEach(function (val) {
-              // push url to router by Luke
-              if (val.url !== "" && val.url !== null) {
-                if (!this.$router.hasRoute(val.name)) {
-                  this.$router.addRoute("user", {
-                    path: val.url,
-                    name: val.name,
-                    component: () =>
-                      import("../pages/modules/" + val.url + ".vue"),
-                  });
-                  // console.log("Route added test:", val);
+    //如果登录了
+    if (this.$auth.check()) {
+      if (this.$auth.user().usercfg) {
+        this.usercfg = JSON.parse(this.$auth.user().usercfg);
+      }
+      this.$router.isReady().then(() => {
+        this.store
+          .getMyPermissions({
+            role: "",
+          })
+          .then((res) => {
+            this.MyRoleList = res.roles;
+            this.routearr = res.modules;
+            if (Array.isArray(this.routearr)) {
+              this.routearr.forEach(function (val) {
+                // push url to router by Luke
+                if (val.url !== "" && val.url !== null) {
+                  if (!this.$router.hasRoute(val.name)) {
+                    this.$router.addRoute("user", {
+                      path: val.url,
+                      name: val.name,
+                      component: () =>
+                        import("../pages/modules/" + val.url + ".vue"),
+                    });
+                    // console.log("Route added test:", val);
+                  }
                 }
-              }
-            }, this);
-            this.blRouterReady = true;
-          }
-          // this.store.getMyPermissions({ role: "" });
-        })
-        .catch((e) => {
-          console.log("Dashboard getMyPermissions ERROR", e);
-        });
-    });
+              }, this);
+              this.blRouterReady = true;
+            }
+            // this.store.getMyPermissions({ role: "" });
+          })
+          .catch((e) => {
+            console.log("Dashboard getMyPermissions ERROR", e);
+          });
+      });
 
-    if (this.usercfg?.theme) this.applytheme(this.usercfg?.theme);
-    if (this.usercfg?.dark) this.applydarkmode();
+      if (this.usercfg?.theme) this.applytheme(this.usercfg?.theme);
+      if (this.usercfg?.dark) this.applydarkmode();
+    }
   },
   created() {},
   methods: {
@@ -460,25 +463,27 @@ export default defineComponent({
       this.usercfg.theme = color;
 
       let tmpUsercfg = {};
-      const tmpu = this.$auth.user();
-      if (tmpu.usercfg !== undefined) {
-        tmpUsercfg = JSON.parse(this.$auth.user().usercfg);
-        if (tmpUsercfg === null) tmpUsercfg = {};
-        tmpUsercfg.theme = color;
-        tmpUsercfg.dark = this.usercfg.dark;
-      }
+      if (this.$auth.check()) {
+        const tmpu = this.$auth.user();
+        if (tmpu.usercfg !== undefined) {
+          tmpUsercfg = JSON.parse(this.$auth.user().usercfg);
+          if (tmpUsercfg === null) tmpUsercfg = {};
+          tmpUsercfg.theme = color;
+          tmpUsercfg.dark = this.usercfg.dark;
+        }
 
-      this.$api
-        .post("/zero/setMyUsercfg/", {
-          usercfg: JSON.stringify(tmpUsercfg),
-        })
-        .then((res) => {
-          if (res.data.success) {
-            this.$auth.user().usercfg = res.data.data.usercfg;
-            this.usercfg = JSON.parse(this.$auth.user().usercfg);
-            this.applytheme(color);
-          }
-        });
+        this.$api
+          .post("/zero/setMyUsercfg/", {
+            usercfg: JSON.stringify(tmpUsercfg),
+          })
+          .then((res) => {
+            if (res.data.success) {
+              this.$auth.user().usercfg = res.data.data.usercfg;
+              this.usercfg = JSON.parse(this.$auth.user().usercfg);
+              this.applytheme(color);
+            }
+          });
+      }
     },
     applytheme(color) {
       this.$zglobal.colors[color].forEach((item) => {
