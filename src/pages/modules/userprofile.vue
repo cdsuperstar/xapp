@@ -224,7 +224,7 @@
           class="userprile-work"
           flat
           square
-          style="border-left: 1px dashed var(--q-color-secondary)"
+          style="border-left: 1px dashed var(--q-secondary)"
         >
           <q-card-section class="text-subitle2 text-left">
             <q-item style="padding: 4px 4px">
@@ -404,10 +404,12 @@
   </q-page>
 </template>
 <script>
-// import { required } from 'vuelidate/lib/validators'
+// import {  required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
 
 export default {
   name: "UserprofileVue",
+  components: {},
   filters: {
     filterChar: function (value) {
       if (value && value.length > 120) {
@@ -445,6 +447,7 @@ export default {
       loading: false,
     };
   },
+  setup: () => ({ v$: useVuelidate() }),
   loading: false,
   created() {
     this.data.id = this.$auth.user().id;
@@ -452,9 +455,16 @@ export default {
   mounted() {
     this.getmyprofile();
   },
+  computed: {},
   methods: {
+    filterChar(value) {
+      if (value && value.length > 120) {
+        value = value.substring(0, 120) + "...";
+      }
+      return value;
+    },
     getmyprofile() {
-      this.$router.app.$http
+      this.$api
         .get("/profile/getMyProfile/")
         .then((res) => {
           if (res.data.success) {
@@ -476,7 +486,7 @@ export default {
     },
     getunitname() {
       // 得到机构数据
-      this.$router.app.$http.get("/z_unit/").then((res) => {
+      this.$api.get("/z_unit/").then((res) => {
         if (res.data.success) {
           // value and label
           this.unitMap = res.data.data.map((val) => {
@@ -506,31 +516,29 @@ export default {
       // }
       // formData.append('avatar', this.$refs.fileuper.files[0])
       // 用户头像结束
-      this.$v.data.$touch();
-      if (!this.$v.data.$error) {
+      this.v$.data.$touch();
+      if (!this.v$.data.$error) {
         this.loading = true;
         // console.log('formData:', formData)
-        this.$router.app.$http
-          .post("/profile/updateMyProfile/", this.data)
-          .then((res) => {
-            // console.log(res)
-            if (res.data.success === true) {
-              this.loading = false;
-              this.$zglobal.showMessage(
-                "positive",
-                "center",
-                this.$t("auth.users.profile.success")
-              );
-              this.getmyprofile();
-            } else {
-              this.loading = false;
-              this.$zglobal.showMessage(
-                "red-5",
-                "center",
-                this.$t("auth.register.invalid_data") + ":" + res.data.code
-              );
-            }
-          });
+        this.$api.post("/profile/updateMyProfile/", this.data).then((res) => {
+          // console.log(res)
+          if (res.data.success === true) {
+            this.loading = false;
+            this.$zglobal.showMessage(
+              "positive",
+              "center",
+              this.$t("auth.users.profile.success")
+            );
+            this.getmyprofile();
+          } else {
+            this.loading = false;
+            this.$zglobal.showMessage(
+              "red-5",
+              "center",
+              this.$t("auth.register.invalid_data") + ":" + res.data.code
+            );
+          }
+        });
         this.loading = false;
       }
       this.Duserprfile = false;

@@ -6,23 +6,10 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 export default defineComponent({
-  setup() {
-    onMounted(() => {
-      //   loadMapScript(); // 加载百度地图资源
-      // init();
-    });
-    // 初始化地图
-    // const init = () => {
-    //   let Bmap = window.BMapGL;
-    //   var b = new Bmap.Map("allmap");
-    //   b.centerAndZoom(new Bmap.Point(114.048529, 22.757597), 13);
-    //   b.enableScrollWheelZoom(true);
-    //   var a = ["114.066392,22.748699", "114.07991,22.640074"];
-    //   // b.setMapStyleV2({ styleJson: echartsMapList })
-    // };
-  },
+  setup() {},
+  components: {},
   mounted() {
     this.init();
   },

@@ -56,7 +56,7 @@
         text-color="white"
         class="q-ma-xs"
         icon="save"
-        :label="this.$t('buttons.save')"
+        :label="$t('buttons.save')"
         @click="saveItems()"
       />
       <q-btn
@@ -64,7 +64,7 @@
         text-color="white"
         class="q-ma-xs"
         icon="cloud_download"
-        :label="this.$t('buttons.export')"
+        :label="$t('buttons.export')"
         @click="ExportDataAsCVS()"
       />
       <q-separator
@@ -78,7 +78,7 @@
         text-color="white"
         class="q-ma-xs"
         icon="apartment"
-        :label="this.$t('buttons.setuit')"
+        :label="$t('buttons.setuit')"
         @click="Showunittree()"
       />
       <q-btn
@@ -87,7 +87,7 @@
         text-color="white"
         class="q-ma-xs"
         icon="print"
-        :label="this.$t('buttons.print')"
+        :label="$t('buttons.print')"
         @click="printItems()"
       />
       <q-space v-if="$q.screen.gt.xs" />
@@ -96,7 +96,7 @@
         dense
         style="max-width: 120px"
         class="q-ml-md"
-        :label="this.$t('modules.searchall')"
+        :label="$t('modules.searchall')"
         @input="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
@@ -138,7 +138,7 @@ import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 import agDateCellRender from "../frameworkComponents/agDateCellRender";
-// import { mapActions, mapState } from "vuex";
+import { useZeroStore } from "stores/zero";
 
 export default {
   name: "Profile",
@@ -169,12 +169,17 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapState("zero", ["ZPermissions"]),
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+    };
   },
+
+  computed: {},
   created() {
     // 得到机构数据
-    this.$router.app.$http.get("/z_unit/").then((res) => {
+    this.$api.get("/z_unit/").then((res) => {
       if (res.data.success) {
         this.columnDefs[9].cellEditorParams.values = res.data.data.map(
           ({ title, id }) => id.toString()
@@ -198,7 +203,6 @@ export default {
     this.initPermissions();
   },
   methods: {
-    ...mapActions("zero", ["reqThePermission"]),
     initPermissions() {
       const preq = [
         {
@@ -223,7 +227,8 @@ export default {
         },
       ];
 
-      this.reqThePermission(preq)
+      this.store
+        .reqThePermission(preq)
         .then((res) => {
           this.mPermissions = res;
         })
@@ -438,7 +443,7 @@ export default {
       this.getRowStyle = this.onchangerowcolor;
     },
     getunitdata() {
-      this.$router.app.$http
+      this.$api
         .get("/profile/")
         .then((res) => {
           if (res.data.success) {
@@ -495,7 +500,7 @@ export default {
       const selectedData = this.gridApi.getSelectedRows();
       selectedData.forEach((val) => {
         if (val.id === undefined) {
-          this.$router.app.$http
+          this.$api
             .post("/profile/", val)
             .then((res) => {
               if (res.data.success) {
@@ -517,7 +522,7 @@ export default {
             })
             .catch((e) => {});
         } else {
-          this.$router.app.$http
+          this.$api
             .put("/profile/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
@@ -556,10 +561,10 @@ export default {
         if (this.mPermissions["profile.iManageUnit"]) {
           node = this.mPermissions["profile.iManageUnit"];
         } else {
-          if (this.ZPermissions.units.length >= 1)
-            node = this.ZPermissions.units[0].id;
+          if (this.store.ZPermissions.units.length >= 1)
+            node = this.store.ZPermissions.units[0].id;
         }
-        this.$router.app.$http
+        this.$api
           .get("/z_unit/getTheUnitTree/" + node)
           .then((res) => {
             if (res.data.success) {
@@ -568,7 +573,7 @@ export default {
 
               // 得到选定用户的机构值
               if (selectedData[0].id) {
-                this.$router.app.$http
+                this.$api
                   .get("/users/getUserUnit/" + selectedData[0].id)
                   .then((resmy) => {
                     if (resmy.data.success) {
@@ -606,7 +611,7 @@ export default {
     Editusertounit() {
       var selectedData = this.gridApi.getSelectedRows();
       var selectarr = selectedData.map(({ name, id }) => id);
-      this.$router.app.$http
+      this.$api
         .post("/users/setUserUnit/", {
           users: selectarr,
           units: [this.unitticked],
@@ -638,7 +643,7 @@ export default {
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
 .Profile-agGrid .ag-header {
-  background-color: var(--q-color-secondary);
+  background-color: var(--q-secondary);
   color: #ffffff;
   font-size: 13px;
 }
@@ -662,6 +667,6 @@ export default {
   color: #cccccc;
 }
 .ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-color-secondary);
+  color: var(--q-secondary);
 }
 </style>

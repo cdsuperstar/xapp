@@ -287,8 +287,10 @@ export default defineComponent({
   },
   mounted() {
     // 返回菜单
-    if (this.$auth.user().usercfg) {
-      this.usercfg = JSON.parse(this.$auth.user().usercfg);
+    if (this.$auth.check()) {
+      if (this.$auth.user().usercfg) {
+        this.usercfg = JSON.parse(this.$auth.user().usercfg);
+      }
     }
   },
   beforeUnmount() {

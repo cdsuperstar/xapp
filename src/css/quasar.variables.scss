@@ -25,12 +25,12 @@ $info: #31CCEC;
 $warning: #F2C037;
 
 
-$addbtn: #c0ca33;
-$deldbtn: #ff7043;
-$savebtn: #5c6bc0;
-$treebtn: #ab47bc;
-$expbtn: #4caf50;
-$textinfo: #80deea;
+$addbtn: #c0ca33 !default;
+$deldbtn: #ff7043 !default;
+$savebtn: #5c6bc0 !default;
+$treebtn: #ab47bc !default;
+$expbtn: #4caf50 !default;
+$textinfo: #80deea !default;
 
 :root {
   --q-addbtn: $addbtn;

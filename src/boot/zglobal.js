@@ -2,7 +2,7 @@
 import { boot } from "quasar/wrappers";
 import { Notify } from "quasar";
 import { useZeroStore } from "stores/zero";
-import { Print } from "vue-print-nb";
+import print from "vue3-print-nb";
 import JsonEditorVue from "json-editor-vue";
 
 if (process.env.DEV) {
@@ -95,7 +95,7 @@ const zglobal = {
     }
   },
 };
-export default boot(async ({ app, router, store }) => {
+export default boot(({ app, router, store }) => {
   router.beforeEach((to, from, next) => {
     if (process.env.DEV) {
       console.log(
@@ -110,7 +110,6 @@ export default boot(async ({ app, router, store }) => {
     const zero = useZeroStore();
     // 加入历史记录
     zero.setZOptHist(to.name);
-
     if (
       to.matched.some((record) => record.meta.requireAuth) &&
       !app.config.globalProperties.$auth.check()
@@ -130,7 +129,7 @@ export default boot(async ({ app, router, store }) => {
     }
   });
   app.use(JsonEditorVue);
-  app.use(Print);
+  app.use(print);
 
   app.config.globalProperties.$zglobal = zglobal;
 });

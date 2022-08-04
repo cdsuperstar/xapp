@@ -9,7 +9,7 @@ import driverRouterVueRouter from "@websanova/vue-auth/dist/drivers/router/vue-r
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 let auth;
-export default boot(async ({ app, router } /* { app, router, ... } */) => {
+export default boot(({ app, router } /* { app, router, ... } */) => {
   // something to do
 
   const auth = app.use(
