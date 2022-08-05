@@ -33,7 +33,6 @@ const routes = [
   {
     path: "/user",
     name: "user",
-    meta: { auth: true },
     component: () => import("layouts/DashboardLayout.vue"),
     children: [
       {

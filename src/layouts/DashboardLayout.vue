@@ -430,9 +430,14 @@ export default defineComponent({
                 // push url to router by Luke
                 if (val.url !== "" && val.url !== null) {
                   if (!this.$router.hasRoute(val.name)) {
+                    let tmpAuth = {};
+                    if (val.author == "vue-auth") {
+                      tmpAuth = { auth: true };
+                    }
                     this.$router.addRoute("user", {
                       path: val.url,
                       name: val.name,
+                      meta: tmpAuth,
                       component: () =>
                         import("../pages/modules/" + val.url + ".vue"),
                     });
