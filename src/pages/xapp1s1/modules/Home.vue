@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page>
     <q-card square flat>
       <!-- your group -->
       <q-card-section>
@@ -12,8 +12,8 @@
           <div class="card bg-grey" style="margin-right: 10px" :key="index">
             <q-img
               src="https://cdn.quasar.dev/img/parallax2.jpg"
-              width="90px"
-              height="150px"
+              width="15vh"
+              height="25vh"
             >
               <div class="absolute-bottom">
                 <div class="text-h6">{{ item.groupName }}</div>
