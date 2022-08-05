@@ -1,4 +1,7 @@
+import xapp1s1 from "src/router/xapp1s1";
+
 const routes = [
+  xapp1s1,
   {
     path: "/",
     meta: { auth: false },
@@ -41,7 +44,6 @@ const routes = [
       },
     ],
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {

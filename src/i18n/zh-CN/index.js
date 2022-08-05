@@ -1,6 +1,8 @@
 // This is just an example,
 // so you can safely delete all default props below
+import { xapp1s1 } from "./xapp1s1";
 export default {
+  xapp1s1,
   failed: "操作失败",
   getlocationfailed: "获取定位信息失败",
   success: "操作成功",
