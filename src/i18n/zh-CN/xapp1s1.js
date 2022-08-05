@@ -16,5 +16,6 @@ export const xapp1s1 = {
   },
   home: {
     yourGroup: "你的朋友圈:",
+    createGroup: "创建你的团队",
   },
 };

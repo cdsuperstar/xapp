@@ -3,7 +3,7 @@
     <q-header elevated class="bg-pink text-white">
       <q-toolbar>
         <q-toolbar-title>
-          <q-btn round style="border: 0" to="login">
+          <q-btn round style="border: 0" to="/xapp1s1/login">
             <q-avatar size="42px">
               <q-img src="../assets/default_avatar.jpg" />
             </q-avatar>
@@ -20,7 +20,7 @@
     </q-page-container>
 
     <q-footer elevated class="text-white q-pa-md" style="padding: 0">
-      <div class="q-gutter-y-md" style="max-width: 600px">
+      <div class="q-gutter-y-md">
         <q-card>
           <q-tabs
             v-model="choose"
@@ -31,25 +31,28 @@
             align="justify"
             narrow-indicator
           >
-            <q-route-tab name="home" icon="home" to="/xapp1s1/home">{{
+            <q-route-tab name="home" icon="home" to="/user/xapp1s1home">{{
               $t("xapp1s1.layout.home")
             }}</q-route-tab>
-            <q-route-tab name="explore" icon="search" to="/xapp1s1/explore">{{
-              $t("xapp1s1.layout.explore")
-            }}</q-route-tab>
+            <q-route-tab
+              name="explore"
+              icon="search"
+              to="/user/xapp1s1explore"
+              >{{ $t("xapp1s1.layout.explore") }}</q-route-tab
+            >
             <q-route-tab
               name="notify"
               icon="notifications"
-              to="/xapp1s1/notify"
+              to="/user/xapp1s1noti"
               >{{ $t("xapp1s1.layout.notify") }}</q-route-tab
             >
-            <q-route-tab name="message" icon="message" to="/xapp1s1/message">{{
+            <q-route-tab name="message" icon="message" to="/user/xapp1s1msg">{{
               $t("xapp1s1.layout.message")
             }}</q-route-tab>
             <q-route-tab
               name="personal"
               icon="person_outline"
-              to="/xapp1s1/personal"
+              to="/user/xapp1s1personal"
               >{{ $t("xapp1s1.layout.personal") }}</q-route-tab
             >
           </q-tabs>
