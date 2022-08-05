@@ -5,7 +5,7 @@
         <q-toolbar-title>
           <q-btn round style="border: 0" to="login">
             <q-avatar size="42px">
-              <q-img src="../statics/default_avatar.jpg" />
+              <q-img src="../assetss/default_avatar.jpg" />
             </q-avatar>
           </q-btn>
           <label class="title">
