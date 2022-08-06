@@ -1,8 +1,16 @@
 <template>
   <q-page>
-    <q-avatar size="100px">
+    <q-dialog v-model="avatarUpdate">
+      <q-uploader
+        url="http://localhost:8080/statics/"
+        style="max-width: 300px"
+      />
+    </q-dialog>
+
+    <q-avatar size="100px" style="margin: 10px" @click="avatarUpdate = true">
       <q-img :src="myProfile.avatar"></q-img>
     </q-avatar>
+
     <q-form class="q-gutter-md">
       <q-input
         outlined
@@ -34,10 +42,12 @@
         :label="$t('xapp1s1.profile.nickname')"
         stack-label
       />
-      <q-input
+      <q-select
+        :options="sex"
         outlined
         v-model="myProfile.sex"
         :label="$t('xapp1s1.profile.sex')"
+        behavior="menu"
         stack-label
       />
       <q-input
@@ -46,15 +56,22 @@
         :label="$t('xapp1s1.profile.height')"
         stack-label
       />
+      <div class="q-pa-md">
+        <q-badge color="secondary">
+          Model: {{ income.min }} to {{ income.max }}
+        </q-badge>
+
+        <q-range v-model="income" :max="50000" :min="0" />
+      </div>
       <q-input
         outlined
-        v-model="myProfile.incomebegin"
+        v-model="income.min"
         :label="$t('xapp1s1.profile.incomeBegin')"
         stack-label
       />
       <q-input
         outlined
-        v-model="myProfile.incomeend"
+        v-model="income.max"
         :label="$t('xapp1s1.profile.incomeEnd')"
         stack-label
       />
@@ -64,16 +81,20 @@
         :label="$t('xapp1s1.profile.workAddress')"
         stack-label
       />
-      <q-input
+      <q-select
         outlined
+        :options="eduback"
         v-model="myProfile.eduback"
         :label="$t('xapp1s1.profile.eduBack')"
+        behavior="menu"
         stack-label
       />
-      <q-input
+      <q-select
         outlined
+        :options="marriage"
         v-model="myProfile.marriage"
         :label="$t('xapp1s1.profile.marriage')"
+        behavior="menu"
         stack-label
       />
       <q-input
@@ -167,35 +188,49 @@ export default {
     return {
       src: "../../../",
       loading: false,
+      avatarUpdate: false,
+      sex: ["男", "女"],
       myProfile: {},
+      income: {
+        min: 0,
+        max: 50000,
+      },
+      eduback: ["小学及以下", "初中", "高中", "大专", "本科及以上"],
+      marriage: ["未婚", "已婚", "离异", "丧偶"],
     };
   },
   created() {
-    this.$api.get("xapp1s1/getMyProfile").then((res) => {
+    this.$api.get("xapp1s1/profile/getMyProfile").then((res) => {
       this.myProfile = res.data.data;
+      this.income.min = this.myProfile.incomebegin;
+      this.income.max = this.myProfile.incomeend;
       console.log(res);
     });
   },
   methods: {
     update() {
       this.loading = true;
-      this.$api.post("xapp1s1/updateMyProfile", this.myProfile).then((res) => {
-        if (res.data.success === true) {
-          this.loading = false;
-          this.$zglobal.showMessage(
-            "positive",
-            "center",
-            this.$t("auth.users.profile.success")
-          );
-        } else {
-          this.loading = false;
-          this.$zglobal.showMessage(
-            "red-5",
-            "center",
-            this.$t("auth.register.invalid_data") + ":" + res.data.code
-          );
-        }
-      });
+      this.myProfile.incomebegin = this.income.min;
+      this.myProfile.incomeend = this.income.max;
+      this.$api
+        .post("xapp1s1/profile/updateMyProfile", this.myProfile)
+        .then((res) => {
+          if (res.data.success === true) {
+            this.loading = false;
+            this.$zglobal.showMessage(
+              "positive",
+              "center",
+              this.$t("auth.users.profile.success")
+            );
+          } else {
+            this.loading = false;
+            this.$zglobal.showMessage(
+              "red-5",
+              "center",
+              this.$t("auth.register.invalid_data") + ":" + res.data.code
+            );
+          }
+        });
     },
   },
 };

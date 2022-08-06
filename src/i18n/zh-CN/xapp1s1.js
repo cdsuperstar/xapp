@@ -40,6 +40,7 @@ export const xapp1s1 = {
     childrenSitu: "小孩情况",
     memo: "简介",
     ok: "确定修改",
+    chooseAvatar: "选择新头像",
   },
   categ: {
     header: "类别管理",
