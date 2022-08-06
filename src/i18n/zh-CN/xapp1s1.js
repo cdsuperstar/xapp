@@ -41,4 +41,12 @@ export const xapp1s1 = {
     memo: "简介",
     ok: "确定修改",
   },
+  categ: {
+    header: "类别管理",
+    badd: "添加",
+    bdelete: "删除",
+    update: "保存",
+    name: "名称",
+    memo: "简介",
+  },
 };

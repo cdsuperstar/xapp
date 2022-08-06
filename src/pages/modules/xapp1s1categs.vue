@@ -1,97 +1,38 @@
 <template>
   <q-page padding class="q-pa-ma">
-    <q-dialog v-model="DUnitTree">
-      <q-card class="q-dialog-plugin">
-        <q-toolbar class="bg-primary text-white">
-          <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            color="white"
-            :title="this.$t('buttons.close')"
-          />
-          <q-toolbar-title>
-            <span class="text-subtitle1 text-weight-bold">
-              {{ $t("units.editunittree") }}</span
-            >
-          </q-toolbar-title>
-          <q-btn
-            flat
-            color="white"
-            icon="save"
-            :label="this.$t('buttons.confirm')"
-            @click="EditUnittree()"
-          />
-        </q-toolbar>
-        <q-separator color="accent" />
-        <q-card-section
-          style="min-height: 10vh; max-height: 80vh"
-          class="scroll"
-        >
-          <nested-test v-if="true" v-model="Unitdata" class="col-8" />
-        </q-card-section>
-        <q-separator color="accent" />
-        <q-inner-loading :showing="loading">
-          <q-spinner-gears size="80px" color="secondary" />
-        </q-inner-loading>
-      </q-card>
-    </q-dialog>
     <div class="text-h5 q-ma-md text-secondary">
-      {{ $t("units.header") }}
+      {{ $t("xapp1s1.categ.header") }}
     </div>
     <q-separator color="accent" />
     <div class="row q-ma-md" style="margin: 16px 1px">
       <q-btn
-        v-if="mPermissions['units.badd']"
         color="addbtn"
         text-color="white"
         class="q-ma-xs"
         icon="post_add"
-        :label="this.$t('buttons.add')"
+        :label="this.$t('xapp1s1.categ.badd')"
         @click="addItems()"
       />
       <q-btn
-        v-if="mPermissions['units.bDelete']"
         color="deldbtn"
         text-color="white"
         class="q-ma-xs"
         icon="delete_sweep"
-        :label="this.$t('buttons.delete')"
+        :label="this.$t('xapp1s1.categ.bdelete')"
         @click="delItems()"
       />
       <q-btn
-        v-if="mPermissions['units.bmodify']"
         color="savebtn"
         text-color="white"
         class="q-ma-xs"
         icon="save"
-        :label="this.$t('buttons.save')"
+        :label="this.$t('xapp1s1.categ.update')"
         @click="saveItems()"
       />
       <q-separator
         v-if="!$q.screen.gt.xs"
         class="col-10 q-ma-xs"
         color="info"
-      />
-      <q-btn
-        v-if="mPermissions['units.bSetTree']"
-        color="treebtn"
-        text-color="white"
-        class="q-ma-xs"
-        icon="account_tree"
-        :label="this.$t('units.showunittree')"
-        @click="Unittree()"
-      />
-      <q-btn
-        v-if="mPermissions['units.bexport']"
-        color="expbtn"
-        text-color="white"
-        class="q-ma-xs"
-        icon="cloud_download"
-        :label="this.$t('buttons.export')"
-        @click="ExportDataAsCVS()"
       />
       <q-space />
       <q-separator
@@ -143,26 +84,16 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-// import { mapActions } from "vuex";
-import NestedTest from "./nested-tree";
-import { useZeroStore } from "stores/zero";
 
 export default {
-  name: "Units",
+  name: "xapp1s1categs",
   components: {
     AgGridVue,
-    NestedTest,
   },
-  setup() {
-    const store = useZeroStore();
-    return {
-      store,
-    };
-  },
+  setup() {},
   data() {
     return {
       loading: true,
-      DUnitTree: null,
       Unitdata: null,
       quickFilter: null,
       importfile: null,
@@ -174,12 +105,11 @@ export default {
       getRowStyle: null,
       changerowcolor: null,
       defaultColDef: null,
-      mPermissions: [],
     };
   },
   created() {
     this.$api
-      .get("/z_unit/")
+      .get("/xapp1s1/categs/")
       .then((res) => {
         if (res.data.success) {
           this.rowData = res.data.data;
@@ -194,73 +124,8 @@ export default {
   mounted() {
     this.gridApi = this.gridOptions.api;
     this.gridColumnApi = this.gridOptions.columnApi;
-    this.initPermissions();
   },
   methods: {
-    // ...mapActions("zero", ["getMyPermissions", "reqThePermission"]),
-    initPermissions() {
-      const preq = [
-        {
-          module: "units",
-          name: "units.badd",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("units.badd"),
-        },
-        {
-          module: "units",
-          name: "units.bDelete",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("units.bDelete"),
-        },
-        {
-          module: "units",
-          name: "units.bmodify",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("units.bmodify"),
-        },
-        {
-          module: "units",
-          name: "units.bexport",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("units.bexport"),
-        },
-        {
-          module: "units",
-          name: "units.bSetTree",
-          syscfg: {
-            required: false,
-            type: "Boolean",
-            default: null,
-          },
-          title: this.$t("units.bSetTree"),
-        },
-      ];
-
-      this.store
-        .reqThePermission(preq)
-        .then((res) => {
-          this.mPermissions = res;
-        })
-        .catch((e) => {
-          // console.log(e)
-        });
-    },
     initGrid() {
       this.gridOptions = {
         rowHeight: 32,
@@ -281,8 +146,8 @@ export default {
           checkboxSelection: true,
         },
         {
-          headerName: this.$t("units.title"),
-          field: "title",
+          headerName: this.$t("xapp1s1.categ.name"),
+          field: "name",
           width: 120,
           minWidth: 120,
           maxWidth: 260,
@@ -291,8 +156,8 @@ export default {
           filter: true,
         },
         {
-          headerName: this.$t("units.brief"),
-          field: "brief",
+          headerName: this.$t("xapp1s1.categ.memo"),
+          field: "memo",
           colId: "date",
           width: 200,
           minWidth: 200,
@@ -345,7 +210,7 @@ export default {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
               this.$api
-                .delete("/z_unit/" + val.id)
+                .delete("/xapp1s1/categs/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
                     // console.log(res.data.data)
@@ -373,14 +238,6 @@ export default {
           });
       }
     },
-    ExportDataAsCVS() {
-      var params = {
-        fileName: "units.xls",
-        suppressQuotes: true,
-        columnSeparator: ",",
-      };
-      this.gridApi.exportDataAsCsv(params);
-    },
     onchangerowcolor() {
       return { backgroundColor: this.changerowcolor };
     },
@@ -403,7 +260,7 @@ export default {
       selectedData.forEach((val) => {
         if (val.id === undefined) {
           this.$api
-            .post("/z_unit/", val)
+            .post("/xapp1s1/categs/", val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
@@ -425,7 +282,7 @@ export default {
             .catch((e) => {});
         } else {
           this.$api
-            .put("/z_unit/" + val.id, val)
+            .put("/xapp1s1/categs/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
@@ -449,82 +306,6 @@ export default {
         }
       });
     },
-    Unittree() {
-      this.loading = true;
-      this.DUnitTree = true;
-      this.$api
-        .get("/z_unit/getUnitTree")
-        .then((res) => {
-          if (res.data.success) {
-            // console.log(res.data.data)
-            this.Unitdata = res.data.data;
-            console.log(this.Unitdata);
-            this.loading = false;
-          } else {
-          }
-        })
-        .catch((e) => {
-          this.$zglobal.showMessage(
-            "red-5",
-            "center",
-            this.$t("auth.register.invalid_data")
-          );
-          this.loading = false;
-          this.DUnitTree = false;
-        });
-    },
-    EditUnittree() {
-      this.loading = true;
-      this.$api
-        .post("/z_unit/setUnitTree/" + this.Unitdata[0].id, this.Unitdata)
-        .then((res) => {
-          if (res.data.success) {
-            this.loading = false;
-            this.DUnitTree = false;
-            this.$zglobal.showMessage("positive", "center", this.$t("success"));
-          }
-        })
-        .catch((error) => {
-          this.loading = false;
-          if (error.status) {
-            this.$zglobal.showMessage(
-              "red-5",
-              "center",
-              this.$t("auth.register.invalid_data")
-            );
-          }
-        });
-    },
   },
 };
 </script>
-<style>
-/*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
-.Units-agGrid .ag-header {
-  background-color: var(--q-secondary);
-  color: #ffffff;
-  font-size: 13px;
-}
-.Units-agGrid .ag-cell {
-  padding-left: 1px;
-  font-size: 13px;
-}
-.ag-theme-balham .ag-ltr .ag-cell {
-  padding-left: 1px;
-  border-right: 1px solid rgba(233, 233, 233, 0.96);
-}
-.ag-theme-balham .ag-icon,
-.ag-header-icon .ag-sort-ascending-icon {
-  color: #ffffff;
-}
-.ag-theme-balham .ag-paging-page-summary-panel .ag-icon,
-.ag-theme-balham .ag-paging-panel {
-  color: #000000;
-}
-.ag-theme-balham .ag-icon-checkbox-unchecked {
-  color: #cccccc;
-}
-.ag-theme-balham .ag-icon-checkbox-checked {
-  color: var(--q-secondary);
-}
-</style>
