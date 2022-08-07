@@ -50,4 +50,15 @@ export const xapp1s1 = {
     name: "名称",
     memo: "简介",
   },
+  shop: {
+    name: "名称",
+    starttime: "营业时间(开始)",
+    endtime: "营业时间(结束)",
+    status: "商铺状态",
+    phone: "联系电话",
+    tel: "座机电话",
+    addr: "商业地址",
+    longitude: "经度",
+    latitude: "纬度",
+  },
 };
