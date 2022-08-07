@@ -130,6 +130,28 @@ export default boot(({ app, router, store }) => {
   });
   app.use(JsonEditorVue);
   app.use(print);
+  if (process.env.BACKEND_LOG == "true") {
+    app.config.errorHandler = (err, vm, info) => {
+      // 处理错误
+      // `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+      let tmpErr = {
+        message: err.message,
+        stack: err.stack,
+        info: info,
+      };
+
+      console.log("BACKEND_LOG(report to backend):", info, err.stack);
+      app.config.globalProperties.$api
+        .post("xapperr/storeLog/", tmpErr)
+        .then((res) => {
+          if (res.data.success) {
+            console.log("Err saved to backend successed.");
+          } else {
+            console.log("Err saved to backend failed.");
+          }
+        });
+    };
+  }
 
   app.config.globalProperties.$zglobal = zglobal;
 });
