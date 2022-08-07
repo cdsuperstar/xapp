@@ -97,7 +97,7 @@
         style="max-width: 120px"
         class="q-ml-md"
         :label="$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @change="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
@@ -160,8 +160,11 @@ export default {
       getRowStyle: null,
       changerowcolor: null,
       defaultColDef: null,
+      genders: this.$tm("auth.users.profile.sexoptions"),
       unitMap: {},
       mPermissions: [],
+      aaa: { a: "11" },
+      bbb: { b: 123, c: "dfd" },
       printObj: {
         id: "printMe",
         popTitle: "这里是标题区域，添加页眉和页脚才能看见！",
@@ -176,7 +179,11 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    ccc() {
+      return JSON.stringify(this.aaa) + JSON.stringify(this.bbb);
+    },
+  },
   created() {
     // 得到机构数据
     this.$api.get("/z_unit/").then((res) => {
@@ -299,7 +306,7 @@ export default {
           filter: true,
           cellEditor: "agSelectCellEditor",
           cellEditorParams: {
-            values: Object.keys(this.$t("auth.users.profile.sexoptions")),
+            values: Object.keys(this.$tm("auth.users.profile.sexoptions")),
           },
           valueFormatter: this.getSelector,
         },
@@ -460,8 +467,7 @@ export default {
       this.gridApi.setQuickFilter(this.quickFilter);
     },
     getSelector(params) {
-      const mapMenu = this.$t("auth.users.profile.sexoptions");
-      return mapMenu[params.value];
+      return this.genders[params.value];
     },
     getUnitmap(params) {
       return this.unitMap[params.value];
