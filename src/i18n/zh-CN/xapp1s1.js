@@ -28,7 +28,12 @@ export const xapp1s1 = {
     height: "身高",
     incomeBegin: "收入开始",
     incomeEnd: "收入结束",
-    workAddress: "工作地址",
+    workAddress: {
+      province: "工作省份",
+      city: "工作城市",
+      area: "工作区/县",
+      info: "详细地址",
+    },
     eduBack: "学历",
     marriage: "婚姻情况",
     nativePlace: "籍贯",
@@ -61,6 +66,6 @@ export const xapp1s1 = {
     addr: "商业地址",
     longitude: "经度",
     latitude: "纬度",
-    ok: "确认修改"
+    ok: "确认修改",
   },
 };

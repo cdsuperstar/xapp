@@ -75,10 +75,45 @@
         :label="$t('xapp1s1.profile.incomeEnd')"
         stack-label
       />
+
+      <q-select
+        outlined
+        :options="province"
+        v-model="address.province"
+        :label="$t('xapp1s1.profile.workAddress.province')"
+        behavior="menu"
+        stack-label
+        map-options
+        option-label="name"
+        option-value="city"
+        @update:model-value="changeAddress"
+      />
+      <q-select
+        v-if="address.province"
+        outlined
+        :options="address.province ? address.province.city : null"
+        v-model="address.city"
+        :label="$t('xapp1s1.profile.workAddress.city')"
+        behavior="menu"
+        stack-label
+        map-options
+        option-label="name"
+        option-value="area"
+        @update:model-value="changeAddress2"
+      />
+      <q-select
+        v-if="address.city"
+        outlined
+        :options="address.city ? address.city.area : null"
+        v-model="address.area"
+        :label="$t('xapp1s1.profile.workAddress.area')"
+        behavior="menu"
+        stack-label
+      />
       <q-input
         outlined
-        v-model="myProfile.workaddress"
-        :label="$t('xapp1s1.profile.workAddress')"
+        v-model="address.info"
+        :label="$t('xapp1s1.profile.workAddress.info')"
         stack-label
       />
       <q-select
@@ -97,8 +132,10 @@
         behavior="menu"
         stack-label
       />
-      <q-input
+      <q-select
         outlined
+        :options="city"
+        behavior="menu"
         v-model="myProfile.nativeplace"
         :label="$t('xapp1s1.profile.nativePlace')"
         stack-label
@@ -153,16 +190,14 @@
       />
     </q-form>
 
-    
-
     <q-list bordered padding>
-      
       <q-item-label header>User Controls</q-item-label>
       <q-item clickable v-ripple>
-        <q-item :lable="$t('xapp1s1.shop.header')" to="/user/xapp1s1shop"></q-item>
-          <q-item-label caption>
-            
-        </q-item-label> 
+        <q-item
+          :lable="$t('xapp1s1.shop.header')"
+          to="/user/xapp1s1shop"
+        ></q-item>
+        <q-item-label caption> </q-item-label>
       </q-item>
       <q-item clickable v-ripple>
         <q-item-section>
@@ -190,11 +225,12 @@
 </template>
 
 <script>
+import { province } from "components/province";
 export default {
   name: "Personal",
   data() {
     return {
-      src: "../../../",
+      province,
       loading: false,
       avatarUpdate: false,
       sex: ["男", "女"],
@@ -203,23 +239,87 @@ export default {
         min: 0,
         max: 50000,
       },
+      address: {
+        province: "",
+        city: "",
+        area: "",
+        info: "",
+      },
       eduback: ["小学及以下", "初中", "高中", "大专", "本科及以上"],
       marriage: ["未婚", "已婚", "离异", "丧偶"],
+      city: [
+        "全国",
+        "北京市",
+        "天津市",
+        "河北省",
+        "山西省",
+        "内蒙古自治区",
+        "辽宁省",
+        "吉林省",
+        "黑龙江省",
+        "上海市",
+        "江苏省",
+        "浙江省",
+        "安徽省",
+        "福建省",
+        "江西省",
+        "山东省",
+        "河南省",
+        "湖北省",
+        "湖南省",
+        "广东省",
+        "广西壮族自治区",
+        "海南省",
+        "重庆市",
+        "四川省",
+        "贵州省",
+        "云南省",
+        "西藏自治区",
+        "陕西省",
+        "甘肃省",
+        "青海省",
+        "宁夏回族自治区",
+        "新疆维吾尔自治区",
+        "香港特别行政区",
+        "澳门特别行政区",
+      ],
     };
   },
   created() {
     this.$api.get("xapp1s1/profile/getMyProfile").then((res) => {
-      this.myProfile = res.data.data;
-      this.income.min = this.myProfile.incomebegin;
-      this.income.max = this.myProfile.incomeend;
-      console.log(res);
+      if (res.data.success === true) {
+        this.myProfile = res.data.data;
+        this.income.min = this.myProfile.incomebegin;
+        this.income.max = this.myProfile.incomeend;
+        const tmp = JSON.parse(this.myProfile.workaddress);
+        //已知：数据库长度不够，存在数据库中的数据只有地址没有存其他的选项
+        this.address.province = tmp.province;
+        this.address.city = tmp.city;
+        this.address.area = tmp.area;
+        this.address.info = tmp.info;
+        console.log(this.address.city);
+      }
     });
   },
   methods: {
+    changeAddress() {
+      this.address.city = null;
+      this.address.area = null;
+    },
+    changeAddress2() {
+      this.address.area = null;
+    },
     update() {
       this.loading = true;
       this.myProfile.incomebegin = this.income.min;
       this.myProfile.incomeend = this.income.max;
+      const tmp = {
+        province: this.address.province,
+        city: this.address.city,
+        area: this.address.area,
+        info: this.address.info,
+      };
+      this.myProfile.workaddress = JSON.stringify(tmp);
       this.$api
         .post("xapp1s1/profile/updateMyProfile", this.myProfile)
         .then((res) => {
