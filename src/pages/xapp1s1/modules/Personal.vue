@@ -153,9 +153,17 @@
       />
     </q-form>
 
-    <q-list bordered padding>
-      <q-item-label header>User Controls</q-item-label>
+    
 
+    <q-list bordered padding>
+      
+      <q-item-label header>User Controls</q-item-label>
+      <q-item clickable v-ripple>
+        <q-item :lable="$t('xapp1s1.shop.header')" to="/user/xapp1s1shop"></q-item>
+          <q-item-label caption>
+            
+        </q-item-label> 
+      </q-item>
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label>Content filtering</q-item-label>
@@ -166,7 +174,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple to="/user/xapp1s1shop">
         <q-item-section>
           <q-item-label>Password</q-item-label>
           <q-item-label caption>

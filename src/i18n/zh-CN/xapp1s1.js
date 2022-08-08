@@ -51,6 +51,7 @@ export const xapp1s1 = {
     memo: "简介",
   },
   shop: {
+    header: "商户信息",
     name: "名称",
     starttime: "营业时间(开始)",
     endtime: "营业时间(结束)",
@@ -60,5 +61,6 @@ export const xapp1s1 = {
     addr: "商业地址",
     longitude: "经度",
     latitude: "纬度",
+    ok: "确认修改"
   },
 };
