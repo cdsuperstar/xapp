@@ -67,5 +67,7 @@ export const xapp1s1 = {
     longitude: "经度",
     latitude: "纬度",
     ok: "确认修改",
+    working: "营业",
+    rest: "休息",
   },
 };

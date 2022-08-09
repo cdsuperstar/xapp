@@ -31,10 +31,7 @@
           </q-icon>
         </template>
       </q-input>
-      <q-input
-        v-model="myShop.status"
-        :label="$t('xapp1s1.shop.status')"
-      />
+      <q-select v-model="myShop.status" :options="options" :label="$t('xapp1s1.shop.status')" />
       <q-input
         v-model="myShop.phone"
         :label="$t('xapp1s1.shop.phone')"
@@ -53,6 +50,12 @@
         :label="$t('xapp1s1.shop.ok')"
         @click="update"
       />
+      <q-btn
+        color="blue"
+        glossy
+        :label="$t('buttons.back')"
+        to="/user/xapp1s1personal"
+      />
     </q-form>
     <q-inner-loading :showing="loading">
       <q-spinner-box size="50px" color="secondary" />
@@ -70,13 +73,16 @@ export default {
       startTime: '09:00',
       endTime: '22:00',
       myShop: {},
+      options: [this.$t('xapp1s1.shop.working'),this. $t('xapp1s1.shop.rest')],
     };
   },
   created() {
+    this.loading = true;
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {
       console.log(res);
       if (res.data.success === true) {
         this.myShop = res.data.data;
+        this.loading = false;
       }else{
         this.myShop = {
           name:null,
@@ -90,6 +96,7 @@ export default {
           latitude:null,
         }
         console.log(typeof(this.myShop));
+        this.loading = false;
       }
       //this.myShop = res.data.data;
       //console.log(res);
