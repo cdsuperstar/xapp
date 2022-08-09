@@ -1,6 +1,7 @@
 const xapp1s1 = {
   path: "/user",
-  component: () => import("layouts/Xapp1s1MainLayout.vue"),
+  // component: () => import("layouts/Xapp1s1MainLayout.vue"),
+  component: () => import("layouts/DashboardLayout.vue"),
   children: [
     { path: "/xapp1s1", component: () => import("pages/xapp1s1/Login.vue") },
     {
