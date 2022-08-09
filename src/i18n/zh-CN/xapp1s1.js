@@ -70,4 +70,13 @@ export const xapp1s1 = {
     working: "营业",
     rest: "休息",
   },
+  product: {
+    header: "商品管理",
+    name: "名称",
+    tagprice: "标价",
+    price: "价格",
+    note: "须知",
+    timebegin: "可用时间(始)",
+    timeend: "可用时间(结)",
+  },
 };

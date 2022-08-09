@@ -1,82 +1,84 @@
 <template>
-  <q-page padding class="q-pa-ma">
-    <div class="text-h5 q-ma-md text-secondary">
-      {{ $t("xapp1s1.categ.header") }}
-    </div>
-    <q-separator color="accent" />
-    <div class="row q-ma-md" style="margin: 16px 1px">
-      <q-btn
-        color="addbtn"
-        text-color="white"
-        class="q-ma-xs"
-        icon="post_add"
-        :label="this.$t('xapp1s1.categ.badd')"
-        @click="addItems()"
-      />
-      <q-btn
-        color="deldbtn"
-        text-color="white"
-        class="q-ma-xs"
-        icon="delete_sweep"
-        :label="this.$t('xapp1s1.categ.bdelete')"
-        @click="delItems()"
-      />
-      <q-btn
-        color="savebtn"
-        text-color="white"
-        class="q-ma-xs"
-        icon="save"
-        :label="this.$t('xapp1s1.categ.update')"
-        @click="saveItems()"
-      />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
-      <q-space />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
-      <q-input
-        v-model="quickFilter"
-        dense
-        style="max-width: 120px"
-        class="q-ml-md"
-        :label="this.$t('modules.searchall')"
-        @change="onQuickFilterChanged()"
-      >
-        <template v-slot:prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
-    </div>
-    <div class="shadow-1">
-      <ag-grid-vue
-        style="width: 100%; height: 500px"
-        class="ag-theme-balham Units-agGrid"
-        row-selection="multiple"
-        row-multi-select-with-click="true"
-        :grid-options="gridOptions"
-        :column-defs="columnDefs"
-        :row-data="rowData"
-        :default-col-def="defaultColDef"
-        :pagination="true"
-        :pagination-page-size="50"
-        :get-row-style="getRowStyle"
-        :locale-text="this.$t('aggrid')"
-        @cellValueChanged="oncellValueChanged"
-        @grid-ready="onGridReady"
-      >
-      </ag-grid-vue>
-    </div>
+  <q-page padding>
+    <q-page padding class="q-pa-ma">
+      <div class="text-h5 q-ma-md text-secondary">
+        {{ $t("xapp1s1.product.header") }}
+      </div>
+      <q-separator color="accent" />
+      <div class="row q-ma-md" style="margin: 16px 1px">
+        <q-btn
+          color="addbtn"
+          text-color="white"
+          class="q-ma-xs"
+          icon="post_add"
+          :label="this.$t('buttons.add')"
+          @click="addItems()"
+        />
+        <q-btn
+          color="deldbtn"
+          text-color="white"
+          class="q-ma-xs"
+          icon="delete_sweep"
+          :label="this.$t('buttons.delete')"
+          @click="delItems()"
+        />
+        <q-btn
+          color="savebtn"
+          text-color="white"
+          class="q-ma-xs"
+          icon="save"
+          :label="this.$t('buttons.save')"
+          @click="saveItems()"
+        />
+        <q-separator
+          v-if="!$q.screen.gt.xs"
+          class="col-10 q-ma-xs"
+          color="info"
+        />
+        <q-space />
+        <q-separator
+          v-if="!$q.screen.gt.xs"
+          class="col-10 q-ma-xs"
+          color="info"
+        />
+        <q-input
+          v-model="quickFilter"
+          dense
+          style="max-width: 120px"
+          class="q-ml-md"
+          :label="this.$t('modules.searchall')"
+          @change="onQuickFilterChanged()"
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-separator
+          v-if="!$q.screen.gt.xs"
+          class="col-10 q-ma-xs"
+          color="info"
+        />
+      </div>
+      <div class="shadow-1">
+        <ag-grid-vue
+          style="width: 100%; height: 500px"
+          class="ag-theme-balham Units-agGrid"
+          row-selection="multiple"
+          row-multi-select-with-click="true"
+          :grid-options="gridOptions"
+          :column-defs="columnDefs"
+          :row-data="rowData"
+          :default-col-def="defaultColDef"
+          :pagination="true"
+          :pagination-page-size="50"
+          :get-row-style="getRowStyle"
+          :locale-text="this.$t('aggrid')"
+          @cellValueChanged="oncellValueChanged"
+          @grid-ready="onGridReady"
+        >
+        </ag-grid-vue>
+      </div>
+    </q-page>
   </q-page>
 </template>
 
@@ -86,7 +88,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 
 export default {
-  name: "xapp1s1categs",
+  name: "xapp1s1products",
   components: {
     AgGridVue,
   },
@@ -108,7 +110,7 @@ export default {
   },
   created() {
     this.$api
-      .get("/xapp1s1/categs/")
+      .get("/xapp1s1/products/")
       .then((res) => {
         if (res.data.success) {
           this.rowData = res.data.data;
@@ -145,7 +147,7 @@ export default {
           checkboxSelection: true,
         },
         {
-          headerName: this.$t("xapp1s1.categ.name"),
+          headerName: this.$t("xapp1s1.product.name"),
           field: "name",
           width: 120,
           minWidth: 120,
@@ -155,20 +157,54 @@ export default {
           filter: true,
         },
         {
-          headerName: this.$t("xapp1s1.categ.memo"),
-          field: "memo",
-          colId: "date",
-          width: 200,
-          minWidth: 200,
-          maxWidth: 450,
+          headerName: this.$t("xapp1s1.product.tagprice"),
+          field: "tagprice",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
           editable: true,
           sortable: true,
-          cellEditor: "agLargeTextCellEditor",
-          cellEditorParams: {
-            maxLength: "30000", // override the editor defaults
-            cols: "60",
-            rows: "6",
-          },
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.product.price"),
+          field: "price",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.product.timebegin"),
+          field: "timebegin",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.product.timeend"),
+          field: "timeend",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.product.note"),
+          field: "note",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
         },
         {
           headerName: this.$t("dataAGgrid.created_at"),
@@ -209,7 +245,7 @@ export default {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
               this.$api
-                .delete("/xapp1s1/categs/" + val.id)
+                .delete("/xapp1s1/products/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
                     // console.log(res.data.data)
@@ -259,7 +295,7 @@ export default {
       selectedData.forEach((val) => {
         if (val.id === undefined) {
           this.$api
-            .post("/xapp1s1/categs/", val)
+            .post("/xapp1s1/products/", val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
@@ -281,7 +317,7 @@ export default {
             .catch((e) => {});
         } else {
           this.$api
-            .put("/xapp1s1/categs/" + val.id, val)
+            .put("/xapp1s1/products/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
