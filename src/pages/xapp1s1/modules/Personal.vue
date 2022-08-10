@@ -1,23 +1,40 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <q-dialog v-model="avatarUpdate">
       <q-uploader
         url="http://localhost:8080/statics/"
         style="max-width: 300px"
       />
     </q-dialog>
-
-    <q-avatar size="100px" style="margin: 10px" @click="avatarUpdate = true">
-      <q-img :src="myProfile.avatar"></q-img>
-    </q-avatar>
-
     <q-form class="q-gutter-md">
-      <q-input
-        outlined
-        v-model="myProfile.realname"
-        :label="$t('xapp1s1.profile.realName')"
-        stack-label
-      />
+      <div class="row">
+        <div class="col-4 offset-4">
+          <q-avatar
+            size="100px"
+            style="margin: 10px"
+            @click="avatarUpdate = true"
+          >
+            <q-img :src="myProfile.avatar"></q-img>
+          </q-avatar>
+        </div>
+      </div>
+      <div class="row">
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.nickname"
+          :label="$t('xapp1s1.profile.nickname')"
+          stack-label
+          style="padding-right: 8px"
+        />
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.realname"
+          :label="$t('xapp1s1.profile.realName')"
+          stack-label
+        />
+      </div>
       <q-input
         outlined
         v-model="myProfile.idcard"
@@ -30,191 +47,210 @@
         :label="$t('xapp1s1.profile.phone')"
         stack-label
       />
+      <div class="row">
+        <q-select
+          class="col-4"
+          :options="sex"
+          outlined
+          v-model="myProfile.sex"
+          :label="$t('xapp1s1.profile.sex')"
+          behavior="menu"
+          stack-label
+          style="padding-right: 8px"
+        />
+        <q-input
+          class="col-4"
+          outlined
+          v-model="myProfile.height"
+          :label="$t('xapp1s1.profile.height')"
+          stack-label
+          style="padding-right: 8px"
+        />
+        <q-input
+          class="col-4"
+          outlined
+          v-model="myProfile.weight"
+          :label="$t('xapp1s1.profile.weight')"
+          stack-label
+        />
+      </div>
+      <div class="row">
+        <q-select
+          class="col-6"
+          outlined
+          :options="eduback"
+          v-model="myProfile.eduback"
+          :label="$t('xapp1s1.profile.eduBack')"
+          behavior="menu"
+          stack-label
+          style="padding-right: 8px"
+        />
+        <q-select
+          class="col-6"
+          outlined
+          :options="city"
+          behavior="menu"
+          v-model="myProfile.nativeplace"
+          :label="$t('xapp1s1.profile.nativePlace')"
+          stack-label
+        />
+      </div>
       <q-input
         outlined
         v-model="myProfile.companyname"
         :label="$t('xapp1s1.profile.companyName')"
         stack-label
       />
-      <q-input
-        outlined
-        v-model="myProfile.nickname"
-        :label="$t('xapp1s1.profile.nickname')"
-        stack-label
-      />
-      <q-select
-        :options="sex"
-        outlined
-        v-model="myProfile.sex"
-        :label="$t('xapp1s1.profile.sex')"
-        behavior="menu"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.height"
-        :label="$t('xapp1s1.profile.height')"
-        stack-label
-      />
       <div class="q-pa-md">
-        <q-badge color="secondary">
-          Model: {{ income.min }} to {{ income.max }}
-        </q-badge>
-
+        <q-item color="grey">
+          {{ $t("xapp1s1.profile.income", [income.min, income.max]) }}
+        </q-item>
+        <div class="row">
+          <q-input
+            class="col"
+            outlined
+            v-model="income.min"
+            :label="$t('xapp1s1.profile.incomeBegin')"
+            stack-label
+            dense
+          />
+          <q-input
+            class="col"
+            outlined
+            v-model="income.max"
+            :label="$t('xapp1s1.profile.incomeEnd')"
+            stack-label
+            dense
+          />
+        </div>
         <q-range v-model="income" :max="50000" :min="0" />
       </div>
+      <div class="row">
+        <q-select
+          class="col"
+          outlined
+          :options="province"
+          v-model="address.province"
+          :label="$t('xapp1s1.profile.workAddress.province')"
+          behavior="menu"
+          stack-label
+          map-options
+          option-label="name"
+          option-value="city"
+          style="padding-right: 8px"
+          @update:model-value="
+            address.city = '';
+            address.area = '';
+          "
+        />
+        <q-select
+          class="col"
+          outlined
+          :options="address.province.city ? address.province.city : null"
+          v-model="address.city"
+          :label="$t('xapp1s1.profile.workAddress.city')"
+          behavior="menu"
+          stack-label
+          map-options
+          option-label="name"
+          option-value="area"
+          style="padding-right: 8px"
+          @update:model-value="address.area = ''"
+        />
+        <q-select
+          class="col"
+          outlined
+          :options="address.city.area ? address.city.area : null"
+          v-model="address.area"
+          :label="$t('xapp1s1.profile.workAddress.area')"
+          behavior="menu"
+          stack-label
+        />
+      </div>
       <q-input
-        outlined
-        v-model="income.min"
-        :label="$t('xapp1s1.profile.incomeBegin')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="income.max"
-        :label="$t('xapp1s1.profile.incomeEnd')"
-        stack-label
-      />
-
-      <q-select
-        outlined
-        :options="province"
-        v-model="address.province"
-        :label="$t('xapp1s1.profile.workAddress.province')"
-        behavior="menu"
-        stack-label
-        map-options
-        option-label="name"
-        option-value="city"
-        @update:model-value="address.city = null"
-      />
-      <q-select
-        v-if="address.province"
-        outlined
-        :options="address.province.city"
-        v-model="address.city"
-        :label="$t('xapp1s1.profile.workAddress.city')"
-        behavior="menu"
-        stack-label
-        map-options
-        option-label="name"
-        option-value="area"
-        @update:model-value="address.area = null"
-      />
-      <q-select
-        v-if="address.city"
-        outlined
-        :options="address.city.area"
-        v-model="address.area"
-        :label="$t('xapp1s1.profile.workAddress.area')"
-        behavior="menu"
-        stack-label
-      />
-      <q-input
+        class="row"
         outlined
         v-model="address.info"
         :label="$t('xapp1s1.profile.workAddress.info')"
         stack-label
       />
-      <q-select
-        outlined
-        :options="eduback"
-        v-model="myProfile.eduback"
-        :label="$t('xapp1s1.profile.eduBack')"
-        behavior="menu"
-        stack-label
-      />
-      <q-select
-        outlined
-        :options="marriage"
-        v-model="myProfile.marriage"
-        :label="$t('xapp1s1.profile.marriage')"
-        behavior="menu"
-        stack-label
-      />
-      <q-select
-        outlined
-        :options="city"
-        behavior="menu"
-        v-model="myProfile.nativeplace"
-        :label="$t('xapp1s1.profile.nativePlace')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.weight"
-        :label="$t('xapp1s1.profile.weight')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.housesitu"
-        :label="$t('xapp1s1.profile.houseSitu')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.carsitu"
-        :label="$t('xapp1s1.profile.carSitu')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.smokesitu"
-        :label="$t('xapp1s1.profile.smokeSitu')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.drinksitu"
-        :label="$t('xapp1s1.profile.drinkSitu')"
-        stack-label
-      />
-      <q-input
-        outlined
-        v-model="myProfile.childrensitu"
-        :label="$t('xapp1s1.profile.childrenSitu')"
-        stack-label
-      />
+      <div class="row">
+        <q-select
+          class="col-6"
+          outlined
+          :options="marriage"
+          v-model="myProfile.marriage"
+          :label="$t('xapp1s1.profile.marriage')"
+          behavior="menu"
+          stack-label
+          style="padding-right: 8px"
+        />
+        <q-input
+          outlined
+          class="col-6"
+          v-model="myProfile.housesitu"
+          :label="$t('xapp1s1.profile.houseSitu')"
+          stack-label
+        />
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.carsitu"
+          :label="$t('xapp1s1.profile.carSitu')"
+          stack-label
+          style="padding-right: 8px; padding-top: 12px"
+        />
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.smokesitu"
+          :label="$t('xapp1s1.profile.smokeSitu')"
+          stack-label
+          style="padding-top: 12px"
+        />
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.drinksitu"
+          :label="$t('xapp1s1.profile.drinkSitu')"
+          stack-label
+          style="padding-right: 8px; padding-top: 12px"
+        />
+        <q-input
+          class="col-6"
+          outlined
+          v-model="myProfile.childrensitu"
+          :label="$t('xapp1s1.profile.childrenSitu')"
+          stack-label
+          style="padding-top: 12px"
+        />
+      </div>
       <q-input
         outlined
         v-model="myProfile.memo"
+        type="textarea"
         :label="$t('xapp1s1.profile.memo')"
         stack-label
       />
-      <q-btn
-        color="deep-orange"
-        glossy
-        :label="$t('xapp1s1.profile.ok')"
-        @click="update"
-      />
+      <div class="row">
+        <q-btn
+          class="col-4 offset-4"
+          color="secondary"
+          glossy
+          :label="$t('xapp1s1.profile.ok')"
+          style="margin-bottom: 20px"
+          @click="update"
+        />
+      </div>
     </q-form>
 
     <q-list bordered padding>
-      <q-item-label header>User Controls</q-item-label>
-      <q-item clickable v-ripple>
-        <q-item
-          :lable="$t('xapp1s1.shop.header')"
-          to="/user/xapp1s1shop"
-        ></q-item>
-        <q-item-label caption> </q-item-label>
-      </q-item>
-      <q-item clickable v-ripple>
+      <q-item dense clickable v-ripple to="/user/xapp1s1shop">
         <q-item-section>
-          <q-item-label>Content filtering</q-item-label>
-          <q-item-label caption>
-            Set the content filtering level to restrict apps that can be
-            downloaded
-          </q-item-label>
+          <q-item-label>{{ $t("xapp1s1.profile.shop") }}</q-item-label>
         </q-item-section>
-      </q-item>
-
-      <q-item clickable v-ripple to="/user/xapp1s1shop">
-        <q-item-section>
-          <q-item-label>Password</q-item-label>
-          <q-item-label caption>
-            Require password for purchase or use password to restrict purchase
-          </q-item-label>
+        <q-item-section thumbnail>
+          <q-icon name="navigate_next" />
         </q-item-section>
       </q-item>
     </q-list>
