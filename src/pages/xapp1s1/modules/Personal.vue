@@ -86,12 +86,12 @@
         map-options
         option-label="name"
         option-value="city"
-        @update:model-value="changeAddress"
+        @update:model-value="address.city = null"
       />
       <q-select
         v-if="address.province"
         outlined
-        :options="address.province ? address.province.city : null"
+        :options="address.province.city"
         v-model="address.city"
         :label="$t('xapp1s1.profile.workAddress.city')"
         behavior="menu"
@@ -99,12 +99,12 @@
         map-options
         option-label="name"
         option-value="area"
-        @update:model-value="changeAddress2"
+        @update:model-value="address.area = null"
       />
       <q-select
         v-if="address.city"
         outlined
-        :options="address.city ? address.city.area : null"
+        :options="address.city.area"
         v-model="address.area"
         :label="$t('xapp1s1.profile.workAddress.area')"
         behavior="menu"
@@ -240,8 +240,12 @@ export default {
         max: 50000,
       },
       address: {
-        province: "",
-        city: "",
+        province: {
+          name: "",
+        },
+        city: {
+          name: "",
+        },
         area: "",
         info: "",
       },
@@ -293,29 +297,26 @@ export default {
         this.income.max = this.myProfile.incomeend;
         const tmp = JSON.parse(this.myProfile.workaddress);
         //已知：数据库长度不够，存在数据库中的数据只有地址没有存其他的选项
-        this.address.province = tmp.province;
-        this.address.city = tmp.city;
+        //通过filter筛选出province中对应项目解决问题
+        this.address.province = province.filter((value) => {
+          return tmp.province == value.name;
+        })[0];
+        this.address.city = this.address.province.city.filter((value) => {
+          return tmp.city == value.name;
+        })[0];
         this.address.area = tmp.area;
         this.address.info = tmp.info;
-        console.log(this.address.city);
       }
     });
   },
   methods: {
-    changeAddress() {
-      this.address.city = null;
-      this.address.area = null;
-    },
-    changeAddress2() {
-      this.address.area = null;
-    },
     update() {
       this.loading = true;
       this.myProfile.incomebegin = this.income.min;
       this.myProfile.incomeend = this.income.max;
       const tmp = {
-        province: this.address.province,
-        city: this.address.city,
+        province: this.address.province.name,
+        city: this.address.city.name,
         area: this.address.area,
         info: this.address.info,
       };
