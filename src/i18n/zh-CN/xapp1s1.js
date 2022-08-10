@@ -79,4 +79,8 @@ export const xapp1s1 = {
     timebegin: "可用时间(始)",
     timeend: "可用时间(结)",
   },
+  moment: {
+    header: "动态管理",
+    note: "动态",
+  },
 };
