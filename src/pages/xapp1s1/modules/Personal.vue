@@ -276,12 +276,8 @@ export default {
         max: 50000,
       },
       address: {
-        province: {
-          name: "",
-        },
-        city: {
-          name: "",
-        },
+        province: "",
+        city: "",
         area: "",
         info: "",
       },
@@ -334,12 +330,16 @@ export default {
         const tmp = JSON.parse(this.myProfile.workaddress);
         //已知：数据库长度不够，存在数据库中的数据只有地址没有存其他的选项
         //通过filter筛选出province中对应项目解决问题
-        this.address.province = province.filter((value) => {
+        let tmp2 = province.filter((value) => {
           return tmp.province == value.name;
         })[0];
-        this.address.city = this.address.province.city.filter((value) => {
+        this.address.province = tmp2 ? tmp2 : { name: "", city: [] };
+
+        let tmp3 = this.address.province.city.filter((value) => {
           return tmp.city == value.name;
         })[0];
+        this.address.city = tmp3 ? tmp3 : { name: "", area: [] };
+
         this.address.area = tmp.area;
         this.address.info = tmp.info;
       }
