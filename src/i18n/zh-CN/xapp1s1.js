@@ -22,6 +22,7 @@ export const xapp1s1 = {
     realName: "真实姓名",
     idCard: "身份证",
     phone: "联系电话",
+    nationality: "名族",
     companyName: "就职单位",
     nickname: "昵称",
     sex: "性别",
