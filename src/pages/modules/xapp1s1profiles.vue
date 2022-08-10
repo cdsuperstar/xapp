@@ -213,7 +213,7 @@ export default {
         },
         {
           headerName: this.$t("xapp1s1.profile.companyName"),
-          field: "companyName",
+          field: "companyname",
           width: 80,
           minWidth: 80,
           maxWidth: 160,

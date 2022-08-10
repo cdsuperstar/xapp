@@ -210,7 +210,7 @@
       />
     </div>
     <div class="row q-ma-md" style="margin: 16px 1px">
-      <div class="col-md-6 shadow-1">
+      <div class="col-md-10 shadow-1">
         <ag-grid-vue
           style="min-width: 100%; height: 500px"
           class="ag-theme-balham User-agGrid"
@@ -304,9 +304,9 @@ export default {
       Roleshow: false,
       data: {
         data: {
-          name: "22",
-          email: "2@2.com",
-          password: "22222222",
+          name: "",
+          email: "",
+          password: "",
         },
       },
     };
@@ -462,6 +462,24 @@ export default {
           editable: false,
           filter: true,
         },
+        {
+          headerName: this.$t("dataAGgrid.created_at"),
+          field: "created_at",
+          width: 160,
+          minWidth: 160,
+          editable: false,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("dataAGgrid.updated_at"),
+          field: "updated_at",
+          width: 160,
+          minWidth: 160,
+          editable: false,
+          sortable: true,
+          filter: true,
+        },
       ];
       this.defaultColDef = {
         editable: true,
@@ -607,6 +625,7 @@ export default {
           this.$api
             .put("/users/" + val.id, val)
             .then((res) => {
+              console.log("users vue:", val);
               if (res.data.success) {
                 this.gridApi.updateRowData({
                   update: [Object.assign(val, res.data.data)],

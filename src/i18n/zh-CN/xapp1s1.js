@@ -81,4 +81,19 @@ export const xapp1s1 = {
     timebegin: "可用时间(始)",
     timeend: "可用时间(结)",
   },
+  moment: {
+    header: "动态管理",
+    note: "动态",
+  },
+  activate: {
+    header: "活动管理",
+    name: "名称",
+    description: "介绍及流程",
+    tagprice: "标价",
+    price: "价格",
+    timebegin: "开始时间",
+    timeend: "结束时间",
+    address: "地点",
+    solt: "人数",
+  },
 };
