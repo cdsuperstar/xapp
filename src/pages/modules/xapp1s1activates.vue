@@ -2,7 +2,7 @@
   <q-page padding>
     <q-page padding class="q-pa-ma">
       <div class="text-h5 q-ma-md text-secondary">
-        {{ $t("xapp1s1.moment.header") }}
+        {{ $t("xapp1s1.activate.header") }}
       </div>
       <q-separator color="accent" />
       <div class="row q-ma-md" style="margin: 16px 1px">
@@ -109,7 +109,7 @@ export default {
   },
   created() {
     this.$api
-      .get("/xapp1s1/moments/")
+      .get("/xapp1s1/activates/")
       .then((res) => {
         if (res.data.success) {
           this.rowData = res.data.data;
@@ -146,8 +146,68 @@ export default {
           checkboxSelection: true,
         },
         {
-          headerName: this.$t("xapp1s1.moment.note"),
-          field: "note",
+          headerName: this.$t("xapp1s1.activate.name"),
+          field: "name",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.description"),
+          field: "description",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.tagprice"),
+          field: "tagprice",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.timebegin"),
+          field: "timebegin",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.timeend"),
+          field: "timeend",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.address"),
+          field: "address",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: this.$t("xapp1s1.activate.solt"),
+          field: "solt",
           width: 120,
           minWidth: 120,
           maxWidth: 260,
@@ -194,7 +254,7 @@ export default {
               this.gridApi.updateRowData({ remove: [val] });
               if (val.id === undefined) return false;
               this.$api
-                .delete("/xapp1s1/moments/" + val.id)
+                .delete("/xapp1s1/activates/" + val.id)
                 .then((res) => {
                   if (res.data.success) {
                     // console.log(res.data.data)
@@ -244,7 +304,7 @@ export default {
       selectedData.forEach((val) => {
         if (val.id === undefined) {
           this.$api
-            .post("/xapp1s1/moments/", val)
+            .post("/xapp1s1/activates/", val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
@@ -266,7 +326,7 @@ export default {
             .catch((e) => {});
         } else {
           this.$api
-            .put("/xapp1s1/moments/" + val.id, val)
+            .put("/xapp1s1/activates/" + val.id, val)
             .then((res) => {
               if (res.data.success) {
                 this.gridApi.updateRowData({
