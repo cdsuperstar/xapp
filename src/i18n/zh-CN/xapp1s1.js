@@ -85,6 +85,7 @@ export const xapp1s1 = {
   moment: {
     header: "动态管理",
     note: "动态",
+    type: "类型",
   },
   activate: {
     header: "活动管理",
