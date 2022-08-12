@@ -7,14 +7,21 @@
       stack-label
       outlined
     />
-    <q-select
-      outlined
-      :options="type"
-      v-model="chooseType"
-      :label="$t('xapp1s1.moment.type')"
-      behavior="menu"
-      stack-label
-    />
+
+    <update-media
+      :server="this.$api.defaults.baseURL + '/zero/uploadMyTmpFiles'"
+      media_file_path="/post_images"
+      :media_server="this.$api.defaults.baseURL + '/zero/getMyTmpFiles'"
+      @saved-media="msave"
+      @added-media="madd"
+      @deleted-media="mdel"
+      :error="{}"
+      :headers="{
+        Authorization: 'Bearer ' + this.$auth.token(),
+      }"
+    >
+    </update-media>
+
     <q-btn
       color="secondary"
       glossy
@@ -25,14 +32,14 @@
 </template>
 
 <script>
-//import { UploadMedia, UpdateMedia } from "vue-media-upload";
+import { UploadMedia, UpdateMedia } from "../../../components/vue-media-upload";
 export default {
   name: "SendActive",
-
+  components: {
+    UpdateMedia,
+  },
   data() {
     return {
-      type: ["个人", "商家"],
-      chooseType: "",
       text: "",
       DaddFiles: false,
       Duserprfile: false,
@@ -40,22 +47,39 @@ export default {
         files: [],
         id: "",
       },
+      pics: {},
+      added: {},
+      saved: {},
     };
   },
   methods: {
+    madd(val) {
+      console.log("Media add:", val);
+      this.added = val;
+    },
+    mdel(val) {
+      console.log("Media del:", val);
+    },
+    msave(val) {
+      console.log("Media save:", val);
+      this.saved = val;
+    },
     send() {
+      Object.assign(this.pics, this.added);
+      Object.assign(this.pics, this.saved);
       let tmp = {
         note: this.text,
-        type: this.chooseType,
+        pics: this.pics,
       };
       console.log(tmp);
       this.$api
         .post("xapp1s1/moments/postMyMoment", {
           note: this.text,
-          type: this.chooseType,
+          pics: this.pics,
         })
         .then((res) => {
           if (res.data.success === true) {
+            console.log(1, res.data);
             this.$zglobal.showMessage(
               "positive",
               "center",

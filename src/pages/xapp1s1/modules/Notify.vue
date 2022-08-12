@@ -47,6 +47,11 @@
           <q-item style="max-height: 200px; height: 200px">
             {{ active.note }}
           </q-item>
+          <q-item>
+            <q-item-section v-for="pic in active.pics" :key="pic">
+              <q-img :src="pic" />
+            </q-item-section>
+          </q-item>
           <q-separator />
         </div>
       </q-tab-panel>
@@ -137,7 +142,7 @@ export default {
           if (res.data.success) {
             this.activeR = res.data.data;
             //查看结构
-            console.log(1);
+            console.log(1, this.activeR);
           }
         });
       } else if (po == "F") {
