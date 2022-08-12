@@ -68,7 +68,7 @@ const xapp1s1 = {
     {
       path: "xapp1s1sendactive",
       name: "xapp1s1sendactive",
-      component: () => import("pages/xapp1s1/modules/SendActive.vue"),
+      component: () => import("pages/xapp1s1/modules/SendMoment.vue"),
     },
   ],
 };
