@@ -5,6 +5,21 @@
         {{ $t("xapp1s1.moment.header") }}
       </div>
       <q-separator color="accent" />
+      <update-media
+        :server="this.$api.defaults.baseURL + '/zero/uploadMyTmpFiles'"
+        media_file_path="/post_images"
+        :media_server="this.$api.defaults.baseURL + '/zero/getMyTmpFiles'"
+        @saved-media="msave"
+        @added-media="madd"
+        @deleted-media="mdel"
+        :error="{}"
+        :headers="{
+          Authorization: 'Bearer ' + this.$auth.token(),
+        }"
+      >
+      </update-media>
+
+      <q-separator color="accent" />
       <div class="row q-ma-md" style="margin: 16px 1px">
         <q-btn
           color="addbtn"
@@ -86,11 +101,15 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import { UploadMedia, UpdateMedia } from "../../components/vue-media-upload";
+// git clone https://github.com/cdsuperstar/vue-media-upload.git
 
 export default {
   name: "xapp1s1moments",
   components: {
     AgGridVue,
+
+    UpdateMedia,
   },
   setup() {},
   data() {
@@ -126,6 +145,15 @@ export default {
     this.gridColumnApi = this.gridOptions.columnApi;
   },
   methods: {
+    madd(val) {
+      console.log("Media add:", val);
+    },
+    mdel(val) {
+      console.log("Media del:", val);
+    },
+    msave(val) {
+      console.log("Media save:", val);
+    },
     initGrid() {
       this.gridOptions = {
         rowHeight: 32,
