@@ -228,6 +228,16 @@ export default {
           filter: true,
         },
         {
+          headerName: this.$t("xapp1s1.shop.approval"),
+          field: "approval",
+          width: 120,
+          minWidth: 120,
+          maxWidth: 260,
+          editable: true,
+          sortable: true,
+          filter: true,
+        },
+        {
           headerName: this.$t("dataAGgrid.created_at"),
           field: "created_at",
           width: 130,
