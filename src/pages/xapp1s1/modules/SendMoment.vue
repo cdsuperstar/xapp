@@ -15,7 +15,6 @@
       @saved-media="msave"
       @added-media="madd"
       @deleted-media="mdel"
-      :error="{}"
       :headers="{
         Authorization: 'Bearer ' + this.$auth.token(),
       }"
@@ -85,6 +84,7 @@ export default {
               "center",
               this.$t("xapp1s1.moment.success")
             );
+            this.$router.push({ name: "xapp1s1home" });
           } else {
             this.$zglobal.showMessage(
               "red-5",
