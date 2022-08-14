@@ -26,228 +26,41 @@
 
     <q-tab-panels v-model="notifyTools" swipeable animated>
       <q-tab-panel name="recommend">
-        <div class="active" :key="active" v-for="active in activeRgi">
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar>
-                <q-img :src="active.user_pub.xapp1s1profile_pub.avatar" />
-              </q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <!--              用户名-->
-              <q-item-label>
-                {{ active.user_pub.xapp1s1profile_pub.nickname }}
-              </q-item-label>
-              <!--              用户资料-->
-              <q-item-label caption>
-                {{ active.user_pub.xapp1s1profile_pub.sex }},
-                {{ active.user_pub.xapp1s1profile_pub.weight }},
-                {{ active.user_pub.xapp1s1profile_pub.height }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item style="max-height: 200px; height: 200px">
-            {{ active.note }}
-          </q-item>
-          <q-item>
-            <q-item-section v-for="pic in active.pics" :key="pic">
-              <q-img :src="pic" />
-            </q-item-section>
-          </q-item>
-          <q-separator />
-        </div>
+        <moment-page
+          v-for="moment in activeR"
+          :key="moment"
+          :moment="moment"
+        ></moment-page>
       </q-tab-panel>
 
       <q-tab-panel name="followed" class="q-pa-md">
-        <div class="active" :key="active" v-for="active in activeF">
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar>
-                <q-img :src="active.user_pub.xapp1s1profile_pub.avatar" />
-              </q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <!--用户名-->
-              <q-item-label>
-                {{ active.user_pub.xapp1s1profile_pub.nickname }}
-              </q-item-label>
-              <!--用户资料-->
-              <q-item-label caption>
-                {{ active.user_pub.xapp1s1profile_pub.sex }},
-                {{ active.user_pub.xapp1s1profile_pub.weight }},
-                {{ active.user_pub.xapp1s1profile_pub.height }}
-              </q-item-label>
-            </q-item-section>
-            <!--动态内容-->
-          </q-item>
-          <q-item style="max-height: 200px">
-            {{ active.note }}
-          </q-item>
-          <!--动态图片-->
-          <div class="pic">
-            <div v-if="active.pics.length > 4" class="q-pa-md">
-              <div class="q-col-gutter-xs row items-start">
-                <div
-                  class="col-4"
-                  v-for="(pic, index) in active.pics"
-                  :key="pic"
-                >
-                  <q-img
-                    :ratio="1"
-                    :src="pic"
-                    @click="showPic(active, index + 1)"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div
-              v-else-if="active.pics.length < 4 && active.pics.length > 1"
-              class="q-pa-md"
-            >
-              <div class="q-col-gutter-xs row items-start">
-                <div
-                  class="col-6"
-                  v-for="(pic, index) in active.pics"
-                  :key="pic"
-                >
-                  <q-img
-                    :ratio="1"
-                    :src="pic"
-                    @click="showPic(active, index + 1)"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div v-else-if="active.pics.length === 1" class="q-pa-md">
-              <div class="q-col-gutter-xs row items-start">
-                <div
-                  class="col-6"
-                  v-for="(pic, index) in active.pics"
-                  :key="pic"
-                >
-                  <q-img :src="pic" @click="showPic(active, index + 1)" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--评论，点赞，时间-->
-          <div class="q-pa-md">
-            <q-bar style="background-color: white; color: gray">
-              <div style="size: 10px">
-                {{ active.updated_at }}
-              </div>
-
-              <q-space />
-              <!--              点赞-->
-              <div class="dianzan">
-                <q-btn
-                  v-if="
-                    active.thumbs.filter((val) => {
-                      return val.user_id == this.$auth.user()?.id;
-                    }).length === 0
-                  "
-                  dense
-                  flat
-                  icon="thumb_up_off_alt"
-                  :label="active.thumbs?.length"
-                  @click="getThumb(active)"
-                />
-                <q-btn
-                  v-if="
-                    active.thumbs.filter((val) => {
-                      return val.user_id == this.$auth.user()?.id;
-                    }).length !== 0
-                  "
-                  dense
-                  flat
-                  color="red"
-                  icon="thumb_up_alt"
-                  :label="active.thumbs?.length"
-                  @click="getThumb(active)"
-                />
-              </div>
-
-              <q-btn
-                dense
-                flat
-                icon="message"
-                @click="openComment(active)"
-                :label="active.comments.length"
-              />
-            </q-bar>
-          </div>
-          <q-separator />
-        </div>
+        <moment-page
+          v-for="moment in activeF"
+          :key="moment"
+          :moment="moment"
+        ></moment-page>
       </q-tab-panel>
 
       <q-tab-panel name="shop">
-        <div class="active" :key="active" v-for="active in activeS">
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar>
-                <q-img :src="active.user_pub.xapp1s1profile_pub.avatar" />
-              </q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <!--              用户名-->
-              <q-item-label>
-                {{ active.user_pub.xapp1s1profile_pub.nickname }}
-              </q-item-label>
-              <!--              用户资料-->
-              <q-item-label caption>
-                {{ active.user_pub.xapp1s1profile_pub.sex }},
-                {{ active.user_pub.xapp1s1profile_pub.weight }},
-                {{ active.user_pub.xapp1s1profile_pub.height }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item style="max-height: 200px; height: 200px">
-            {{ active.note }}
-          </q-item>
-          <q-item>
-            <q-item-section v-for="pic in active.pics" :key="pic">
-              <q-img :src="pic" />
-            </q-item-section>
-          </q-item>
-          <q-separator />
-        </div>
+        <moment-page
+          v-for="moment in activeS"
+          :key="moment"
+          :moment="moment"
+        ></moment-page>
       </q-tab-panel>
     </q-tab-panels>
     <q-separator />
   </q-page>
-  <!--  展示图片-->
-  <q-dialog v-model="pop" auto-close transition-hide="slide-down">
-    <q-carousel swipeable v-model="slide" control-color="primary">
-      <q-carousel-slide
-        v-for="(pic, index) in popImg"
-        :key="pic"
-        :name="index + 1"
-      >
-        <q-img :src="pic"></q-img>
-      </q-carousel-slide>
-    </q-carousel>
-  </q-dialog>
-  <!--  评论-->
-  <q-dialog v-model="comment" position="bottom">
-    <q-card>
-      <q-input v-model="commentContent">
-        <template v-slot:append
-          ><q-btn label="发布" color="primary" @click="sendComment" />
-        </template>
-      </q-input>
-    </q-card>
-  </q-dialog>
 </template>
 
 <script>
 import { ref } from "vue";
+import momentPage from "components/momentPage";
 export default {
   name: "Notify",
+  components: {
+    momentPage,
+  },
   setup() {
     return {
       slide: ref(1),
