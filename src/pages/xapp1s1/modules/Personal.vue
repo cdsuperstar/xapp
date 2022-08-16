@@ -1,21 +1,26 @@
 <template>
   <q-page class="q-pa-md">
-    <q-dialog v-model="avatarUpdate">
-      <q-uploader
-        url="http://localhost:8080/statics/"
-        style="max-width: 300px"
-      />
-    </q-dialog>
     <q-form class="q-gutter-md">
       <div class="row">
-        <div class="col-4 offset-4">
-          <q-avatar
-            size="100px"
-            style="margin: 10px"
-            @click="avatarUpdate = true"
-          >
+        <div class="col-6">
+          <q-avatar size="100px" style="margin: 10px">
             <q-img :src="myProfile.avatar"></q-img>
           </q-avatar>
+        </div>
+        <div class="col-6">
+          <update-media
+            :server="this.$api.defaults.baseURL + '/zero/uploadMyTmpFiles'"
+            media_file_path="/post_images"
+            :media_server="this.$api.defaults.baseURL + '/zero/getMyTmpFiles'"
+            @saved-media="mediaSave"
+            @added-media="mediaAdd"
+            @deleted-media="mediaDel"
+            :multiple="false"
+            :headers="{
+              Authorization: 'Bearer ' + this.$auth.token(),
+            }"
+          >
+          </update-media>
         </div>
       </div>
       <div class="row">
@@ -60,7 +65,6 @@
           option-value="name"
           option-label="name"
           stack-label
-          @update:model-value="test"
         />
       </div>
       <div class="row">
@@ -278,13 +282,17 @@
 
 <script>
 import { province } from "components/province";
+import { UpdateMedia } from "../../../components/vue-media-upload";
+
 export default {
   name: "Personal",
+  components: {
+    UpdateMedia,
+  },
   data() {
     return {
       province,
       loading: false,
-      avatarUpdate: false,
       sex: ["男", "女"],
       myProfile: {},
       income: {
@@ -420,8 +428,31 @@ export default {
     });
   },
   methods: {
-    test() {
-      console.log(this.myProfile.nationality);
+    mediaSave(val) {
+      // console.log("save", val);
+    },
+    mediaAdd(val) {
+      if (val.length > 0) {
+        this.$api
+          .post("/xapp1s1/profile/updateMyAvatar", { filenames: val })
+          .then((res) => {
+            if (res.data.success === true) {
+              this.myProfile.avatar = res.data.data.avatar;
+            }
+          });
+      }
+      // console.log("add", val);
+    },
+    mediaDel(val) {
+      if (val.length > 0) {
+        this.$api
+          .post("/zero/delMyTmpFiles", { filenames: val })
+          .then((res) => {
+            if (res.data.success === true) {
+            }
+          });
+        // console.log("mediaDel: ", val);
+      }
     },
     update() {
       this.loading = true;
