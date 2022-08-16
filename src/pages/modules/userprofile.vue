@@ -177,7 +177,7 @@
             <p class="text-caption text-grey">
               {{ $t("auth.users.profile.sex") }}：
               {{
-                data.sex === "m"
+                data.sex === "1"
                   ? $t("auth.users.profile.male")
                   : $t("auth.users.profile.female")
               }}
@@ -440,8 +440,8 @@ export default {
         address: null,
         memo: null,
         sexoptions: [
-          { label: this.$t("auth.users.profile.male"), value: "m" },
-          { label: this.$t("auth.users.profile.female"), value: "f" },
+          { label: this.$t("auth.users.profile.male"), value: "1" },
+          { label: this.$t("auth.users.profile.female"), value: "2" },
         ],
       },
       loading: false,
