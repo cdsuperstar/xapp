@@ -31,6 +31,7 @@ export const xapp1s1 = {
     income: "收入区间：{0} 到 {1}",
     incomeBegin: "从",
     incomeEnd: "到",
+    workAddr: "工作地址",
     workAddress: {
       province: "就职省份",
       city: "就职城市",

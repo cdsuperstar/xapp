@@ -1,51 +1,5 @@
 <template>
   <q-page padding class="q-pa-ma">
-    <q-dialog v-model="DunitTree">
-      <q-card class="q-dialog-plugin">
-        <q-toolbar class="bg-primary text-white">
-          <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            :title="this.$t('buttons.close')"
-          />
-          <q-toolbar-title>
-            <span class="text-subtitle1 text-weight-bold">
-              {{ $t("units.showunittree") }}</span
-            >
-          </q-toolbar-title>
-          <q-btn
-            flat
-            color="secondary"
-            text-color="white"
-            icon="save"
-            :label="this.$t('buttons.confirm')"
-            @click="Editusertounit()"
-          />
-        </q-toolbar>
-        <q-separator color="accent" />
-        <q-card-section
-          style="min-height: 10vh; max-height: 80vh"
-          class="scroll"
-        >
-          <q-tree
-            ref="myunittree"
-            node-key="id"
-            label-key="title"
-            selected-color="warning"
-            :nodes="Unitdata"
-            :selected="unitticked"
-            default-expand-all
-          />
-        </q-card-section>
-        <q-separator color="accent" />
-        <q-inner-loading :showing="loading">
-          <q-spinner-gears size="80px" color="secondary" />
-        </q-inner-loading>
-      </q-card>
-    </q-dialog>
     <div class="text-h5 q-ma-md text-secondary">
       {{ $t("auth.users.profile.pheader") }}
     </div>
@@ -86,7 +40,7 @@
     <div id="printMe" class="shadow-1">
       <ag-grid-vue
         id="myGrid"
-        style="width: 100%; height: 500px"
+        style="height: 500px"
         class="ag-theme-balham Profile-agGrid"
         row-selection="multiple"
         row-multi-select-with-click="true"
@@ -119,7 +73,6 @@ export default {
   },
   data() {
     return {
-      unitticked: null,
       loading: false,
       quickFilter: null,
       gridOptions: null,
@@ -277,7 +230,7 @@ export default {
           filter: true,
         },
         {
-          headerName: this.$t("xapp1s1.profile.workAddress"),
+          headerName: this.$t("xapp1s1.profile.workAddr"),
           field: "workaddress",
           width: 80,
           minWidth: 80,
