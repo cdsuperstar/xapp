@@ -75,6 +75,12 @@ export const xapp1s1 = {
     ok: "确认修改",
     working: "营业",
     rest: "休息",
+    shopAvatar: "商铺头像",
+    environments: "环境图片",
+    products: "商品图片",
+    menus: "菜单图片",
+    qualifications: "资质图片",
+    others: "其他图片",
   },
   product: {
     header: "商品管理",
