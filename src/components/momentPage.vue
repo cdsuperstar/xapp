@@ -146,7 +146,6 @@ export default {
         this.momentDetail = true;
         this.$props.isDetail = true;
       }
-      console.log(this.$props.moment);
     },
   },
 };

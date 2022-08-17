@@ -110,7 +110,7 @@ export default {
         this.$api.get("xapp1s1/moments/getFocusedMoments ").then((res) => {
           if (res.data.success) {
             this.activeF = res.data.data;
-            console.log(2, this.activeF);
+            // console.log(2, this.activeF);
           }
         });
       } else {
@@ -137,7 +137,6 @@ export default {
         .post("xapp1s1/moments/thumbUpMoment/" + moment.id)
         .then((res) => {
           if (res.data.success) {
-            console.log(res.data.data);
             moment.thumbs = res.data.data;
           }
         });
