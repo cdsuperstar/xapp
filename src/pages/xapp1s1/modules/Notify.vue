@@ -36,9 +36,10 @@
       <q-tab-panel name="followed" class="q-pa-md">
         <moment-page
           v-for="moment in activeF"
-          :key="moment"
+          :key="moment.id"
           :moment="moment"
         ></moment-page>
+        <label>我是有底线的！</label>
       </q-tab-panel>
 
       <q-tab-panel name="shop">

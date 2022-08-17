@@ -55,7 +55,59 @@
           </q-btn>
         </q-bar>
         <moment-page :moment="moment" :is-detail="true"></moment-page>
-        <q-separator />
+        <q-tabs align="left" v-model="chooseThumbsComments">
+          <q-tab name="comments" icon="message" />
+          <q-tab name="thumbs" icon="thumb_up_alt" />
+        </q-tabs>
+        <q-tab-panels v-model="chooseThumbsComments" animated>
+          <q-tab-panel name="comments">
+            <q-list bordered dense separator>
+              <q-item
+                clickable
+                v-ripple
+                v-for="comment in moment.comments"
+                :key="comment.id"
+              >
+                <q-item-section avatar>
+                  <q-avatar>
+                    <q-img :src="comment.user_pub.xapp1s1profile_pub.avatar" />
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label header>
+                    {{ comment.user_pub.xapp1s1profile_pub.nickname }}:{{
+                      comment.content
+                    }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    {{ comment.created_at.replace("T", " ").substring(0, 16) }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-tab-panel>
+          <q-tab-panel name="thumbs">
+            <q-list bordered dense separator>
+              <q-item
+                clickable
+                v-ripple
+                v-for="thumb in moment.thumbs"
+                :key="thumb.id"
+              >
+                <q-item-section avatar>
+                  <q-avatar>
+                    <q-img :src="thumb.user_pub.xapp1s1profile_pub.avatar" />
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label header
+                    >{{ thumb.user_pub.xapp1s1profile_pub.nickname }} 点赞了
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-tab-panel>
+        </q-tab-panels>
       </q-card>
     </q-dialog>
   </div>
@@ -76,9 +128,7 @@ export default {
     thumbMoment,
   },
   props: {
-    moment: {
-      type: Object,
-    },
+    moment: {},
     isDetail: {
       type: Boolean,
       default: false,
@@ -86,6 +136,7 @@ export default {
   },
   data() {
     return {
+      chooseThumbsComments: "comments",
       momentDetail: false,
     };
   },
@@ -94,8 +145,8 @@ export default {
       if (!this.$props.isDetail) {
         this.momentDetail = true;
         this.$props.isDetail = true;
-        console.log(this.$props.isDetail);
       }
+      console.log(this.$props.moment);
     },
   },
 };
