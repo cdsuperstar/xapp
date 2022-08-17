@@ -274,6 +274,7 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <q-btn push color="savebtn" label="发起活动" to="xapp1s1sendactive" />
     <q-inner-loading :showing="loading">
       <q-spinner-box size="50px" color="secondary" />
     </q-inner-loading>
