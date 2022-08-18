@@ -6,7 +6,7 @@
         round
         dense
         icon="keyboard_arrow_left"
-        to="/user/xapp1s1personal"
+        to="/user/xapp1s1profile"
       />
       <q-toolbar-title>
         <label class="title">

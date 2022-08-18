@@ -265,9 +265,18 @@
     </q-form>
 
     <q-list bordered padding>
-      <q-item dense clickable v-ripple to="/user/xapp1s1shop">
+      <q-item clickable v-ripple to="/user/xapp1s1shop">
         <q-item-section>
           <q-item-label>{{ $t("xapp1s1.profile.shop") }}</q-item-label>
+        </q-item-section>
+        <q-item-section thumbnail>
+          <q-icon name="navigate_next" />
+        </q-item-section>
+      </q-item>
+
+      <q-item clickable v-ripple to="/user/xapp1s1profile">
+        <q-item-section>
+          <q-item-label>返回个人信息</q-item-label>
         </q-item-section>
         <q-item-section thumbnail>
           <q-icon name="navigate_next" />
