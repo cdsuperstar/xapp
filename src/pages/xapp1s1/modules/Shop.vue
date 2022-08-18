@@ -23,37 +23,38 @@
         outlined
         rounded
       />
-
-      <q-card
-        flat
-        bordered
-        class="col-12"
-        v-for="cl in fileCollentions"
-        :key="cl"
-      >
-        <q-card-section>
-          <div class="text-h6">{{ $t(`xapp1s1.shop.${cl}`) }}</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <update-media
-            :server="
-              this.$api.defaults.baseURL +
-              `/xapp1s1/shops/uploadMyShopFiles/${cl}`
-            "
-            :media_server="
-              this.$api.defaults.baseURL + `/xapp1s1/shops/getMyShopFiles/${cl}`
-            "
-            @deleted-media="mediaDel"
-            :collention="cl"
-            :multiple="true"
-            :headers="{
-              Authorization: 'Bearer ' + this.$auth.token(),
-            }"
-          >
-          </update-media>
-        </q-card-section>
-      </q-card>
+      <div v-if="showPicUploader">
+        <q-expansion-item
+          expand-separator
+          icon="perm_media"
+          :label="$t(`xapp1s1.shop.${cl}`)"
+          class="col-12"
+          v-for="cl in fileCollentions"
+          :key="cl"
+        >
+          <q-card>
+            <q-card-section>
+              <update-media
+                :server="
+                  this.$api.defaults.baseURL +
+                  `/xapp1s1/shops/uploadMyShopFiles/${cl}`
+                "
+                :media_server="
+                  this.$api.defaults.baseURL +
+                  `/xapp1s1/shops/getMyShopFiles/${cl}`
+                "
+                @deleted-media="mediaDel"
+                :collention="cl"
+                :multiple="true"
+                :headers="{
+                  Authorization: 'Bearer ' + this.$auth.token(),
+                }"
+              >
+              </update-media>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
+      </div>
 
       <div class="row q-pa-md">
         <q-input
@@ -169,6 +170,7 @@ export default {
         "qualifications",
         "others",
       ],
+      showPicUploader: false,
       loading: false,
       startTime: "09:00",
       endTime: "22:00",
@@ -181,6 +183,7 @@ export default {
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {
       if (res.data.success === true) {
         this.myShop = res.data.data;
+        this.showPicUploader = true;
         this.loading = false;
       } else {
         this.myShop = {
@@ -223,6 +226,7 @@ export default {
       this.$api.post("xapp1s1/shops/updateMyShop", this.myShop).then((res) => {
         if (res.data.success === true) {
           this.loading = false;
+          this.showPicUploader = true;
           this.$zglobal.showMessage(
             "positive",
             "center",
