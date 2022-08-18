@@ -1,5 +1,14 @@
 <template>
   <q-page class="q-pa-md">
+    <q-toolbar>
+      <q-btn
+        flat
+        round
+        dense
+        icon="keyboard_arrow_left"
+        to="/user/xapp1s1shop"
+      />
+    </q-toolbar>
     <q-form class="q-gutter-md">
       <q-input outlined v-model="name" label="活动名字" stack-label />
       <q-input outlined v-model="description" label="活动描述" stack-label />

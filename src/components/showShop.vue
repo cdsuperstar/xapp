@@ -1,4 +1,16 @@
 <template>
+  <q-toolbar>
+    <q-btn
+      flat
+      round
+      dense
+      icon="keyboard_arrow_left"
+      to="/user/xapp1s1profile"
+    />
+    <q-toolbar-title>
+      <label class="title"> 返回 </label>
+    </q-toolbar-title>
+  </q-toolbar>
   <q-list bordered separator>
     <q-item>
       <q-item-section />
@@ -103,10 +115,21 @@
 
     <q-item clickable v-ripple to="/user/xapp1s1profile">
       <q-item-section avatar>
-        <q-icon name="edit" />
+        <q-icon name="checklist" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>返回个人信息</q-item-label>
+        <q-item-label>商品列表</q-item-label>
+      </q-item-section>
+      <q-item-section thumbnail>
+        <q-icon name="navigate_next" />
+      </q-item-section>
+    </q-item>
+    <q-item clickable v-ripple to="xapp1s1sendactive">
+      <q-item-section avatar>
+        <q-icon name="groups" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>发起活动</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />

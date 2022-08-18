@@ -1,5 +1,15 @@
 <template>
   <q-page class="q-pa-md">
+    <q-toolbar>
+      <q-btn
+        flat
+        round
+        dense
+        icon="keyboard_arrow_left"
+        to="/user/xapp1s1profile"
+      />
+      <q-toolbar-title> </q-toolbar-title>
+    </q-toolbar>
     <q-form class="q-gutter-md">
       <div class="row">
         <div class="col-6">
@@ -274,7 +284,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <q-btn push color="savebtn" label="发起活动" to="xapp1s1sendactive" />
+
     <q-inner-loading :showing="loading">
       <q-spinner-box size="50px" color="secondary" />
     </q-inner-loading>
