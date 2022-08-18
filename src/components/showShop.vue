@@ -7,9 +7,6 @@
       icon="keyboard_arrow_left"
       to="/user/xapp1s1profile"
     />
-    <q-toolbar-title>
-      <label class="title"> 返回 </label>
-    </q-toolbar-title>
   </q-toolbar>
   <q-list bordered separator>
     <q-item>
@@ -113,7 +110,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item clickable v-ripple to="/user/xapp1s1profile">
+    <q-item clickable v-ripple to="/user/xapp1s1shopproducts">
       <q-item-section avatar>
         <q-icon name="checklist" />
       </q-item-section>
@@ -168,11 +165,11 @@ export default {
       .then((res) => {
         if (res.data.success) {
           this.shopProfile = res.data.data[0];
-          this.pic.push(JSON.parse(this.shopProfile.imgenvironments));
-          this.pic.push(JSON.parse(this.shopProfile.imgmenus));
-          this.pic.push(JSON.parse(this.shopProfile.imgothers));
-          this.pic.push(JSON.parse(this.shopProfile.imgproducts));
-          this.pic.push(JSON.parse(this.shopProfile.imgqualifications));
+          this.pic.push(this.shopProfile.imgenvironments);
+          this.pic.push(this.shopProfile.imgmenus);
+          this.pic.push(this.shopProfile.imgothers);
+          this.pic.push(this.shopProfile.imgproducts);
+          this.pic.push(this.shopProfile.imgqualifications);
           console.log(this.shopProfile);
         }
         //imgenvironments,imgmenus,imgothers,imgproducts,imgqualifications
