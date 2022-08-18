@@ -58,7 +58,7 @@ const xapp1s1 = {
     {
       path: "xapp1s1profile",
       name: "xapp1s1profile",
-      component: () => import("pages/xapp1s1/modules/Personal.vue"),
+      component: () => import("pages/xapp1s1/modules/Profile.vue"),
     },
     {
       path: "xapp1s1set",
