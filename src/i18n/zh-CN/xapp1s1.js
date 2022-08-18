@@ -110,4 +110,11 @@ export const xapp1s1 = {
     address: "地点",
     solt: "人数",
   },
+  showShop: {
+    imgenvironments: "店内环境",
+    imgmenus: "菜单图片",
+    imgothers: "其他",
+    imgproducts: "产品图片",
+    imgqualifications: "资质图片",
+  },
 };

@@ -2,29 +2,26 @@
   <!--  swipeable-->
   <!--  缩略图-->
   <div class="pic">
-    <div v-if="moment.pics.length > 4" class="q-pa-md">
+    <div v-if="pics.length > 4" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
-        <div class="col-4" v-for="(pic, index) in moment.pics" :key="pic">
-          <q-img :ratio="1" :src="pic" @click="showPic(moment, index + 1)" />
+        <div class="col-4" v-for="(pic, index) in pics" :key="pic">
+          <q-img :ratio="1" :src="pic" @click="showPic(index + 1)" />
         </div>
       </div>
     </div>
 
-    <div
-      v-else-if="moment.pics.length < 4 && moment.pics.length > 1"
-      class="q-pa-md"
-    >
+    <div v-else-if="pics.length < 4 && pics.length > 1" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
-        <div class="col-6" v-for="(pic, index) in moment.pics" :key="pic">
-          <q-img :ratio="1" :src="pic" @click="showPic(moment, index + 1)" />
+        <div class="col-6" v-for="(pic, index) in pics" :key="pic">
+          <q-img :ratio="1" :src="pic" @click="showPic(index + 1)" />
         </div>
       </div>
     </div>
 
-    <div v-else-if="moment.pics.length === 1" class="q-pa-md">
+    <div v-else-if="pics.length === 1" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
-        <div class="col-6" v-for="(pic, index) in moment.pics" :key="pic">
-          <q-img :src="pic" @click="showPic(moment, index + 1)" />
+        <div class="col-6" v-for="(pic, index) in pics" :key="pic">
+          <q-img :src="pic" @click="showPic(index + 1)" />
         </div>
       </div>
     </div>
@@ -50,7 +47,7 @@ import { ref } from "vue";
 export default {
   name: "showPic",
   props: {
-    moment: {
+    pics: {
       type: Object,
     },
   },
@@ -63,9 +60,9 @@ export default {
     };
   },
   methods: {
-    showPic(active, index) {
+    showPic(index) {
       this.pop = true;
-      this.popImg = active.pics;
+      this.popImg = this.$props.pics;
       this.slide = ref(index);
     },
   },

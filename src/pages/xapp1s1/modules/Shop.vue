@@ -181,7 +181,6 @@ export default {
   created() {
     this.loading = true;
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {
-      console.log(res.data);
       if (res.data.success === true) {
         this.myShop = res.data.data[0];
         this.showPicUploader = true;

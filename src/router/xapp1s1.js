@@ -53,6 +53,11 @@ const xapp1s1 = {
     {
       path: "xapp1s1shop",
       name: "xapp1s1shop",
+      component: () => import("pages/xapp1s1/modules/myShop.vue"),
+    },
+    {
+      path: "xapp1s1createshop",
+      name: "xapp1s1createshop",
       component: () => import("pages/xapp1s1/modules/Shop.vue"),
     },
     {

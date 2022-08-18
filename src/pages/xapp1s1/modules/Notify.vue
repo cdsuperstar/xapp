@@ -21,7 +21,7 @@
         </q-tabs>
       </q-card>
       <q-separator />
-      <q-btn class="col-1" icon="add" flat to="xapp1s1sendactive" />
+      <q-btn class="col-1" icon="add" flat to="xapp1s1sendmoment" />
     </div>
 
     <q-tab-panels v-model="notifyTools" swipeable animated>

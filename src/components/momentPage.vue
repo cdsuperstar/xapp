@@ -25,7 +25,7 @@
       {{ moment.note }}
     </div>
     <!--动态图片-->
-    <show-pic :moment="moment"></show-pic>
+    <show-pic :pics="moment.pics"></show-pic>
     <!--评论，点赞，时间-->
     <div class="q-pa-md">
       <q-bar style="background-color: white; color: gray">
