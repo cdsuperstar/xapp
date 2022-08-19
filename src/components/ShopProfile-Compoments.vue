@@ -151,20 +151,22 @@ export default {
       "imgproducts",
       "imgqualifications",
     ];
-    this.$api
-      .get("xapp1s1/shops/getTheShop/" + this.$props.shop_id)
-      .then((res) => {
-        if (res.data.success) {
-          this.shopProfile = res.data.data[0];
-          this.pic.push(this.shopProfile.imgenvironments);
-          this.pic.push(this.shopProfile.imgmenus);
-          this.pic.push(this.shopProfile.imgothers);
-          this.pic.push(this.shopProfile.imgproducts);
-          this.pic.push(this.shopProfile.imgqualifications);
-          console.log(this.shopProfile);
-        }
-        //imgenvironments,imgmenus,imgothers,imgproducts,imgqualifications
-      });
+    if (this.shop_id) {
+      this.$api
+        .get("xapp1s1/shops/getTheShop/" + this.$props.shop_id)
+        .then((res) => {
+          if (res.data.success) {
+            this.shopProfile = res.data.data[0];
+            this.pic.push(this.shopProfile.imgenvironments);
+            this.pic.push(this.shopProfile.imgmenus);
+            this.pic.push(this.shopProfile.imgothers);
+            this.pic.push(this.shopProfile.imgproducts);
+            this.pic.push(this.shopProfile.imgqualifications);
+            console.log(this.shopProfile);
+          }
+          //imgenvironments,imgmenus,imgothers,imgproducts,imgqualifications
+        });
+    }
   },
 };
 </script>
