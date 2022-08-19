@@ -120,6 +120,14 @@
         :label="$t('xapp1s1.profile.companyName')"
         stack-label
       />
+      <q-select
+        outlined
+        :options="career"
+        behavior="menu"
+        v-model="myProfile.career"
+        :label="$t('xapp1s1.profile.career')"
+        stack-label
+      />
       <div class="q-pa-md">
         <q-item color="grey">
           {{ $t("xapp1s1.profile.income", [income.min, income.max]) }}
@@ -204,42 +212,52 @@
           stack-label
           style="padding-right: 8px"
         />
-        <q-input
-          outlined
+        <q-select
           class="col-6"
+          outlined
+          :options="houseChoose"
           v-model="myProfile.housesitu"
           :label="$t('xapp1s1.profile.houseSitu')"
+          behavior="menu"
           stack-label
         />
-        <q-input
+        <q-select
           class="col-6"
           outlined
+          :options="carChoose"
           v-model="myProfile.carsitu"
           :label="$t('xapp1s1.profile.carSitu')"
+          behavior="menu"
           stack-label
           style="padding-right: 8px; padding-top: 12px"
         />
-        <q-input
+        <q-select
           class="col-6"
           outlined
+          :options="smokeChoose"
           v-model="myProfile.smokesitu"
           :label="$t('xapp1s1.profile.smokeSitu')"
+          behavior="menu"
           stack-label
           style="padding-top: 12px"
         />
-        <q-input
+        <q-select
           class="col-6"
           outlined
+          :options="drinkChoose"
           v-model="myProfile.drinksitu"
           :label="$t('xapp1s1.profile.drinkSitu')"
+          behavior="menu"
           stack-label
           style="padding-right: 8px; padding-top: 12px"
         />
-        <q-input
+        <q-select
           class="col-6"
           outlined
+          :options="childChoose"
           v-model="myProfile.childrensitu"
           :label="$t('xapp1s1.profile.childrenSitu')"
+          behavior="menu"
           stack-label
           style="padding-top: 12px"
         />
@@ -282,7 +300,6 @@ export default {
     return {
       province,
       loading: false,
-      sex: ["男", "女"],
       myProfile: {},
       income: {
         min: 0,
@@ -294,9 +311,122 @@ export default {
         area: "",
         info: "",
       },
-      eduback: ["小学及以下", "初中", "高中", "大专", "本科及以上"],
-      marriage: ["未婚", "已婚", "离异", "丧偶"],
+      houseChoose: [
+        "",
+        "和家人同住",
+        "已购房",
+        "租房",
+        "打算婚后购房",
+        "住在单位宿舍",
+      ],
+      smokeChoose: [
+        "",
+        "不抽烟",
+        "稍微抽一点烟",
+        "烟抽得很多",
+        "社交场合会抽烟",
+      ],
+      drinkChoose: [
+        "",
+        "不喝酒",
+        "稍微喝一点酒",
+        "酒喝得很多",
+        "社交场合会喝酒",
+      ],
+      carChoose: ["", "已购车", "未购车"],
+      childChoose: [
+        "",
+        "没有孩子",
+        "有孩子且住在一起",
+        "有孩子且偶尔会一起住",
+        "有孩子但不在身边",
+      ],
+      eduback: ["", "中专", "高中及以下", "大专", "大学本科", "硕士", "博士"],
+      marriage: ["", "未婚", "已婚", "离异", "丧偶"],
+      career: [
+        "",
+        "教师",
+        "工人",
+        "记者",
+        "演员",
+        "厨师",
+        "医生",
+        "护士",
+        "司机",
+        "军人",
+        "律师",
+        "商人",
+        "会计",
+        "店员",
+        "出纳",
+        "作家",
+        "导游",
+        "模特",
+        "警察",
+        "歌手",
+        "画家",
+        "裁缝",
+        "翻译",
+        "法官",
+        "保安",
+        "花匠",
+        "服务员",
+        "清洁工",
+        "建筑师",
+        "理发师",
+        "采购员",
+        "设计师",
+        "消防员",
+        "机修工",
+        "推销员",
+        "魔术师",
+        "模特儿",
+        "邮递员",
+        "售货员",
+        "救生员",
+        "运动员",
+        "工程师",
+        "飞行员",
+        "管理员",
+        "机械师",
+        "经纪人",
+        "审计员",
+        "漫画家",
+        "园艺师",
+        "科学家",
+        "主持人",
+        "调酒师",
+        "化妆师",
+        "音乐节",
+        "艺术家",
+        "糕点师",
+        "甜品师",
+        "运动员",
+        "外交官",
+        "舞蹈",
+        "箭术",
+        "演员",
+        "溜冰",
+        "弹钢琴",
+        "古筝手",
+        "设计师",
+        "酒吧老板",
+        "CEO",
+        "游乐园老板",
+        "机长",
+        "记者",
+        "赛车手",
+        "律师",
+        "理发师",
+        "跆拳道教练",
+        "运动员",
+        "兽医",
+        "特警",
+        "按摩",
+        "其它职业",
+      ],
       city: [
+        "",
         "北京市",
         "天津市",
         "河北省",
@@ -332,6 +462,7 @@ export default {
         "澳门特别行政区",
       ],
       nationality: [
+        "",
         "汉族",
         "蒙古族",
         "回族",

@@ -16,7 +16,7 @@
         }}</q-item-label>
       </q-item-section>
       <q-item-section side>
-        <q-item-label>{{ myProfile.birthday }}</q-item-label>
+        <q-item-label>{{ myProfile.birthday?.substring(5) }}</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -85,6 +85,59 @@
     <q-item>
       <q-item-section>
         <q-item-label caption>{{
+          $t("xapp1s1.profile.houseSitu")
+        }}</q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label>{{ myProfile.housesitu }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item>
+      <q-item-section>
+        <q-item-label caption>{{ $t("xapp1s1.profile.carSitu") }}</q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label>{{ myProfile.carsitu }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item>
+      <q-item-section>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.drinkSitu")
+        }}</q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label>{{ myProfile.drinksitu }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item>
+      <q-item-section>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.smokeSitu")
+        }}</q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label>{{ myProfile.smokesitu }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item>
+      <q-item-section>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.childrenSitu")
+        }}</q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label>{{ myProfile.childrensitu }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item>
+      <q-item-section>
+        <q-item-label caption>{{
           $t("xapp1s1.profile.nickname")
         }}</q-item-label>
       </q-item-section>
@@ -123,6 +176,7 @@ export default {
       this.$api
         .get("xapp1s1/profile/getTheUserProfile/" + this.user_id)
         .then((res) => {
+          console.log(res.data.data);
           if (res.data.success) {
             this.myProfile = res.data.data;
           } else {

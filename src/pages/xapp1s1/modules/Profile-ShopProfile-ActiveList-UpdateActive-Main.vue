@@ -100,6 +100,9 @@
       />
       <div v-for="(slt, index) in slots" :key="index">
         <div class="row">
+          {{ $t("xapp1s1.activate.slots", [index + 1]) }}
+        </div>
+        <div class="row">
           <!--          <q-select-->
           <!--            class="col-4"-->
           <!--            :options="sex"-->
@@ -110,31 +113,55 @@
           <!--            stack-label-->
           <!--            style="padding-right: 8px"-->
           <!--          />-->
-          {{ $t("xapp1s1.activate.slots", [index + 1]) }}
+
+          <q-input class="col-7" outlined v-model="slt.heightbegin" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">
+                {{ $t("xapp1s1.profile.height") }}:
+              </div>
+            </template>
+          </q-input>
+          <q-input class="col-5" outlined v-model="slt.heightend" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">~</div>
+            </template>
+          </q-input>
+
+          <q-input class="col-7" outlined v-model="slt.incomebegin" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">
+                {{ $t("xapp1s1.profile.incomeSit") }}:
+              </div>
+            </template>
+          </q-input>
+          <q-input class="col-5" outlined v-model="slt.incomeend" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">~</div>
+            </template>
+          </q-input>
+
+          <q-input class="col-7" outlined v-model="slt.weightbegin" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">
+                {{ $t("xapp1s1.profile.weight") }}:
+              </div>
+            </template>
+          </q-input>
+          <q-input class="col-5" outlined v-model="slt.weightend" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">~</div>
+            </template>
+          </q-input>
+
           <q-input
-            class="col-4"
-            outlined
-            v-model="slt.reqObject.height"
-            :label="$t('xapp1s1.profile.height')"
-            stack-label
-            style="padding-right: 8px"
-          />
-          <q-input
-            class="col-4"
-            outlined
-            v-model="slt.reqObject.weight"
-            :label="$t('xapp1s1.profile.weight')"
-            stack-label
-          />
-          <q-input
-            class="col-4"
+            class="col-12"
             outlined
             v-model="slt.note"
             :label="$t('xapp1s1.activate.note')"
             stack-label
           />
           <q-input
-            class="col-4"
+            class="col-6"
             outlined
             v-model="slt.price"
             :label="$t('xapp1s1.activate.price')"
@@ -163,6 +190,22 @@
         <!--          />-->
         <!--        </div>-->
       </div>
+      <div class="q-pa-md">
+        <q-select
+          filled
+          label="Select multiple values"
+          hint="Separate multiple values by [,;|]"
+          v-model="model"
+          use-input
+          use-chips
+          multiple
+          input-debounce="0"
+          @new-value="createValue"
+          :options="string"
+          @filter="filterFn"
+          style="width: 250px"
+        />
+      </div>
     </q-form>
     <q-btn
       push
@@ -179,6 +222,9 @@ export default {
   name: "Active",
   data() {
     return {
+      modal: null,
+      string: ["1", "2", "3", "4"],
+      //test
       name: "",
       description: "",
       tagprice: 0,
@@ -198,10 +244,26 @@ export default {
       this.slots = [];
       for (let i = 0; i < this.slot; i++) {
         this.slots.push({
-          reqObject: { height: "", weight: "" },
-          req: "",
-          note: "",
           price: "",
+          note: "",
+          agebegin: "",
+          ageend: "",
+          constellation: "",
+          sex: "",
+          heightbegin: "",
+          heightend: "",
+          incomebegin: "",
+          incomeend: "",
+          eduback: "",
+          marriage: "",
+          career: "",
+          weightbegin: "",
+          weightend: "",
+          housesitu: "",
+          carsitu: "",
+          smokesitu: "",
+          drinksitu: "",
+          childrensitu: "",
         });
       }
     },
