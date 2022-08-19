@@ -6,7 +6,7 @@
         round
         dense
         icon="keyboard_arrow_left"
-        to="/user/xapp1s1shopinfo"
+        to="/user/xapp1s1shop"
       />
       <q-toolbar-title>
         <label class="title">
@@ -181,7 +181,7 @@ export default {
   created() {
     this.loading = true;
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {
-      console.log(res)
+      console.log(res);
       if (res.data.success === true) {
         this.myShop = res.data.data[0];
         this.showPicUploader = true;
