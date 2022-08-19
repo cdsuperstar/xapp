@@ -9,6 +9,12 @@ export default {
   system: {
     name: "综合智能管理系统",
   },
+  location: {
+    province: "省",
+    city: "市",
+    district: "区",
+    addr: "详细地址",
+  },
   operation: {
     addsuccess: "添加成功！",
     addfailed: "添加失败！",
