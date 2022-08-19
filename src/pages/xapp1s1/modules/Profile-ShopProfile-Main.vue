@@ -34,7 +34,6 @@ export default {
   created() {
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {
       if (res.data.success) {
-        console.log(res.data.data);
         this.shop_id = res.data.data[0].id;
         this.hasShop = true;
       } else {

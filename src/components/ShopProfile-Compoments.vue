@@ -162,7 +162,6 @@ export default {
             this.pic.push(this.shopProfile.imgothers);
             this.pic.push(this.shopProfile.imgproducts);
             this.pic.push(this.shopProfile.imgqualifications);
-            console.log(this.shopProfile);
           }
           //imgenvironments,imgmenus,imgothers,imgproducts,imgqualifications
         });
