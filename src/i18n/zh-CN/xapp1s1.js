@@ -109,12 +109,13 @@ export const xapp1s1 = {
   activate: {
     header: "活动管理",
     name: "名称",
+    search: "搜索活动的名称,描述等",
     description: "介绍及流程",
     tagprice: "标价",
     price: "价格",
     timebegin: "开始时间",
     timeend: "结束时间",
-    address: "地点",
+    address: "活动地址",
     solt: "人数",
   },
   showShop: {
