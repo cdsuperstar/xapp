@@ -16,7 +16,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item clickable v-ripple to="xapp1s1shop">
+    <q-item clickable v-ripple to="xapp1s1shopinfo">
       <q-item-section avatar>
         <q-icon name="store" />
       </q-item-section>
