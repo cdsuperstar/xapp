@@ -10,10 +10,30 @@
       />
     </q-toolbar>
     <q-form class="q-gutter-md">
-      <q-input outlined v-model="name" label="活动名字" stack-label />
-      <q-input outlined v-model="description" label="活动描述" stack-label />
-      <q-input outlined v-model="tagprice" label="标价" stack-label />
-      <q-input outlined v-model="price" label="价格" stack-label />
+      <q-input
+        outlined
+        v-model="name"
+        :label="$t('xapp1s1.activate.name')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="description"
+        :label="$t('xapp1s1.activate.description')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="tagprice"
+        :label="$t('xapp1s1.activate.tagprice')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="price"
+        :label="$t('xapp1s1.activate.price')"
+        stack-label
+      />
       <q-date v-model="datebegin" />
       <q-date v-model="dateend" />
       <div class="row q-pa-md">
@@ -21,7 +41,7 @@
           v-model="timebegin"
           mask="time"
           :rules="['time']"
-          :hint="$t('xapp1s1.shop.starttime')"
+          :hint="$t('xapp1s1.activate.timebegin')"
           class="col-6"
           outlined
           rounded
@@ -44,7 +64,7 @@
           v-model="timeend"
           mask="time"
           :rules="['time']"
-          :hint="$t('xapp1s1.shop.endtime')"
+          :hint="$t('xapp1s1.activate.timeend')"
           class="col-6"
           outlined
           rounded
@@ -62,13 +82,18 @@
           </template>
         </q-input>
       </div>
-      <q-input outlined v-model="address" label="地址" stack-label />
+      <q-input
+        outlined
+        v-model="address"
+        :label="$t('xapp1s1.activate.address')"
+        stack-label
+      />
       <!--      要做人数限制-->
       <q-input
         outlined
         type=""
         v-model="slot"
-        label="参加人数"
+        :label="$t('xapp1s1.activate.slot')"
         @change="setSlotsNum"
         stack-label
         maxlength="2"
@@ -85,7 +110,7 @@
           <!--            stack-label-->
           <!--            style="padding-right: 8px"-->
           <!--          />-->
-          {{ index + 1 }}号位
+          {{ $t("xapp1s1.activate.slots", [index + 1]) }}
           <q-input
             class="col-4"
             outlined
@@ -105,14 +130,14 @@
             class="col-4"
             outlined
             v-model="slt.note"
-            label="注意事项"
+            :label="$t('xapp1s1.activate.note')"
             stack-label
           />
           <q-input
             class="col-4"
             outlined
             v-model="slt.price"
-            label="价格"
+            :label="$t('xapp1s1.activate.price')"
             stack-label
           />
         </div>
@@ -139,7 +164,12 @@
         <!--        </div>-->
       </div>
     </q-form>
-    <q-btn push color="savebtn" label="发布活动" @click="createActive" />
+    <q-btn
+      push
+      color="savebtn"
+      :label="$t('xapp1s1.activate.pub')"
+      @click="createActive"
+    />
   </q-page>
 </template>
 

@@ -10,10 +10,30 @@
   </q-toolbar>
   <q-page class="q-pa-md">
     <q-form class="q-gutter-md">
-      <q-input outlined v-model="name" label="商品名字" stack-label />
-      <q-input outlined v-model="note" label="商品描述" stack-label />
-      <q-input outlined v-model="tagprice" label="标价" stack-label />
-      <q-input outlined v-model="price" label="价格" stack-label />
+      <q-input
+        outlined
+        v-model="name"
+        :label="$t('xapp1s1.product.name')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="note"
+        :label="$t('xapp1s1.product.note')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="tagprice"
+        :label="$t('xapp1s1.product.tagprice')"
+        stack-label
+      />
+      <q-input
+        outlined
+        v-model="price"
+        :label="$t('xapp1s1.product.price')"
+        stack-label
+      />
       <q-date v-model="datebegin" />
       <q-date v-model="dateend" />
       <div class="row q-pa-md">
@@ -21,7 +41,7 @@
           v-model="timebegin"
           mask="time"
           :rules="['time']"
-          :hint="$t('xapp1s1.shop.starttime')"
+          :hint="$t('xapp1s1.product.timebegin')"
           class="col-6"
           outlined
           rounded
@@ -44,7 +64,7 @@
           v-model="timeend"
           mask="time"
           :rules="['time']"
-          :hint="$t('xapp1s1.shop.endtime')"
+          :hint="$t('xapp1s1.product.timeend')"
           class="col-6"
           outlined
           rounded
@@ -61,7 +81,12 @@
             </q-icon>
           </template>
         </q-input>
-        <q-btn push color="savebtn" label="上架商品" @click="createProduct" />
+        <q-btn
+          push
+          color="savebtn"
+          :label="$t('xapp1s1.product.pub')"
+          @click="createProduct"
+        />
       </div>
     </q-form>
   </q-page>

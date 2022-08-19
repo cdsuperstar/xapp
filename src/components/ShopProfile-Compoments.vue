@@ -11,7 +11,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>店铺名</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.name") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.name }}</q-item-label>
@@ -20,7 +20,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>地址</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.addr") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.addr }}</q-item-label>
@@ -29,7 +29,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>许可</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.approval") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.approval }}</q-item-label>
@@ -38,7 +38,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>联系电话1</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.phone") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.phone }}</q-item-label>
@@ -47,7 +47,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>联系电话2</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.tel") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.tel }}</q-item-label>
@@ -56,7 +56,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>营业状态</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.status") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ shopProfile.status }}</q-item-label>
@@ -65,7 +65,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>营业时间</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.shop.time") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label
@@ -94,7 +94,7 @@
         <q-icon name="edit" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>修改商铺信息</q-item-label>
+        <q-item-label>{{ $t("xapp1s1.shop.changeShop") }}</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />
@@ -106,7 +106,7 @@
         <q-icon name="checklist" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>商品列表</q-item-label>
+        <q-item-label>{{ $t("xapp1s1.shop.productList") }}</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />
@@ -117,7 +117,7 @@
         <q-icon name="groups" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>活动列表</q-item-label>
+        <q-item-label>{{ $t("xapp1s1.shop.activeList") }}</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />
