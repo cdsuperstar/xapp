@@ -1,7 +1,7 @@
 <template>
-  <show-shop v-if="hasShop" :shop_id="shop_id"></show-shop>
+  <shop-profile v-if="hasShop" :shop_id="shop_id"></shop-profile>
   <q-list v-else-if="!hasShop" bordered padding separator>
-    <q-item clickable v-ripple to="/user/xapp1s1createshop">
+    <q-item clickable v-ripple to="/xapp1s1createshop">
       <q-item-section avatar>
         <q-icon name="edit" />
       </q-item-section>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import showShop from "components/showShop";
+import ShopProfile from "components/ShopProfile-Compoments";
 export default {
   name: "myShop",
   data() {
@@ -26,7 +26,7 @@ export default {
     };
   },
   components: {
-    showShop,
+    ShopProfile,
   },
   created() {
     this.$api.get("xapp1s1/shops/getMyShop").then((res) => {

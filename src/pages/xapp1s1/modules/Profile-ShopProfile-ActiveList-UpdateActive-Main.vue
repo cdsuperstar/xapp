@@ -6,7 +6,7 @@
         round
         dense
         icon="keyboard_arrow_left"
-        to="/user/xapp1s1shop"
+        @click="this.$router.back()"
       />
     </q-toolbar>
     <q-form class="q-gutter-md">

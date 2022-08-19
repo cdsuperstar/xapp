@@ -97,7 +97,7 @@
 
 <script>
 export default {
-  name: "showProfile",
+  name: "UserProfile",
   props: {
     user_id: {},
   },

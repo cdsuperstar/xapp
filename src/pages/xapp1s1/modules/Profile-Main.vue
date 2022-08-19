@@ -1,10 +1,10 @@
 <template>
-  <show-profile :user_id="this.$auth.user()?.id"></show-profile>
+  <UserProfile :user_id="this.$auth.user()?.id"></UserProfile>
 
   <div class="div" style="height: 20px"></div>
 
   <q-list bordered padding separator>
-    <q-item clickable v-ripple to="/user/xapp1s1personal">
+    <q-item clickable v-ripple to="xapp1s1personal">
       <q-item-section avatar>
         <q-icon name="edit" />
       </q-item-section>
@@ -16,7 +16,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item clickable v-ripple to="/user/xapp1s1shop">
+    <q-item clickable v-ripple to="xapp1s1shop">
       <q-item-section avatar>
         <q-icon name="store" />
       </q-item-section>
@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import showProfile from "components/showProfile";
+import UserProfile from "components/UserProfile-Compoments";
 export default {
   name: "Profile",
   components: {
-    showProfile,
+    UserProfile,
   },
 };
 </script>

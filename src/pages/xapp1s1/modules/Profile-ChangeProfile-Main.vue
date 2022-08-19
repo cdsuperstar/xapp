@@ -6,9 +6,8 @@
         round
         dense
         icon="keyboard_arrow_left"
-        to="/user/xapp1s1profile"
+        @click="this.$router.back()"
       />
-      <q-toolbar-title> </q-toolbar-title>
     </q-toolbar>
     <q-form class="q-gutter-md">
       <div class="row">
@@ -273,17 +272,6 @@
         />
       </div>
     </q-form>
-
-    <q-list bordered padding>
-      <q-item clickable v-ripple to="/user/xapp1s1profile">
-        <q-item-section>
-          <q-item-label>返回个人信息</q-item-label>
-        </q-item-section>
-        <q-item-section thumbnail>
-          <q-icon name="navigate_next" />
-        </q-item-section>
-      </q-item>
-    </q-list>
 
     <q-inner-loading :showing="loading">
       <q-spinner-box size="50px" color="secondary" />

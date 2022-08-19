@@ -48,32 +48,43 @@ const xapp1s1 = {
     {
       path: "xapp1s1personal",
       name: "xapp1s1personal",
-      component: () => import("pages/xapp1s1/modules/Personal.vue"),
+      component: () =>
+        import("pages/xapp1s1/modules/Profile-ChangeProfile-Main.vue"),
     },
     {
       path: "xapp1s1shop",
       name: "xapp1s1shop",
-      component: () => import("pages/xapp1s1/modules/myShop.vue"),
+      component: () =>
+        import("pages/xapp1s1/modules/Profile-ShopProfile-Main.vue"),
     },
     {
       path: "xapp1s1createshop",
       name: "xapp1s1createshop",
-      component: () => import("pages/xapp1s1/modules/Shop.vue"),
+      component: () =>
+        import(
+          "pages/xapp1s1/modules/Profile-ShopProfile-ChangeShopProfile-Main.vue"
+        ),
     },
     {
       path: "xapp1s1shopproducts",
       name: "xapp1s1shopproducts",
-      component: () => import("pages/xapp1s1/modules/shopProduct.vue"),
+      component: () =>
+        import(
+          "pages/xapp1s1/modules/Profile-ShopProfile-ProductsList-Main.vue"
+        ),
     },
     {
       path: "xapp1s1createproduct",
       name: "xapp1s1createproduct",
-      component: () => import("pages/xapp1s1/modules/createProducts.vue"),
+      component: () =>
+        import(
+          "pages/xapp1s1/modules/Profile-ShopProfile-ProductsList-UpdateProduct-Main.vue"
+        ),
     },
     {
       path: "xapp1s1profile",
       name: "xapp1s1profile",
-      component: () => import("pages/xapp1s1/modules/Profile.vue"),
+      component: () => import("pages/xapp1s1/modules/Profile-Main.vue"),
     },
     {
       path: "xapp1s1set",
@@ -88,7 +99,16 @@ const xapp1s1 = {
     {
       path: "xapp1s1sendactive",
       name: "xapp1s1sendactive",
-      component: () => import("pages/xapp1s1/modules/Active.vue"),
+      component: () =>
+        import("pages/xapp1s1/modules/Profile-ShopProfile-ActiveList-Main.vue"),
+    },
+    {
+      path: "xapp1s1createactive",
+      name: "xapp1s1createactive",
+      component: () =>
+        import(
+          "pages/xapp1s1/modules/Profile-ShopProfile-ActiveList-UpdateActive-Main"
+        ),
     },
   ],
 };

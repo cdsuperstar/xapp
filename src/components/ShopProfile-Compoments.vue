@@ -1,12 +1,6 @@
 <template>
   <q-toolbar>
-    <q-btn
-      flat
-      round
-      dense
-      icon="keyboard_arrow_left"
-      to="/user/xapp1s1profile"
-    />
+    <q-btn flat round dense icon="keyboard_arrow_left" to="xapp1s1profile" />
   </q-toolbar>
   <q-list bordered separator>
     <q-item>
@@ -126,7 +120,7 @@
         <q-icon name="groups" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>发起活动</q-item-label>
+        <q-item-label>活动列表</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />
@@ -138,7 +132,7 @@
 <script>
 import showPic from "components/showPic";
 export default {
-  name: "showShop",
+  name: "ShopProfile",
   components: {
     showPic,
   },
