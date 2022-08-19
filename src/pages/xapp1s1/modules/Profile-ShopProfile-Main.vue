@@ -1,12 +1,15 @@
 <template>
+  <q-toolbar>
+    <q-btn flat round dense icon="keyboard_arrow_left" to="xapp1s1profile" />
+  </q-toolbar>
   <shop-profile v-if="hasShop" :shop_id="shop_id"></shop-profile>
   <q-list v-else-if="!hasShop" bordered padding separator>
-    <q-item clickable v-ripple to="/xapp1s1createshop">
+    <q-item clickable v-ripple to="xapp1s1createshop">
       <q-item-section avatar>
         <q-icon name="edit" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>创建商铺</q-item-label>
+        <q-item-label>{{ $t("xapp1s1.profile.createShop") }}</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />

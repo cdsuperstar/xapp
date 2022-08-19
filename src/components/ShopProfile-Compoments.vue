@@ -1,7 +1,4 @@
 <template>
-  <q-toolbar>
-    <q-btn flat round dense icon="keyboard_arrow_left" to="xapp1s1profile" />
-  </q-toolbar>
   <q-list bordered separator>
     <q-item>
       <q-item-section />

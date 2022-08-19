@@ -11,7 +11,9 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>生日</q-item-label>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.birthday")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.birthday }}</q-item-label>
@@ -20,7 +22,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>职业</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.profile.job") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.career }}</q-item-label>
@@ -29,7 +31,9 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>星座</q-item-label>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.constellation")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.constellation }}</q-item-label>
@@ -38,7 +42,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>身高</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.profile.height") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.height }}</q-item-label>
@@ -47,7 +51,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>体重</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.profile.weight") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.weight }}</q-item-label>
@@ -56,7 +60,9 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>收入情况</q-item-label>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.incomeSit")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label
@@ -67,7 +73,9 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>婚姻情况</q-item-label>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.marriage")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.marriage }}</q-item-label>
@@ -76,7 +84,9 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>昵称</q-item-label>
+        <q-item-label caption>{{
+          $t("xapp1s1.profile.nickname")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ myProfile.nickname }}</q-item-label>
@@ -85,7 +95,7 @@
 
     <q-item>
       <q-item-section>
-        <q-item-label caption>性别</q-item-label>
+        <q-item-label caption>{{ $t("xapp1s1.profile.sex") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-item-label>{{ sex[myProfile.sex] }}</q-item-label>
@@ -109,15 +119,17 @@ export default {
     };
   },
   created() {
-    this.$api
-      .get("xapp1s1/profile/getTheUserProfile/" + this.$props.user_id)
-      .then((res) => {
-        if (res.data.success) {
-          this.myProfile = res.data.data;
-        } else {
-          this.haveProfile = false;
-        }
-      });
+    if (this.user_id) {
+      this.$api
+        .get("xapp1s1/profile/getTheUserProfile/" + this.user_id)
+        .then((res) => {
+          if (res.data.success) {
+            this.myProfile = res.data.data;
+          } else {
+            this.haveProfile = false;
+          }
+        });
+    }
   },
 };
 </script>

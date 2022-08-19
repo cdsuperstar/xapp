@@ -77,18 +77,8 @@
         />
       </div>
       <div class="row">
-        <q-select
-          class="col-4"
-          :options="sex"
-          outlined
-          v-model="myProfile.sex"
-          :label="$t('xapp1s1.profile.sex')"
-          behavior="menu"
-          stack-label
-          style="padding-right: 8px"
-        />
         <q-input
-          class="col-4"
+          class="col-6"
           outlined
           v-model="myProfile.height"
           :label="$t('xapp1s1.profile.height')"
@@ -96,7 +86,7 @@
           style="padding-right: 8px"
         />
         <q-input
-          class="col-4"
+          class="col-6"
           outlined
           v-model="myProfile.weight"
           :label="$t('xapp1s1.profile.weight')"
@@ -408,21 +398,19 @@ export default {
         this.myProfile = res.data.data;
         this.income.min = this.myProfile.incomebegin;
         this.income.max = this.myProfile.incomeend;
-        const tmp = JSON.parse(this.myProfile.workaddress);
-        //已知：数据库长度不够，存在数据库中的数据只有地址没有存其他的选项
-        //通过filter筛选出province中对应项目解决问题
+
         let tmp2 = province.filter((value) => {
-          return tmp.province == value.name;
+          return this.myProfile.province == value.name;
         })[0];
         this.address.province = tmp2 ? tmp2 : { name: "", city: [] };
 
         let tmp3 = this.address.province.city.filter((value) => {
-          return tmp.city == value.name;
+          return this.myProfile.city == value.name;
         })[0];
         this.address.city = tmp3 ? tmp3 : { name: "", area: [] };
 
-        this.address.area = tmp.area;
-        this.address.info = tmp.info;
+        this.address.area = this.myProfile.district;
+        this.address.info = this.myProfile.addr;
       }
     });
   },
@@ -457,13 +445,10 @@ export default {
       this.loading = true;
       this.myProfile.incomebegin = this.income.min;
       this.myProfile.incomeend = this.income.max;
-      const tmp = {
-        province: this.address.province.name,
-        city: this.address.city.name,
-        area: this.address.area,
-        info: this.address.info,
-      };
-      this.myProfile.workaddress = JSON.stringify(tmp);
+      this.myProfile.province = this.address.province.name;
+      this.myProfile.city = this.address.city.name;
+      this.myProfile.district = this.address.area;
+      this.myProfile.addr = this.address.info;
       this.$api
         .post("xapp1s1/profile/updateMyProfile", this.myProfile)
         .then((res) => {

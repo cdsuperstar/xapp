@@ -50,7 +50,14 @@ export const xapp1s1 = {
     memo: "简介",
     ok: "保存修改",
     chooseAvatar: "选择新头像",
+    birthday: "生日",
+    job: "职业",
+    constellation: "星座",
+    incomeSit: "收入情况",
+    //部分选项
     shop: "我的商铺",
+    createShop: "创建商铺",
+    changeProfile: "修改个人信息",
   },
   categ: {
     header: "类别管理",

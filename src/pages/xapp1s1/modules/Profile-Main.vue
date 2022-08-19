@@ -9,7 +9,7 @@
         <q-icon name="edit" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>修改个人信息</q-item-label>
+        <q-item-label>{{ $t("xapp1s1.profile.changeProfile") }}</q-item-label>
       </q-item-section>
       <q-item-section thumbnail>
         <q-icon name="navigate_next" />
