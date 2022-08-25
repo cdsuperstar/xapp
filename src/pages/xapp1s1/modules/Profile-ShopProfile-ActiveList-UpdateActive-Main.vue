@@ -149,7 +149,20 @@
           </q-input>
           <q-input class="col-5" outlined v-model="slt.weightend" stack-label>
             <template v-slot:before>
-              <div class="" style="font-size: medium">~</div>
+              <div style="font-size: medium">~</div>
+            </template>
+          </q-input>
+
+          <q-input class="col-7" outlined v-model="slt.agebegin" stack-label>
+            <template v-slot:before>
+              <div class="" style="font-size: medium">
+                {{ $t("xapp1s1.activate.age") }}:
+              </div>
+            </template>
+          </q-input>
+          <q-input class="col-5" outlined v-model="slt.ageend" stack-label>
+            <template v-slot:before>
+              <div style="font-size: medium">~</div>
             </template>
           </q-input>
 
@@ -165,6 +178,107 @@
             outlined
             v-model="slt.price"
             :label="$t('xapp1s1.activate.price')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            :options="sex"
+            v-model="slt.sex"
+            :emit-value="true"
+            :map-options="true"
+            :label="$t('xapp1s1.profile.sex')"
+            behavior="menu"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.constellation"
+            multiple
+            :options="constellation"
+            behavior="menu"
+            :label="$t('xapp1s1.activate.constellation')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.marriage"
+            multiple
+            :options="marriage"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.marriage')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.eduback"
+            multiple
+            :options="eduback"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.eduBack')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.career"
+            multiple
+            :options="career"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.career')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.housesitu"
+            multiple
+            :options="houseChoose"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.houseSitu')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            :options="carChoose"
+            v-model="slt.carsitu"
+            :label="$t('xapp1s1.profile.carSitu')"
+            behavior="menu"
+            stack-label
+          />
+
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.smokesitu"
+            multiple
+            :options="smokeChoose"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.smokeSitu')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.drinksitu"
+            multiple
+            :options="drinkChoose"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.drinkSitu')"
+            stack-label
+          />
+          <q-select
+            class="col-12"
+            outlined
+            v-model="slt.childrensitu"
+            multiple
+            :options="childChoose"
+            behavior="menu"
+            :label="$t('xapp1s1.profile.childrenSitu')"
             stack-label
           />
         </div>
@@ -189,22 +303,6 @@
         <!--            stack-label-->
         <!--          />-->
         <!--        </div>-->
-      </div>
-      <div class="q-pa-md">
-        <q-select
-          filled
-          label="Select multiple values"
-          hint="Separate multiple values by [,;|]"
-          v-model="model"
-          use-input
-          use-chips
-          multiple
-          input-debounce="0"
-          @new-value="createValue"
-          :options="string"
-          @filter="filterFn"
-          style="width: 250px"
-        />
       </div>
     </q-form>
     <q-btn
@@ -237,6 +335,147 @@ export default {
       slot: 0,
       //
       slots: [],
+      marriage: ["不限", "未婚", "已婚", "离异", "丧偶"],
+      houseChoose: [
+        "不限",
+        "和家人同住",
+        "已购房",
+        "租房",
+        "打算婚后购房",
+        "住在单位宿舍",
+      ],
+      smokeChoose: [
+        "不限",
+        "不抽烟",
+        "稍微抽一点烟",
+        "烟抽得很多",
+        "社交场合会抽烟",
+      ],
+      drinkChoose: [
+        "不限",
+        "不喝酒",
+        "稍微喝一点酒",
+        "酒喝得很多",
+        "社交场合会喝酒",
+      ],
+      carChoose: ["不限", "已购车", "未购车"],
+      childChoose: [
+        "不限",
+        "没有孩子",
+        "有孩子且住在一起",
+        "有孩子且偶尔会一起住",
+        "有孩子但不在身边",
+      ],
+      eduback: [
+        "不限",
+        "中专",
+        "高中及以下",
+        "大专",
+        "大学本科",
+        "硕士",
+        "博士",
+      ],
+      career: [
+        "不限",
+        "教师",
+        "工人",
+        "记者",
+        "演员",
+        "厨师",
+        "医生",
+        "护士",
+        "司机",
+        "军人",
+        "律师",
+        "商人",
+        "会计",
+        "店员",
+        "出纳",
+        "作家",
+        "导游",
+        "模特",
+        "警察",
+        "歌手",
+        "画家",
+        "裁缝",
+        "翻译",
+        "法官",
+        "保安",
+        "花匠",
+        "服务员",
+        "清洁工",
+        "建筑师",
+        "理发师",
+        "采购员",
+        "设计师",
+        "消防员",
+        "机修工",
+        "推销员",
+        "魔术师",
+        "模特儿",
+        "邮递员",
+        "售货员",
+        "救生员",
+        "运动员",
+        "工程师",
+        "飞行员",
+        "管理员",
+        "机械师",
+        "经纪人",
+        "审计员",
+        "漫画家",
+        "园艺师",
+        "科学家",
+        "主持人",
+        "调酒师",
+        "化妆师",
+        "音乐节",
+        "艺术家",
+        "糕点师",
+        "甜品师",
+        "运动员",
+        "外交官",
+        "舞蹈",
+        "箭术",
+        "演员",
+        "溜冰",
+        "弹钢琴",
+        "古筝手",
+        "设计师",
+        "酒吧老板",
+        "CEO",
+        "游乐园老板",
+        "机长",
+        "记者",
+        "赛车手",
+        "律师",
+        "理发师",
+        "跆拳道教练",
+        "运动员",
+        "兽医",
+        "特警",
+        "按摩",
+        "其它职业",
+      ],
+      sex: [
+        { label: "不限", value: 0 },
+        { label: "女", value: 2 },
+        { label: "男", value: 1 },
+      ],
+      constellation: [
+        "不限",
+        "白羊座",
+        "金牛座",
+        "双子座",
+        "巨蟹座",
+        "狮子座",
+        "处女座",
+        "天秤座",
+        "射手座",
+        "摩羯座",
+        "水瓶座",
+        "双鱼座",
+      ],
     };
   },
   methods: {
@@ -248,28 +487,38 @@ export default {
           note: "",
           agebegin: "",
           ageend: "",
-          constellation: "",
+          constellation: [],
           sex: "",
           heightbegin: "",
           heightend: "",
           incomebegin: "",
           incomeend: "",
-          eduback: "",
-          marriage: "",
-          career: "",
+          eduback: [],
+          marriage: [],
+          career: [],
           weightbegin: "",
           weightend: "",
-          housesitu: "",
-          carsitu: "",
-          smokesitu: "",
-          drinksitu: "",
-          childrensitu: "",
+          housesitu: [],
+          carsitu: [],
+          smokesitu: [],
+          drinksitu: [],
+          childrensitu: [],
         });
       }
     },
     createActive() {
       for (let i = 0; i < this.slots.length; i++) {
-        this.slots[i].req = JSON.stringify(this.slots[i].reqObject);
+        this.slots[i].constellation = JSON.stringify(
+          this.slots[i].constellation
+        );
+        this.slots[i].eduback = JSON.stringify(this.slots[i].eduback);
+        this.slots[i].marriage = JSON.stringify(this.slots[i].marriage);
+        this.slots[i].career = JSON.stringify(this.slots[i].career);
+        this.slots[i].housesitu = JSON.stringify(this.slots[i].housesitu);
+        this.slots[i].carsitu = JSON.stringify(this.slots[i].carsitu);
+        this.slots[i].smokesitu = JSON.stringify(this.slots[i].smokesitu);
+        this.slots[i].drinksitu = JSON.stringify(this.slots[i].drinksitu);
+        this.slots[i].childrensitu = JSON.stringify(this.slots[i].childrensitu);
       }
       console.log(this.slots);
       const active = {
@@ -287,6 +536,9 @@ export default {
       // console.log(active);
       this.$api.post("xapp1s1/activates/saveMyActivate", active).then((res) => {
         // console.log(res);
+        if (res.data.success) {
+          this.$router.back();
+        }
       });
     },
   },

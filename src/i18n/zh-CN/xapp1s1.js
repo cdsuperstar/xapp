@@ -127,6 +127,9 @@ export const xapp1s1 = {
     slots: "{0}号位：",
     note: "注意事项",
     pub: "发布活动",
+    age: "年龄",
+    constellation: "星座",
+    time: "活动时间",
   },
   showShop: {
     imgenvironments: "店内环境",
