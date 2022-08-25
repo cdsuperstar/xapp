@@ -1,21 +1,19 @@
 <template>
   <q-page>
-    <q-input rounded outlined v-model="search" label="Rounded outlined" />
+    <q-input
+      v-model="searchParams.nameOrDescription"
+      debounce="500"
+      filled
+      outlined
+      :placeholder="this.$t('xapp1s1.activate.search')"
+      @change="searchActivates"
+    >
+      <template v-slot:append>
+        <q-icon name="search" />
+      </template>
+    </q-input>
     <q-separator />
-    <q-item to="">
-      <q-field square outlined style="width: 100vh">
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">
-            {{ $t("xapp1s1.home.createGroup") }}
-          </div>
-        </template>
-        <template v-slot:append>
-          <q-avatar>
-            <q-icon name="arrow-forward" size="50px"></q-icon>
-          </q-avatar>
-        </template>
-      </q-field>
-    </q-item>
+
     <q-separator />
 
     <div class="q-pa-md">
@@ -40,8 +38,26 @@ export default {
   name: "Explore",
   data() {
     return {
-      search: "",
+      searchParams: {
+        nameOrDescription: null,
+      },
+      listActivates: [],
     };
+  },
+  methods: {
+    searchActivates() {
+      this.$api
+        .post("/xapp1s1/activates/searchFitActivates", {
+          searchParams: this.searchParams,
+        })
+        .then((res) => {
+          if (res.data.success) {
+            this.listActivates = res.data.data;
+            console.log("Seached : ", this.listActivates);
+          } else {
+          }
+        });
+    },
   },
 };
 </script>
