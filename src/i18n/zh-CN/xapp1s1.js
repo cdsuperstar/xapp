@@ -130,6 +130,8 @@ export const xapp1s1 = {
     age: "年龄",
     constellation: "星座",
     time: "活动时间",
+    del: "删除",
+    fix: "修改",
   },
   showShop: {
     imgenvironments: "店内环境",

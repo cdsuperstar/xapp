@@ -481,6 +481,7 @@ export default {
   methods: {
     setSlotsNum() {
       this.slots = [];
+      if (!this.slot) this.slot = 0;
       for (let i = 0; i < this.slot; i++) {
         this.slots.push({
           price: "",

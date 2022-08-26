@@ -11,6 +11,7 @@
     <update-media
       :server="this.$api.defaults.baseURL + '/zero/uploadMyTmpFiles'"
       media_file_path="/post_images"
+      :multiple="true"
       :media_server="this.$api.defaults.baseURL + '/zero/getMyTmpFiles'"
       @saved-media="msave"
       @added-media="madd"
@@ -53,14 +54,10 @@ export default {
   },
   methods: {
     madd(val) {
-      console.log("Media add:", val);
       this.added = val;
     },
-    mdel(val) {
-      console.log("Media del:", val);
-    },
+    mdel(val) {},
     msave(val) {
-      console.log("Media save:", val);
       this.saved = val;
     },
     send() {
@@ -70,7 +67,6 @@ export default {
         note: this.text,
         pics: this.pics,
       };
-      console.log(tmp);
       this.$api
         .post("xapp1s1/moments/postMyMoment", {
           note: this.text,
@@ -78,7 +74,6 @@ export default {
         })
         .then((res) => {
           if (res.data.success === true) {
-            console.log(1, res.data);
             this.$zglobal.showMessage(
               "positive",
               "center",
