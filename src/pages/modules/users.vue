@@ -210,7 +210,7 @@
       />
     </div>
     <div class="row q-ma-md" style="margin: 16px 1px">
-      <div class="col-md-10 shadow-1">
+      <div class="col-md-9 shadow-1">
         <ag-grid-vue
           style="min-width: 100%; height: 500px"
           class="ag-theme-balham User-agGrid"
@@ -231,7 +231,7 @@
       </div>
       <div
         v-if="mPermissions['users.bsetrole'] && Roleshow"
-        class="col-md-3 shadow-1"
+        class="col-md-2 shadow-1"
         style="margin-left: 15px"
       >
         <q-item-label class="row" style="min-height: 20px">
