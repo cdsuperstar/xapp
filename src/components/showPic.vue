@@ -28,8 +28,15 @@
   </div>
 
   <!--  展示图片-->
-  <q-dialog v-model="pop" auto-close full-width transition-hide="slide-down">
-    <q-carousel swipeable v-model="slide" control-color="primary">
+  <q-dialog v-model="pop" auto-close full-width transition-hide="fade">
+    <q-carousel
+      animated
+      transition-next="slide-left"
+      transition-prev="slide-right"
+      swipeable
+      v-model="slide"
+      control-color="primary"
+    >
       <q-carousel-slide
         v-for="(pic, index) in popImg"
         :key="index"
