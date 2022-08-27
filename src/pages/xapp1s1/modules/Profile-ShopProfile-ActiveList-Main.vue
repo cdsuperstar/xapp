@@ -30,12 +30,18 @@
         </q-item-label>
       </q-item-section>
       <q-item-section side top>
-        <q-btn-dropdown dense flat unelevated no-icon-animation :ripple="false">
+        <q-btn-dropdown
+          dropdown-icon="more_horiz"
+          dense
+          flat
+          unelevated
+          :ripple="false"
+        >
           <q-list>
             <q-item clickable @click="del(active.id)">
               {{ $t("xapp1s1.activate.del") }}
             </q-item>
-            <q-item clickable @click="fix(active)">
+            <q-item clickable @click="modify(active)">
               {{ $t("xapp1s1.activate.fix") }}
             </q-item>
           </q-list>
@@ -95,8 +101,13 @@ export default {
           }
         });
     },
-    fix(active) {
-      this.$router.push;
+    modify(val) {
+      this.$router.push({
+        name: "xapp1s1createactive",
+        params: {
+          active: JSON.stringify(val),
+        },
+      });
     },
   },
 };

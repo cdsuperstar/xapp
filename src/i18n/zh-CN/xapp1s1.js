@@ -132,6 +132,7 @@ export const xapp1s1 = {
     time: "活动时间",
     del: "删除",
     fix: "修改",
+    cancel: "取消",
   },
   showShop: {
     imgenvironments: "店内环境",

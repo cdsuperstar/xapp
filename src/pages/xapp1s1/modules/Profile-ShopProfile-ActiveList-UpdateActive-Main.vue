@@ -12,33 +12,33 @@
     <q-form class="q-gutter-md">
       <q-input
         outlined
-        v-model="name"
+        v-model="activeInfo.name"
         :label="$t('xapp1s1.activate.name')"
         stack-label
       />
       <q-input
         outlined
-        v-model="description"
+        v-model="activeInfo.description"
         :label="$t('xapp1s1.activate.description')"
         stack-label
       />
       <q-input
         outlined
-        v-model="tagprice"
+        v-model="activeInfo.tagprice"
         :label="$t('xapp1s1.activate.tagprice')"
         stack-label
       />
       <q-input
         outlined
-        v-model="price"
+        v-model="activeInfo.price"
         :label="$t('xapp1s1.activate.price')"
         stack-label
       />
-      <q-date v-model="datebegin" />
-      <q-date v-model="dateend" />
+      <q-date v-model="activeInfo.datebegin" />
+      <q-date v-model="activeInfo.dateend" />
       <div class="row q-pa-md">
         <q-input
-          v-model="timebegin"
+          v-model="activeInfo.timebegin"
           mask="time"
           :rules="['time']"
           :hint="$t('xapp1s1.activate.timebegin')"
@@ -50,7 +50,7 @@
           <template v-slot:append>
             <q-icon name="access_time" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-time v-model="timebegin">
+                <q-time v-model="activeInfo.timebegin">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -61,7 +61,7 @@
         </q-input>
 
         <q-input
-          v-model="timeend"
+          v-model="activeInfo.timeend"
           mask="time"
           :rules="['time']"
           :hint="$t('xapp1s1.activate.timeend')"
@@ -72,7 +72,7 @@
           <template v-slot:append>
             <q-icon name="access_time" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-time v-model="timeend">
+                <q-time v-model="activeInfo.timeend">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -84,7 +84,7 @@
       </div>
       <q-input
         outlined
-        v-model="address"
+        v-model="activeInfo.address"
         :label="$t('xapp1s1.activate.address')"
         stack-label
       />
@@ -92,22 +92,24 @@
       <q-input
         outlined
         type=""
-        v-model="slot"
+        v-model="activeInfo.slot"
         :label="$t('xapp1s1.activate.slot')"
         @change="setSlotsNum"
         stack-label
         maxlength="2"
       />
-      <div v-for="(slt, index) in slots" :key="index">
-        <div class="row">
-          {{ $t("xapp1s1.activate.slots", [index + 1]) }}
-        </div>
+      <q-expansion-item
+        icon="chair"
+        :label="$t('xapp1s1.activate.slots', [index + 1])"
+        v-for="(slt, index) in activeInfo.slots"
+        :key="index"
+      >
         <div class="row">
           <!--          <q-select-->
           <!--            class="col-4"-->
           <!--            :options="sex"-->
           <!--            outlined-->
-          <!--            v-model="slots[sl].sex"-->
+          <!--            v-model="activeInfo.slots[sl].sex"-->
           <!--            :label="$t('xapp1s1.profile.sex')"-->
           <!--            behavior="menu"-->
           <!--            stack-label-->
@@ -287,7 +289,7 @@
         <!--            class="col-6"-->
         <!--            outlined-->
         <!--            :options="eduback"-->
-        <!--            v-model="slots[sl].eduback"-->
+        <!--            v-model="activeInfo.slots[sl].eduback"-->
         <!--            :label="$t('xapp1s1.profile.eduBack')"-->
         <!--            behavior="menu"-->
         <!--            stack-label-->
@@ -298,18 +300,24 @@
         <!--            outlined-->
         <!--            :options="city"-->
         <!--            behavior="menu"-->
-        <!--            v-model="slots[sl].nativeplace"-->
+        <!--            v-model="activeInfo.slots[sl].nativeplace"-->
         <!--            :label="$t('xapp1s1.profile.nativePlace')"-->
         <!--            stack-label-->
         <!--          />-->
         <!--        </div>-->
-      </div>
+      </q-expansion-item>
     </q-form>
     <q-btn
       push
       color="savebtn"
       :label="$t('xapp1s1.activate.pub')"
       @click="createActive"
+    />
+    <q-btn
+      push
+      color="grey"
+      :label="$t('xapp1s1.activate.cancel')"
+      @click="this.$router.back()"
     />
   </q-page>
 </template>
@@ -320,21 +328,11 @@ export default {
   name: "Active",
   data() {
     return {
+      active: null,
       modal: null,
-      string: ["1", "2", "3", "4"],
       //test
-      name: "",
-      description: "",
-      tagprice: 0,
-      price: 0,
-      datebegin: date.formatDate(Date.now(), "YYYY/MM/DD"),
-      dateend: date.formatDate(Date.now(), "YYYY/MM/DD"),
-      timebegin: "",
-      timeend: "",
-      address: "",
-      slot: 0,
-      //
-      slots: [],
+      activeInfo: {},
+      //选项
       marriage: ["不限", "未婚", "已婚", "离异", "丧偶"],
       houseChoose: [
         "不限",
@@ -458,9 +456,9 @@ export default {
         "其它职业",
       ],
       sex: [
-        { label: "不限", value: 0 },
-        { label: "女", value: 2 },
-        { label: "男", value: 1 },
+        { label: "不限", value: "0" },
+        { label: "女", value: "2" },
+        { label: "男", value: "1" },
       ],
       constellation: [
         "不限",
@@ -478,69 +476,116 @@ export default {
       ],
     };
   },
+  mounted() {
+    if (this.$route.params.active) {
+      this.active = JSON.parse(this.$route.params.active);
+      if (this.active.timebegin) {
+        this.active.datebegin = date.formatDate(
+          this.active.timebegin.substring(0, 10),
+          "YYYY/MM/DD"
+        );
+        this.active.timebegin = this.active.timebegin.substring(11);
+      }
+      if (this.active.timeend) {
+        this.active.dateend = date.formatDate(
+          this.active.timeend.substring(0, 10),
+          "YYYY/MM/DD"
+        );
+        this.active.timeend = this.active.timeend.substring(11);
+      }
+      for (let i = 0; i < this.active.slots.length; i++) {
+        Object.keys(this.active.slots[i]).forEach((k) => {
+          try {
+            let tmp = JSON.parse(this.active.slots[i][k]);
+            if (typeof tmp != "number") this.active.slots[i][k] = tmp;
+          } catch (e) {}
+        });
+      }
+
+      this.activeInfo = this.active;
+    } else {
+      this.activeInfo = {
+        name: "",
+        description: "",
+        tagprice: 0,
+        price: 0,
+        datebegin: date.formatDate(Date.now(), "YYYY/MM/DD"),
+        dateend: date.formatDate(Date.now(), "YYYY/MM/DD"),
+        timebegin: "00:00",
+        timeend: "00:00",
+        address: "",
+        slot: 0,
+        slots: [],
+      };
+    }
+  },
   methods: {
     setSlotsNum() {
-      this.slots = [];
-      if (!this.slot) this.slot = 0;
-      for (let i = 0; i < this.slot; i++) {
-        this.slots.push({
+      this.activeInfo.slots = [];
+      if (!this.activeInfo.slot) this.activeInfo.slot = 0;
+      for (let i = 0; i < this.activeInfo.slot; i++) {
+        this.activeInfo.slots.push({
           price: "",
           note: "",
           agebegin: "",
           ageend: "",
-          constellation: [],
-          sex: "",
+          constellation: ["不限"],
+          sex: "0",
           heightbegin: "",
           heightend: "",
           incomebegin: "",
           incomeend: "",
-          eduback: [],
-          marriage: [],
-          career: [],
+          eduback: ["不限"],
+          marriage: ["不限"],
+          career: ["不限"],
           weightbegin: "",
           weightend: "",
-          housesitu: [],
-          carsitu: [],
-          smokesitu: [],
-          drinksitu: [],
-          childrensitu: [],
+          housesitu: ["不限"],
+          carsitu: ["不限"],
+          smokesitu: ["不限"],
+          drinksitu: ["不限"],
+          childrensitu: ["不限"],
         });
       }
     },
     createActive() {
-      for (let i = 0; i < this.slots.length; i++) {
-        this.slots[i].constellation = JSON.stringify(
-          this.slots[i].constellation
-        );
-        this.slots[i].eduback = JSON.stringify(this.slots[i].eduback);
-        this.slots[i].marriage = JSON.stringify(this.slots[i].marriage);
-        this.slots[i].career = JSON.stringify(this.slots[i].career);
-        this.slots[i].housesitu = JSON.stringify(this.slots[i].housesitu);
-        this.slots[i].carsitu = JSON.stringify(this.slots[i].carsitu);
-        this.slots[i].smokesitu = JSON.stringify(this.slots[i].smokesitu);
-        this.slots[i].drinksitu = JSON.stringify(this.slots[i].drinksitu);
-        this.slots[i].childrensitu = JSON.stringify(this.slots[i].childrensitu);
+      for (let i = 0; i < this.activeInfo.slots.length; i++) {
+        Object.keys(this.activeInfo.slots[i]).forEach((k) => {
+          if (typeof this.activeInfo.slots[i][k] == "object") {
+            this.activeInfo.slots[i][k] =
+              JSON.stringify(this.activeInfo.slots[i][k]) == "null"
+                ? null
+                : JSON.stringify(this.activeInfo.slots[i][k]);
+          }
+        });
       }
-      console.log(this.slots);
+      console.log(this.activeInfo.slots);
       const active = {
-        name: this.name,
-        description: this.description,
-        tagprice: this.tagprice,
-        price: this.price,
-        timebegin: this.datebegin + " " + this.timebegin,
-        timeend: this.dateend + " " + this.timeend,
-        address: this.address,
-        slot: this.slot,
-        slots: this.slots,
+        name: this.activeInfo.name,
+        description: this.activeInfo.description,
+        tagprice: this.activeInfo.tagprice,
+        price: this.activeInfo.price,
+        timebegin: this.activeInfo.datebegin + " " + this.activeInfo.timebegin,
+        timeend: this.activeInfo.dateend + " " + this.activeInfo.timeend,
+        address: this.activeInfo.address,
+        slot: this.activeInfo.slot,
+        slots: this.activeInfo.slots,
       };
-
-      // console.log(active);
-      this.$api.post("xapp1s1/activates/saveMyActivate", active).then((res) => {
-        // console.log(res);
-        if (res.data.success) {
-          this.$router.back();
-        }
-      });
+      this.$api
+        .post(
+          "xapp1s1/activates/saveMyActivate/" +
+            (this.activeInfo.id ? this.activeInfo.id : ""),
+          active
+        )
+        .then((res) => {
+          if (res.data.success) {
+            this.$router.back();
+          }
+        });
+    },
+    //content_copy
+    copy(i, j) {
+      structuredClone();
     },
   },
 };
