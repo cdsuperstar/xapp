@@ -48,7 +48,7 @@
       transition-show="slide-right"
       transition-hide="slide-left"
     >
-      <q-card class="bg-primary text-white">
+      <q-card class="text-black">
         <q-bar>
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip content-class="bg-white text-primary">Close</q-tooltip>
