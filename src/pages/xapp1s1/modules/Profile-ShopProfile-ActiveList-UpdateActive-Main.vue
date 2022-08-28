@@ -115,6 +115,8 @@
           <!--            stack-label-->
           <!--            style="padding-right: 8px"-->
           <!--          />-->
+          <q-input v-model="x" label="从这里" />
+          <q-btn @click="copy(x, index)" label="从x号位复制"></q-btn>
 
           <q-input class="col-7" outlined v-model="slt.heightbegin" stack-label>
             <template v-slot:before>
@@ -348,6 +350,7 @@ export default {
   components: { UpdateMedia },
   data() {
     return {
+      x: 0,
       active: null,
       modal: null,
       //test
@@ -604,7 +607,7 @@ export default {
     },
     //content_copy
     copy(i, j) {
-      structuredClone();
+      this.activeInfo.slots[j] = structuredClone(this.activeInfo.slots[i - 1]);
     },
     mediaDel(val) {
       if (val?.length > 0) {
