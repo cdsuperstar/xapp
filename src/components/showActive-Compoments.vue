@@ -352,7 +352,6 @@ export default {
           } catch (e) {}
         });
       }
-      console.log(active);
     },
     del(activeid) {
       this.$api
