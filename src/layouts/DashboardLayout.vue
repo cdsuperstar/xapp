@@ -55,7 +55,7 @@
                 <q-icon name="person" size="25px" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ ro.title }} </q-item-label>
+                <q-item-label>{{ ro.title }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -158,6 +158,7 @@
       behavior="desktop"
       overlay
       bordered
+      @hide="saveToServer"
       side="right"
       :width="rightdrawer"
     >
@@ -202,12 +203,12 @@
             :label="this.$t('theme.title')"
           >
             <q-item>
-              <q-item-section
-                ><q-toggle
+              <q-item-section>
+                <q-toggle
                   v-model="usercfg.dark"
                   :label="this.$t('theme.shieldeye')"
-                ></q-toggle
-              ></q-item-section>
+                ></q-toggle>
+              </q-item-section>
             </q-item>
             <q-item
               v-for="n in themeoptions"
@@ -272,7 +273,7 @@
 
     <q-footer reveal bordered class="bg-white text-primary">
       <q-toolbar>
-        <q-toolbar-title> </q-toolbar-title>
+        <q-toolbar-title></q-toolbar-title>
         <q-btn-dropdown
           stretch
           flat
@@ -441,7 +442,6 @@ export default defineComponent({
                       component: () =>
                         import("../pages/modules/" + val.url + ".vue"),
                     });
-                    // console.log("Route added test:", val);
                   }
                 }
               }, this);
@@ -460,35 +460,43 @@ export default defineComponent({
   },
   created() {},
   methods: {
+    saveToServer() {
+      let blDirty = false;
+      let tmpUsercfg = {};
+      if (this.$auth.check()) {
+        if (this.$auth.user().usercfg !== undefined) {
+          tmpUsercfg = JSON.parse(this.$auth.user().usercfg);
+          if (tmpUsercfg === null) tmpUsercfg = {};
+          if (tmpUsercfg.theme != this.usercfg.theme) {
+            tmpUsercfg.theme = this.usercfg.theme;
+            blDirty = true;
+          }
+          if (tmpUsercfg.dark != this.usercfg.dark) {
+            tmpUsercfg.dark = this.usercfg.dark;
+            blDirty = true;
+          }
+        }
+        if (blDirty) {
+          this.$api
+            .post("/zero/setMyUsercfg/", {
+              usercfg: JSON.stringify(tmpUsercfg),
+            })
+            .then((res) => {
+              if (res.data.success) {
+                this.$auth.user().usercfg = res.data.data.usercfg;
+                this.usercfg = JSON.parse(this.$auth.user().usercfg);
+              }
+            });
+        }
+      }
+    },
     setlanguage(lang) {
       this.lang = lang;
     },
     // 设置主题
     setthemecolor(color) {
       this.usercfg.theme = color;
-
-      let tmpUsercfg = {};
-      if (this.$auth.check()) {
-        const tmpu = this.$auth.user();
-        if (tmpu.usercfg !== undefined) {
-          tmpUsercfg = JSON.parse(this.$auth.user().usercfg);
-          if (tmpUsercfg === null) tmpUsercfg = {};
-          tmpUsercfg.theme = color;
-          tmpUsercfg.dark = this.usercfg.dark;
-        }
-
-        this.$api
-          .post("/zero/setMyUsercfg/", {
-            usercfg: JSON.stringify(tmpUsercfg),
-          })
-          .then((res) => {
-            if (res.data.success) {
-              this.$auth.user().usercfg = res.data.data.usercfg;
-              this.usercfg = JSON.parse(this.$auth.user().usercfg);
-              this.applytheme(color);
-            }
-          });
-      }
+      this.applytheme(color);
     },
     applytheme(color) {
       this.$zglobal.colors[color].forEach((item) => {
@@ -546,18 +554,22 @@ export default defineComponent({
   -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3);
   background-color: #c1c1c1;
 }
+
 /*定义aggrid的css*/
 .ag-theme-balham .ag-icon,
 .ag-header-icon .ag-sort-ascending-icon {
   color: #ffffff;
 }
+
 .ag-theme-balham .ag-paging-page-summary-panel .ag-icon,
 .ag-theme-balham .ag-paging-panel {
   color: #000000;
 }
+
 .ag-theme-balham .ag-icon-checkbox-unchecked {
   color: #cccccc;
 }
+
 .ag-theme-balham .ag-icon-checkbox-checked {
   color: var(--q-secondary);
 }
