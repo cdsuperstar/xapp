@@ -306,6 +306,24 @@
         <!--          />-->
         <!--        </div>-->
       </q-expansion-item>
+      <update-media
+        v-if="activeInfo.id"
+        :server="
+          this.$api.defaults.baseURL +
+          `/xapp1s1/activates/uploadMyActivateFiles/${activeInfo.id}`
+        "
+        :media_server="
+          this.$api.defaults.baseURL +
+          `/xapp1s1/activates/getMyActivateFiles/${activeInfo.id}`
+        "
+        @deleted-media="mediaDel"
+        :collention="cl"
+        :multiple="true"
+        :headers="{
+          Authorization: 'Bearer ' + this.$auth.token(),
+        }"
+      >
+      </update-media>
     </q-form>
     <q-btn
       push
@@ -324,8 +342,10 @@
 
 <script>
 import { date } from "quasar";
+import { UpdateMedia } from "../../../components/vue-media-upload";
 export default {
   name: "Active",
+  components: { UpdateMedia },
   data() {
     return {
       active: null,
@@ -559,7 +579,6 @@ export default {
           }
         });
       }
-      console.log(this.activeInfo.slots);
       const active = {
         name: this.activeInfo.name,
         description: this.activeInfo.description,
@@ -586,6 +605,23 @@ export default {
     //content_copy
     copy(i, j) {
       structuredClone();
+    },
+    mediaDel(val) {
+      if (val?.length > 0) {
+        this.$api
+          .post("/xapp1s1/activates/delMyActivateFiles/" + this.activeInfo.id, {
+            filenames: val,
+          })
+          .then((res) => {
+            if (res.data.success === true) {
+              this.$zglobal.showMessage(
+                "positive",
+                "center",
+                this.$t("operation.delsuccess")
+              );
+            }
+          });
+      }
     },
   },
 };
