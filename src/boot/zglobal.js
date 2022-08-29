@@ -96,6 +96,7 @@ const zglobal = {
   },
 };
 export default boot(({ app, router, store }) => {
+  // 每路由之前 every route.
   router.beforeEach((to, from, next) => {
     if (process.env.DEV) {
       console.log(
@@ -128,8 +129,11 @@ export default boot(({ app, router, store }) => {
       next();
     }
   });
+
   app.use(JsonEditorVue);
   app.use(print);
+
+  // 后台推日志 log to backend server
   if (process.env.BACKEND_LOG == "true") {
     app.config.errorHandler = (err, vm, info) => {
       // 处理错误

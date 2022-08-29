@@ -97,6 +97,11 @@
 <script>
 import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+
+window.Pusher = Pusher;
+
 export default {
   name: "Login",
   components: {},
@@ -147,6 +152,34 @@ export default {
           this.$auth
             .login(this.data)
             .then((response) => {
+              // 登录后初始化echo
+              if (process.env.USE_BROADCAST == "true") {
+                window.Echo = new Echo({
+                  broadcaster: "pusher",
+                  authEndpoint:
+                    "http://" +
+                    window.location.hostname +
+                    "/api/v1/broadcasting/auth",
+                  app_id: 1,
+                  key: "b540ff10ff9a76b8ee18",
+                  wsHost: window.location.hostname,
+                  // wsHost: '0apps.test',
+                  wsPort: 8001,
+                  wssPort: 8001,
+                  encrypted: false,
+                  secret: "xapp1s1",
+                  forceTLS: false,
+                  enabledTransports: ["ws", "wss"],
+                  disableStats: true,
+                  auth: {
+                    headers: {
+                      Authorization: "Bearer " + this.$auth.token(),
+                      Accept: "application/json",
+                    },
+                  },
+                });
+              }
+
               // console.log("Login res:", response);
               if (this.data.rememberMe) {
                 this.$q.localStorage.set("username", this.data.data.username);

@@ -303,7 +303,7 @@
                 </q-item-section>
               </q-item>
             </div>
-            <q-item v-ripple clickable tag="a" @click="$auth.logout()">
+            <q-item v-ripple clickable tag="a" @click="logout">
               <q-item-section avatar>
                 <q-avatar
                   color="secondary"
@@ -366,7 +366,6 @@ export default defineComponent({
       // you can return the whole store instance to use it in the template
     };
   },
-  beforeCreate() {},
   computed: {
     menutree: {
       get() {
@@ -458,8 +457,15 @@ export default defineComponent({
       if (this.usercfg?.dark) this.applydarkmode();
     }
   },
-  created() {},
   methods: {
+    logout() {
+      // if echo exist, close echo on logout
+      this.$auth.logout().then(() => {
+        if (window.Echo) {
+          window.Echo.disconnect();
+        }
+      });
+    },
     saveToServer() {
       let blDirty = false;
       let tmpUsercfg = {};
