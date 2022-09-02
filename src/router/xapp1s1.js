@@ -46,6 +46,11 @@ const xapp1s1 = {
       component: () => import("pages/xapp1s1/modules/Message.vue"),
     },
     {
+      path: "xapp1s1msgbox",
+      name: "xapp1s1msgbox",
+      component: () => import("pages/xapp1s1/modules/MessageBox.vue"),
+    },
+    {
       path: "xapp1s1personal",
       name: "xapp1s1personal",
       component: () =>

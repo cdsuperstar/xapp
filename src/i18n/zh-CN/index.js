@@ -1,6 +1,7 @@
 // This is just an example,
 // so you can safely delete all default props below
 import { xapp1s1 } from "./xapp1s1";
+
 export default {
   xapp1s1,
   failed: "操作失败",
@@ -8,6 +9,14 @@ export default {
   success: "操作成功",
   system: {
     name: "综合智能管理系统",
+  },
+  datetime: {
+    year: "年",
+    month: "月",
+    day: "日",
+    hour: "小时",
+    minute: "分钟",
+    second: "秒",
   },
   location: {
     province: "省",
