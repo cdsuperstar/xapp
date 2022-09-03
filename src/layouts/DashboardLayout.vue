@@ -462,6 +462,7 @@ export default defineComponent({
       // if echo exist, close echo on logout
       this.$auth.logout().then(() => {
         if (window.Echo) {
+          window.Echo.leave("App.Models.User." + this.$auth.user().id);
           window.Echo.disconnect();
         }
       });

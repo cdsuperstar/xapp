@@ -99,6 +99,7 @@ import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
+import { useZeroStore } from "stores/zero";
 
 window.Pusher = Pusher;
 
@@ -120,7 +121,13 @@ export default {
       loading: false,
     };
   },
-  setup: () => ({ v$: useVuelidate() }),
+  setup() {
+    const store = useZeroStore();
+    return {
+      store,
+      v$: useVuelidate(),
+    };
+  },
   created() {
     // 加入初始记住的用户信息
     if (this.$q.localStorage.getItem("rememberMe")) {
@@ -177,6 +184,20 @@ export default {
                       Accept: "application/json",
                     },
                   },
+                });
+                window.Echo.private(
+                  "App.Models.User." + response.data.data.id
+                ).listen("msgEvt", (msg) => {
+                  if (this.store.ZUserMsg[msg.sender] == undefined) {
+                    this.store.ZUserMsg[msg.sender] = [];
+                  }
+                  this.store.ZUserMsg[msg.sender].push(msg);
+                  // console.log(
+                  //   "Server msg is :",
+                  //   msg,
+                  //   window.Echo.socketId(),
+                  //   " OK"
+                  // );
                 });
               }
 

@@ -6,6 +6,8 @@ export const useZeroStore = defineStore("zero", {
     ZModules: [],
     ZPermissions: [],
     ZUIcfg: {},
+    // 用户消息
+    ZUserMsg: [],
     // 访问历史
     ZOptHist: [],
   }),

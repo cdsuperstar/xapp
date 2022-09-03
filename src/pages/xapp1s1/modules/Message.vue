@@ -74,13 +74,21 @@ export default {
   methods: {
     toMessageBox(user) {
       if (!user.user_pub.oauth_access_token) {
-        this.$zglobal.showMessage("negative", "center", "User not online.");
+        this.$zglobal.showMessage(
+          "negative",
+          "center",
+          this.$t("message.useroffline")
+        );
       } else if (!user.user_pub.like) {
-        this.$zglobal.showMessage("negative", "center", "User not like you.");
+        this.$zglobal.showMessage(
+          "negative",
+          "center",
+          this.$t("message.usernotliked")
+        );
       } else {
         this.$router.push({
           name: "xapp1s1msgbox",
-          params: { user_id: user.user_pub.id },
+          params: { touser: JSON.stringify(user) },
         });
       }
     },
@@ -91,7 +99,6 @@ export default {
         "minutes"
       );
       let tmpRet = "";
-      console.log(tmpMinutes, d, Date.now(), new Date(d));
       tmpRet += Math.floor(tmpMinutes / 60)
         ? Math.floor(tmpMinutes / 60) + this.$t("datetime.hour")
         : "";

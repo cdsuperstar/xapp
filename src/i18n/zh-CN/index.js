@@ -10,6 +10,10 @@ export default {
   system: {
     name: "综合智能管理系统",
   },
+  message: {
+    useroffline: "用户不在线",
+    usernotliked: "用户未关注您",
+  },
   datetime: {
     year: "年",
     month: "月",

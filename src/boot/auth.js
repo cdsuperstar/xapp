@@ -62,6 +62,8 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
           checkExpiration: true,
           data: {
             grant_type: "refresh_token",
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
           },
         },
         fetchData: {
