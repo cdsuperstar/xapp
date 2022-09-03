@@ -85,8 +85,13 @@ export default {
       }
     },
     getOnlineMinutes(d) {
-      let tmpMinutes = date.getDateDiff(Date.now(), d, "minutes");
+      let tmpMinutes = date.getDateDiff(
+        Date.now(),
+        new Date(d.replace(/-/g, "/")),
+        "minutes"
+      );
       let tmpRet = "";
+      console.log(tmpMinutes, d, Date.now(), new Date(d));
       tmpRet += Math.floor(tmpMinutes / 60)
         ? Math.floor(tmpMinutes / 60) + this.$t("datetime.hour")
         : "";
