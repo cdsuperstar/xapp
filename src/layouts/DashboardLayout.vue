@@ -460,9 +460,10 @@ export default defineComponent({
   methods: {
     logout() {
       // if echo exist, close echo on logout
+      let tmpUserid = this.$auth.user().id;
       this.$auth.logout().then(() => {
         if (window.Echo) {
-          window.Echo.leave("App.Models.User." + this.$auth.user().id);
+          window.Echo.leave("App.Models.User." + tmpUserid);
           window.Echo.disconnect();
         }
       });
