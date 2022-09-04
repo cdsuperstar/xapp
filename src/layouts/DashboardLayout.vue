@@ -345,6 +345,7 @@ export default defineComponent({
       leftdrawer: 210,
       rightdrawer: 230,
       miniState: false,
+      userID: 0,
       langs: [
         {
           label: "中文",
@@ -411,6 +412,8 @@ export default defineComponent({
     },
   },
   mounted() {
+    // cache the user id
+    this.userID = this.$auth.user().id;
     this.lang = this.langs.filter((lan) => lan.value === this.lang)[0];
     //如果登录了
     if (this.$auth.check()) {
@@ -460,10 +463,9 @@ export default defineComponent({
   methods: {
     logout() {
       // if echo exist, close echo on logout
-      let tmpUserid = this.$auth.user().id;
       this.$auth.logout().then(() => {
         if (window.Echo) {
-          window.Echo.leave("App.Models.User." + tmpUserid);
+          window.Echo.leave("App.Models.User." + this.userID);
           window.Echo.disconnect();
         }
       });
