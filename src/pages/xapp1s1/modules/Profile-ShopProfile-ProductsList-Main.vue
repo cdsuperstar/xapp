@@ -6,18 +6,17 @@
   </q-toolbar>
   <div class="q-pa-md">
     <q-pull-to-refresh @refresh="refresh">
-      <div class="row justify-center q-gutter-sm">
-        <div v-for="(item, index) in items" :key="index">
-          <q-card class="q-ma-sm" style="width: 15vh; height: 25vh;">
-            <q-badge color="secondary">
-              {{ items.length - index }}
-            </q-badge>
-            <q-card-section>
-              <div class="text-h8">{{ $t('xapp1s1.product.name') }}: {{ item.name }}</div>
-              <div class="text-subtitle2">{{ $t('xapp1s1.product.tagprice') }}: {{ item.tagprice }}</div>
-              <div class="text-subtitle2">{{ $t('xapp1s1.product.price') }}: {{ item.price }}</div>
-              <div class="text-subtitle2">{{ $t('xapp1s1.product.timebegin') }}: {{ item.timebegin }}</div>    
-            </q-card-section>
+      <div class="row q-gutter-sm">
+        <div v-for="(item, index) in items" :key="index" style="width: 45%; height: 100%;">
+          <q-card class="q-ma-sm" style="width: 100%; ">
+            <img src="https://cdn.quasar.dev/img/mountains.jpg" style="width: 100%; height: 100%;">
+            <q-card-section class="row justify-evenly">
+              <div class="text-h8 col-12">{{ item.name }}</div>
+              <div class="row col-12">
+                <div class="col-6" style="color:red;">¥{{ item.tagprice }}</div>
+                <del class="col-6" style="color:gray;">{{ item.price }}</del>
+              </div>
+            </q-card-section>    
           </q-card>
         </div>
       </div>
