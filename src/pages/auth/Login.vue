@@ -37,6 +37,7 @@
           :error="this.v$.data.data.password.$error"
           :error-message="this.$t('auth.errors.password')"
           @blur="this.v$.data.data.password.$touch"
+          @keyup.enter="login"
         >
           <template v-slot:append>
             <q-icon
