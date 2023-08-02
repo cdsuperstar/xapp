@@ -2,7 +2,7 @@
   <div class="dianzan">
     <q-btn
       v-if="
-        moment.thumbs.filter((val) => {
+        moment.thumbs?.filter((val) => {
           return val.user_id == this.$auth.user()?.id;
         }).length === 0
       "
@@ -14,7 +14,7 @@
     />
     <q-btn
       v-if="
-        moment.thumbs.filter((val) => {
+        moment.thumbs?.filter((val) => {
           return val.user_id == this.$auth.user()?.id;
         }).length !== 0
       "

@@ -154,7 +154,7 @@
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import XLSX from "xlsx";
+import { read, writeFileXLSX } from "xlsx";
 import NestedTest from "./nested-tree";
 import { defineComponent } from "vue";
 import { useZeroStore } from "stores/zero";

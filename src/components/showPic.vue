@@ -2,7 +2,7 @@
   <!--  swipeable-->
   <!--  缩略图-->
   <div class="pic">
-    <div v-if="pics.length > 4" class="q-pa-md">
+    <div v-if="pics?.length > 4" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
         <div class="col-4" v-for="(pic, index) in pics" :key="index">
           <q-img :ratio="1" :src="pic" @click="showPic(index + 1)" />
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div v-else-if="pics.length <= 4 && pics.length > 1" class="q-pa-md">
+    <div v-else-if="pics?.length <= 4 && pics?.length > 1" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
         <div class="col-6" v-for="(pic, index) in pics" :key="index">
           <q-img :ratio="1" :src="pic" @click="showPic(index + 1)" />
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div v-else-if="pics.length === 1" class="q-pa-md">
+    <div v-else-if="pics?.length === 1" class="q-pa-md">
       <div class="q-col-gutter-xs row items-start">
         <div class="col-6" v-for="(pic, index) in pics" :key="index">
           <q-img :src="pic" @click="showPic(index + 1)" />

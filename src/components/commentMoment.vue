@@ -4,7 +4,7 @@
     flat
     icon="message"
     @click="openComment(moment)"
-    :label="moment.comments.length"
+    :label="moment.comments?.length"
   />
   <!--  评论-->
   <q-dialog v-model="comment" position="bottom">
