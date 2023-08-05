@@ -70,11 +70,6 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
           url: "auth/user",
           method: "GET",
           enabled: true,
-          data: {
-            grant_type: "authorization_code",
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-          },
         },
         // passportData: {
         //   client_id: 2,
