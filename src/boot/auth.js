@@ -26,7 +26,7 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
       options: {
         rolesVar: "role",
         tokenStore: ["localStorage", "cookie"],
-        tokenDefaultName: "xapp0",
+        tokenDefaultName: "xapp",
         // authRedirect: { path: '/user' },
         // forbiddenRedirect: { path: '/403' },
         // notFoundRedirect: { path: '/404' },
@@ -57,7 +57,7 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
         refreshData: {
           url: "oauth/token",
           method: "POST",
-          enabled: false,
+          enabled: true,
           interval: 55,
           checkExpiration: true,
           data: {
@@ -70,6 +70,11 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
           url: "auth/user",
           method: "GET",
           enabled: true,
+          data: {
+            grant_type: "authorization_code",
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
+          },
         },
         // passportData: {
         //   client_id: 2,

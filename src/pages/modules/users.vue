@@ -625,7 +625,9 @@ export default {
           this.$api
             .put("/users/" + val.id, val)
             .then((res) => {
-              console.log("users vue:", val);
+              if (process.env.DEV) {
+                console.log("users vue:", val);
+              }
               if (res.data.success) {
                 this.gridApi.updateRowData({
                   update: [Object.assign(val, res.data.data)],

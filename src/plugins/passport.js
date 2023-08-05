@@ -2,7 +2,13 @@ export default {
   request: function (req, token) {
     // If refresh, add refresh_token to request data
     if (req.url === this.options.refreshData.url) {
-      req.data = { refresh_token: this.token(this.options.refreshTokenKey) };
+      req.data = Object.assign(
+        {
+          refresh_token: this.token(this.options.refreshTokenKey),
+        },
+        this.options.refreshData.data
+      );
+      console.log(req.data);
     }
 
     this.drivers.http.setHeaders.call(this, req, {
