@@ -406,15 +406,15 @@ export default {
         };
     },
 
-    //   mounted(){
-    //     this.$api
-    //     .post(
-    //         "/xapp1s1/activates"
-    //     )
-    //     .then(res=>{
-    //         console.log(res)
-    //     })
-    //   },
+      mounted(){
+        this.$api
+        .post(
+            "/xapp1s1/activates"
+        )
+        .then(res=>{
+            console.log(res)
+        })
+      },
     data() {
         return {
             message: "Events",
