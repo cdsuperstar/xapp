@@ -4,7 +4,7 @@
     <div class="col">
       <br>
       <div class="row">
-        <p style="font-size: 24px;font-weight: bold;">早上/中午/晚上 好 USER NAME 👋 </p>
+        <p style="font-size: 24px;font-weight: bold;">{{ greeting }} {{ userName }} 👋 </p>
       </div>
       <br>
       <div class="row">
@@ -198,10 +198,34 @@ export default {
     return {
       // heavyList,
       thumb_up1,
+      userName:'',
       value: ref(true),
       hometools: "all",
     };
   },
+  created() {
+    this.$api.get("auth/user").then((res) => {
+      if (res.data.success === true) {
+        this.userName = res.data.data.name
+      }
+    });
+  },
+  computed: {
+    greeting() {
+      const currentTime = new Date();
+      const hours = currentTime.getHours();
+      
+      if (hours >= 5 && hours < 12) {
+        return '早上好';
+      } else if (hours >= 12 && hours < 13) {
+        return '中午好';
+      } else if (hours >= 13 && hours < 18) {
+        return '中午好';
+      } else {
+        return '晚上好';
+      }
+    }
+  }
 };
 </script>
 

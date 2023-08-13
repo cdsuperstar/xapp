@@ -54,6 +54,12 @@ const xapp1s1 = {
       path: "xapp1s1personal",
       name: "xapp1s1personal",
       component: () =>
+        import("pages/xapp1s1/modules/Profile-ViewProfile.vue"),
+    },
+    {
+      path: "xapp1s1personalchange",
+      name: "xapp1s1personalchange",
+      component: () =>
         import("pages/xapp1s1/modules/Profile-ChangeProfile-Main.vue"),
     },
     {
