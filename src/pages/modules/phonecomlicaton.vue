@@ -26,6 +26,10 @@
             <q-icon color="primary" name="double_arrow" />
           </q-item-section>
           <q-item-section> 网络状态：{{ netstate }} </q-item-section>
+          <q-item-section>
+            <q-btn outline color="warning" icon="fiber_smart_record" label="开始"
+            @click="checkConnection" /> 
+          </q-item-section>
         </q-item>
         <q-separator spaced inset="item" style="
             margin-left: 30px;
@@ -130,7 +134,7 @@ export default {
   data() {
     return {
       positioneexpanded: true,
-      netstate: null,
+      //netstate: null,
       //batterystatus: null,
       //batterystatusisPlugged: null,
       //mediaRec: null,
@@ -164,9 +168,68 @@ export default {
     const recordPauseStatus = ref(null)
     const recordStatus = ref(true)
     const playstatus = ref(true)
-
+    
+    //网络
+    const netstate = ref(null)
 
     //--------------------------Functions----------------------------
+    //二维码扫描
+    function barcodescanresult(result){
+      divstatus.value = 
+        "扫描结果\n" +
+        "类型:[ " +
+        result.format +
+        "]\n" +
+        "内容: " +
+        result.text +
+        "\n" +
+        "是否取消: " +
+        result.cancelled
+    }
+
+    function barcodescan(){
+      cordova.plugins.barcodeScanner.scan(
+        barcodescanresult,
+        function(error) {
+          alert("扫描失败: " + error);
+        },
+        {
+          preferFrontCamera: false, // iOS and Android
+          showFlipCameraButton: true, // iOS and Android
+          showTorchButton: true, // iOS and Android
+          torchOn: false, // Android, launch with the torch switched on (if available)
+          saveHistory: true, // Android, save scan history (default false)
+          prompt: "请把二维码置于摄像区域...", // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          // formats: 'QR_CODE,PDF_417', // default: all but PDF_417 and RSS_EXPANDED
+          // direction:"landscape",//  仅Android（portrait | landscape），默认未设置，因此会随设备旋转
+          disableAnimations: true, // iOS
+          disableSuccessBeep: true, // iOS and Android
+        }
+      );
+      if($auth.user().usercfg) {
+        const tmpa = JSON.parse($auth.user().usercfg);
+        barcodetype = tmpa.barcode.format;
+        barcodetext = tmpa.barcode.text;
+      }
+    }
+    //联网
+    function checkConnection() {
+      const networkState = ref(navigator.connection.type)
+      const status = ref({
+        unknown: "未知网络连接",
+        ethernet: "以太网连接",
+        wifi: "WIFI 网络连接",
+        "2g": "2G 网络连接",
+        "3g": "3G 网络连接",
+        "4g": "4G 网络连接",
+        cell: "蜂窝数据连接",
+        none: "无网络连接",
+      })
+      netstate.value = status.value[networkState.value]
+    }
+    checkConnection()
+
     //拍摄照片
     function captureImage() {
       //成功
@@ -427,11 +490,14 @@ export default {
       recordPauseStatus,
       recordStatus,
       soundstatus,
+      netstate,
       captureImage,
       captureVideo,
       getCurrentPosition,
       getRecord,
-      playAudio
+      playAudio,
+      checkConnection,
+      barcodescan
     }
   },
   // created() {
@@ -491,59 +557,59 @@ export default {
       }
     },
     // 查询当前网络连接
-    checkConnection() {
-      var networkState = navigator.connection.type;
-      const states = {
-        unknown: "未知网络连接",
-        ethernet: "以太网连接",
-        wifi: "WIFI 网络连接",
-        "2g": "2G 网络连接",
-        "3g": "3G 网络连接",
-        "4g": "4G 网络连接",
-        cell: "蜂窝数据连接",
-        none: "无网络连接",
-      };
-      this.netstate = states[networkState];
-    },
+    // checkConnection() {
+    //   var networkState = navigator.connection.type;
+    //   const states = {
+    //     unknown: "未知网络连接",
+    //     ethernet: "以太网连接",
+    //     wifi: "WIFI 网络连接",
+    //     "2g": "2G 网络连接",
+    //     "3g": "3G 网络连接",
+    //     "4g": "4G 网络连接",
+    //     cell: "蜂窝数据连接",
+    //     none: "无网络连接",
+    //   };
+    //   this.netstate = states[networkState];
+    // },
     // 二维码扫描
-    barcodescan() {
-      cordova.plugins.barcodeScanner.scan(
-        this.barcodescanresult,
-        function (error) {
-          alert("扫描失败: " + error);
-        },
-        {
-          preferFrontCamera: false, // iOS and Android
-          showFlipCameraButton: true, // iOS and Android
-          showTorchButton: true, // iOS and Android
-          torchOn: false, // Android, launch with the torch switched on (if available)
-          saveHistory: true, // Android, save scan history (default false)
-          prompt: "请把二维码置于摄像区域...", // Android
-          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          // formats: 'QR_CODE,PDF_417', // default: all but PDF_417 and RSS_EXPANDED
-          // direction:"landscape",//  仅Android（portrait | landscape），默认未设置，因此会随设备旋转
-          disableAnimations: true, // iOS
-          disableSuccessBeep: true, // iOS and Android
-        }
-      );
-      if (this.$auth.user().usercfg) {
-        const tmpa = JSON.parse(this.$auth.user().usercfg);
-        this.barcodetype = tmpa.barcode.format;
-        this.barcodetext = tmpa.barcode.text;
-      }
-    },
-    barcodescanresult(result) {
-      this.divstatus =
-        "扫描结果\n" +
-        "类型:[ " +
-        result.format +
-        "]\n" +
-        "内容: " +
-        result.text +
-        "\n" +
-        "是否取消: " +
-        result.cancelled;
-    },
+    // barcodescan() {
+    //   cordova.plugins.barcodeScanner.scan(
+    //     this.barcodescanresult,
+    //     function (error) {
+    //       alert("扫描失败: " + error);
+    //     },
+    //     {
+    //       preferFrontCamera: false, // iOS and Android
+    //       showFlipCameraButton: true, // iOS and Android
+    //       showTorchButton: true, // iOS and Android
+    //       torchOn: false, // Android, launch with the torch switched on (if available)
+    //       saveHistory: true, // Android, save scan history (default false)
+    //       prompt: "请把二维码置于摄像区域...", // Android
+    //       resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+    //       // formats: 'QR_CODE,PDF_417', // default: all but PDF_417 and RSS_EXPANDED
+    //       // direction:"landscape",//  仅Android（portrait | landscape），默认未设置，因此会随设备旋转
+    //       disableAnimations: true, // iOS
+    //       disableSuccessBeep: true, // iOS and Android
+    //     }
+    //   );
+    //   if (this.$auth.user().usercfg) {
+    //     const tmpa = JSON.parse(this.$auth.user().usercfg);
+    //     this.barcodetype = tmpa.barcode.format;
+    //     this.barcodetext = tmpa.barcode.text;
+    //   }
+    // },
+    // barcodescanresult(result) {
+    //   this.divstatus =
+    //     "扫描结果\n" +
+    //     "类型:[ " +
+    //     result.format +
+    //     "]\n" +
+    //     "内容: " +
+    //     result.text +
+    //     "\n" +
+    //     "是否取消: " +
+    //     result.cancelled;
+    // },
     // 拍摄
     capturesuccess(mediaFiles) {
       var i, path, len;
