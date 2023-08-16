@@ -86,23 +86,24 @@
 </template>
 
 <script>
-import { email, required, minLength, sameAs } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
+import { email, required, minLength, sameAs } from "@vuelidate/validators";
 
 export default {
   name: "Login",
   components: {},
+  setup: () => ({ v$: useVuelidate() }),
   data() {
     return {
       isPwd: true,
       data: {
         data: {
-          name: "11",
-          username: "",
-          email: "1@1.com",
-          password: "12345678",
+          name: "luke",
+          username: "181977814@qq.com",
+          email: "181977814@qq.com",
+          password: "*12345678",
           pwdType: "password",
-          password_confirmation: "12345678",
+          password_confirmation: "*12345678",
         },
         autoLogin: false,
         rememberMe: false,
@@ -110,12 +111,35 @@ export default {
       loading: false,
     };
   },
-  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      data: {
+        data: {
+          name: {
+            required,
+          },
+          email: {
+            required,
+            email,
+          },
+          password: {
+            minLength: minLength(8),
+            required,
+          },
+          password_confirmation: {
+            sameAsPassword: sameAs(this.data.data.password),
+            required,
+          },
+        },
+      },
+    };
+  },
+  created() {},
   methods: {
     register() {
       this.data.data.username = this.data.data.email;
-      this.$v.data.$touch();
-      if (!this.$v.data.$error) {
+      this.v$.data.$touch();
+      if (!this.v$.data.$error) {
         this.loading = true;
         this.$auth
           .register(this.data)
@@ -163,27 +187,6 @@ export default {
             this.loading = false;
           });
       }
-    },
-  },
-  validations: {
-    data: {
-      data: {
-        name: {
-          required,
-        },
-        email: {
-          required,
-          email,
-        },
-        password: {
-          minLength: minLength(8),
-          required,
-        },
-        password_confirmation: {
-          sameAsPassword: sameAs("password"),
-          required,
-        },
-      },
     },
   },
 };
