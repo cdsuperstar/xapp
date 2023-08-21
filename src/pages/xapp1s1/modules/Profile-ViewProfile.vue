@@ -17,7 +17,13 @@
         <q-separator style="height: 1px;"/>
         <br>
         <div style="display: flex;justify-content: center; align-items: center;">
+          <div class="col" style="display: flex;justify-content: center; align-items: center;">
             <q-btn color="primary" to="/user/xapp1s1personalchange" style="width: 150px;"> 更改档案 </q-btn>
+          </div>
+          <div class="col" style="display: flex;justify-content: center; align-items: center;">
+            <q-btn color="primary" to="xapp1s1shop" style="width: 150px;"> 我的商铺 </q-btn>
+          </div>
+
         </div>
         <br>
         <q-separator style="height: 1px;"/>

@@ -1,6 +1,6 @@
 <template>
   <q-toolbar>
-    <q-btn flat round dense icon="keyboard_arrow_left" to="xapp1s1profile" />
+    <q-btn flat round dense icon="keyboard_arrow_left" @click="goBack"/>
   </q-toolbar>
   <shop-profile v-if="hasShop" :shop_id="shop_id"></shop-profile>
   <q-list v-else-if="!hasShop" bordered padding separator>
@@ -41,6 +41,11 @@ export default {
       }
     });
   },
+  methods: {
+  goBack() {
+    history.back();
+  }
+}
 };
 </script>
 
