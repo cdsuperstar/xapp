@@ -127,6 +127,22 @@ const xapp1s1 = {
           "pages/xapp1s1/modules/Profile-ShopProfile-ActiveList-UpdateActive-Main"
         ),
     },
+    {
+      path: "/user/xapp1s1ActivityDisplay",
+      name: "xapp1s1ActivityDisplay",
+      component: () =>
+        import(
+          "src/pages/xapp1s1/modules/ActivityDisplay.vue"
+        ),
+    },
+    {
+      path:"/user/xapp1s1GroupDisplay",
+      name: "xapp1s1GroupDisplay",
+      component:()=>
+        import(
+          "src/pages/xapp1s1/modules/GroupDisplay.vue"
+        )
+    }
   ],
 };
 
