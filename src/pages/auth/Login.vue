@@ -162,15 +162,15 @@ export default {
             .then((response) => {
               // 登录后初始化echo
               if (process.env.USE_BROADCAST == "true") {
+                let baseurl = process.env.BASE_URL;
+                let baseurlObj = new URL(baseurl);
+                let baseurlHostname = baseurlObj.hostname;
                 window.Echo = new Echo({
                   broadcaster: "pusher",
-                  authEndpoint:
-                    "http://" +
-                    window.location.hostname +
-                    "/api/v1/broadcasting/auth",
+                  authEndpoint: baseurl + "/broadcasting/auth",
                   app_id: 1,
                   key: "b540ff10ff9a76b8ee18",
-                  wsHost: window.location.hostname,
+                  wsHost: baseurlHostname,
                   // wsHost: '0apps.test',
                   wsPort: 8001,
                   wssPort: 8001,
@@ -193,12 +193,7 @@ export default {
                     this.store.ZUserMsg[msg.sender] = [];
                   }
                   this.store.ZUserMsg[msg.sender].push(msg);
-                  // console.log(
-                  //   "Server msg is :",
-                  //   msg,
-                  //   window.Echo.socketId(),
-                  //   " OK"
-                  // );
+                  console.log("Server msg is :", msg, window.Echo.socketId());
                 });
               }
 
