@@ -7,10 +7,14 @@
         </div>
         <br>
         <div class="row" style="display: flex;justify-content: center; align-items: center;flex-direction: column;">
-            <p style="font-size: 60px;">{{userName}}</p>
+            <div style="font-size: 60px;">{{userName}}</div>
         </div>
         <div class="row" style="display: flex;justify-content: center; align-items: center;flex-direction: column;">
-            <p style="font-size: 30px; color: gray;"><q-icon name="location_on" ></q-icon>{{location}}</p>
+            <div style="font-size: 30px; color: gray;"><q-icon name="location_on" ></q-icon>{{location}}</div>
+        </div>
+        <br>
+        <div class="row" style="display: flex;justify-content: center; align-items: center;">
+            <q-btn  @click="logout" style="width: 150px;background-color: rgb(210, 210, 210);"> 退出登录 </q-btn>
         </div>
 
         <br>
@@ -23,6 +27,7 @@
           <div class="col" style="display: flex;justify-content: center; align-items: center;">
             <q-btn color="primary" to="xapp1s1shop" style="width: 150px;"> 我的商铺 </q-btn>
           </div>
+          
 
         </div>
         <br>
@@ -90,6 +95,18 @@
       }
     });
     },
+    methods:
+    {
+        logout() {
+      // if echo exist, close echo on logout
+      this.$auth.logout().then(() => {
+        if (window.Echo) {
+          window.Echo.leave("App.Models.User." + this.userID);
+          window.Echo.disconnect();
+        }
+      });
+    },
+    }
   };
   </script>
   
