@@ -38,7 +38,7 @@
                                     主办方</q-item-label
                                 >
                                 <q-item-label style="padding: 0px">
-                                    小组的ID:{{ aaa.active.xapp1s1shop_id}}
+                                    小组的ID:{{ aaa.active.xapp1s1shop_id }}
                                     <!-- <UserProfile :user_id="1"></UserProfile> -->
                                 </q-item-label>
                             </q-item-section>
@@ -84,7 +84,9 @@
                                 color: white;
                                 width: 80%;
                             "
-                            @click="ChangeToSignUp(this.aaa.active)"
+                            @click="
+                                ChangeToSignUp(this.aaa.active, this.aaa.id)
+                            "
                             label="参加活动"
                             rounded
                         />
@@ -147,10 +149,10 @@
                         v-slot="{ items, index }"
                         :key="index"
                     >
-
                         <q-card
                             style="margin: 5px; max-width: 300px; height: 200px"
-                            v-for="n in 10" :key="n"
+                            v-for="n in 10"
+                            :key="n"
                         >
                             <q-item>
                                 <q-item-section
@@ -165,7 +167,7 @@
                             <q-item>
                                 <q-item-section>
                                     <q-item-label class="text-center"
-                                        >{{ items}} 成员名：{{ aaa.id }}
+                                        >{{ items }} 成员名：{{ aaa.id }}
                                     </q-item-label>
                                     <q-item-label caption class="text-center"
                                         >成员职位</q-item-label
@@ -280,25 +282,32 @@
 </template>
 
 <script>
-import UserProfile from "components/UserProfile-Compoments";
 const heavyList = [];
- heavyList.push({ });
+heavyList.push({});
 export default {
-    //components: {
-    //   UserProfile,
-    //  },
     data() {
         return {
-            //activity:"这是活动名",
             aaa: JSON.parse(this.$route.query.aaa),
+            shop_id: "",
+            myProfile: {},
+            user_id: "",
         };
     },
     setup() {
         return {
             heavyList,
             lorem: "laboris nisi ut aliquip ex ea commodo consequat.",
-            //slot:aaa.active.slot,
         };
+    },
+    created() {
+        this.$api.get("xapp1s1/profile/getMyProfile").then((res) => {
+            if (res.data.success === true) {
+                this.myProfile = res.data.data;
+                //console.log(this.myProfile);
+                this.user_id = this.myProfile.user_id;
+                //console.log(this.user_id);
+            }
+        });
     },
     methods: {
         ChangeToGroupDisplay(e) {
@@ -307,11 +316,18 @@ export default {
                 query: { id: JSON.stringify(e) },
             });
         },
-        ChangeToSignUp(e) {
-            this.$router.push({
-                path: "/user/xapp1s1SignUp/",
-                query: { active: JSON.stringify(e) },
-            });
+        ChangeToSignUp(e, m) {
+            this.$api
+                .post("/xapp1s1/activates/signupTheActivate/" + m)
+                .then((res) => {
+                    if (res.data.success) {
+                        this.$router.push({
+                            path: "/user/xapp1s1SignUp/",
+                            query: { active: JSON.stringify(e) },
+                        });
+                    } else {
+                    }
+                });
         },
     },
 };
