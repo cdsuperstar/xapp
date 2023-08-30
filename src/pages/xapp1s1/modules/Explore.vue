@@ -33,7 +33,6 @@
         </q-intersection> -->
                 <!-- </div> -->
 
-                
                 <div class="q-gutter-y-md">
                     <strong
                         ><h5>
@@ -42,7 +41,10 @@
                     >
                 </div>
 
-                <div class="q-gutter-y-md" style="max-width: auto; width: 100%">
+                <div
+                    class="q-gutter-y-md item-center justify-center"
+                    style="max-width: auto; width: 100%"
+                >
                     <q-card class="no-shadow">
                         <q-tabs
                             v-model="tab"
@@ -71,11 +73,13 @@
                             v-model="tab"
                             animated
                             style="margin: 0px"
+                            class="item-center justify-center"
                         >
                             <q-tab-panel name="Events">
-                                <q-virtual-scroll
+                                <!-- <q-virtual-scroll
                                     :items="heavyList"
                                     virtual-scroll-horizontal
+                                    class="item-center justify-center"
                                 >
                                     <q-btn-dropdown
                                         label="1"
@@ -187,7 +191,7 @@
                                         rounded
                                         no-caps
                                     />
-                                </q-virtual-scroll>
+                                </q-virtual-scroll> -->
 
                                 <q-separator />
 
@@ -197,13 +201,13 @@
                                         :offset="250"
                                     >
                                         <div
-                                            v-for="index in 5"
-                                            :key="index"
+                                            v-for="theActivity in listActivates"
+                                            :key="theActivity"
                                             class="example-item"
                                         >
                                             <q-card
                                                 class="my-card"
-                                                style="margin: 5px"
+                                                style="margin: 5px;"
                                             >
                                                 <q-card-section horizontal>
                                                     <q-img
@@ -212,7 +216,52 @@
                                                     />
 
                                                     <q-card-section>
-                                                        {{ lorem }}
+                                                        <div>重磅推荐[img]</div>
+                                                        <div
+                                                            style="
+                                                                color: #84b05e;
+                                                            "
+                                                        >
+                                                            时间:{{
+                                                                theActivity
+                                                                    .active
+                                                                    .timebegin
+                                                            }}
+                                                        </div>
+                                                        <div class="text-bold">
+                                                            活动名:{{
+                                                                theActivity
+                                                                    .active.name
+                                                            }}
+                                                        </div>
+                                                        <div
+                                                            class="text-weight-light"
+                                                        >
+                                                            地址:{{
+                                                                theActivity
+                                                                    .active
+                                                                    .address
+                                                            }}
+                                                        </div>
+                                                        <div
+                                                            class="text-left"
+                                                            style="
+                                                                font-size: 13px;
+                                                                color: #a9a9a9;
+                                                            "
+                                                        >
+                                                            需求参加人数:{{
+                                                                theActivity
+                                                                    .active.slot
+                                                            }}
+                                                        </div>
+                                                        <div class="text-right">
+                                                            价格:{{
+                                                                theActivity
+                                                                    .active
+                                                                    .price
+                                                            }}
+                                                        </div>
                                                     </q-card-section>
                                                 </q-card-section>
 
@@ -221,13 +270,14 @@
                                                 <q-card-actions>
                                                     <q-btn
                                                         flat
-                                                        round
-                                                        icon="event"
-                                                    />
-                                                    <q-btn flat> 5:30PM </q-btn>
-                                                    <q-btn flat> 7:00PM </q-btn>
-                                                    <q-btn flat color="primary" @click=" ChangeToActivityDisplay">
-                                                        Reserve
+                                                        color="primary"
+                                                        @click="
+                                                            ChangeToActivityDisplay(
+                                                                theActivity
+                                                            )
+                                                        "
+                                                    >
+                                                        查看更多
                                                     </q-btn>
                                                 </q-card-actions>
                                             </q-card>
@@ -251,7 +301,7 @@
                                     :items="heavyList"
                                     virtual-scroll-horizontal
                                 >
-                                    <q-btn-dropdown
+                                    <!-- <q-btn-dropdown
                                         label="1"
                                         class="unelevated"
                                         style="
@@ -359,7 +409,7 @@
                                         dense
                                         rounded
                                         no-caps
-                                    />
+                                    /> -->
                                 </q-virtual-scroll>
 
                                 <q-separator />
@@ -369,15 +419,8 @@
                                         @load="onLoad"
                                         :offset="10"
                                     >
-                                        <div
-                                            v-for="index in 10"
-                                            :key="index"
-                                            class="caption"
-                                        >
-                                            <q-card
-                                                class="my-card"
-                                                style="margin: 5px"
-                                            >
+                                        <div v-for="index in 10" :key="index">
+                                            <q-card class="my-card">
                                                 <q-card-section horizontal>
                                                     <q-img
                                                         class="col-5"
@@ -403,7 +446,7 @@
                                                         flat
                                                         color="primary"
                                                         @click="
-                                                           ChangeToGroupDisplay
+                                                            ChangeToGroupDisplay
                                                         "
                                                     >
                                                         Reserve
@@ -428,7 +471,6 @@
                     </q-card>
                 </div>
             </div>
-
             <!-- <div class="col-xs-12 col-sm-6 col-md-2 q-pl-md">这里是地图Image</div> -->
         </div>
     </q-page>
@@ -436,13 +478,14 @@
 
 <script>
 import { ref } from "vue";
-import ActivityDemoVue from "./ActivityDisplay.vue";
+
 // 水平滚动
 const heavyList = [];
 
 heavyList.push({});
 
 export default {
+    components: {},
     name: "Explore",
 
     setup() {
@@ -499,12 +542,14 @@ export default {
         changemessage2() {
             return (this.message = "Groups");
         },
-        ChangeToActivityDisplay() {
-            
-            this.$router.push('/user/xapp1s1ActivityDisplay');
+        ChangeToActivityDisplay(e) {
+            this.$router.push({
+                path: "/user/xapp1s1ActivityDisplay/",
+                query: { aaa: JSON.stringify(e) },
+            });
         },
-        ChangeToGroupDisplay(){
-            this.$router.push('/user/xapp1s1GroupDisplay')
+        ChangeToGroupDisplay() {
+            this.$router.push("/user/xapp1s1GroupDisplay");
         },
     },
 };
