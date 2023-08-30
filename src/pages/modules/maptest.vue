@@ -6,12 +6,21 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onBeforeUpdate, onMounted, ref } from "vue";
 export default defineComponent({
   setup() {
     const longitude = ref(104.1605381);
     const latitude = ref(30.6866651);
     const geolocationData = ref(null);
+    const currentLocation = ref(null);
+    //添加信息窗口
+    var opts = {
+	      width : 200,     // 信息窗口宽度
+	      height: 100,     // 信息窗口高度
+	      title : "当前位置" , // 信息窗口标题
+	      message:"这里是你的位置"
+	    }
+    var infoWindow = new BMap.InfoWindow("地址：" + currentLocation.value, opts);  // 创建信息窗口对象 
 
     //更新地理信息
     function getCurrentPosition() {
@@ -41,37 +50,52 @@ export default defineComponent({
       console.log("getposistion end")
     }
 
+    function update(){
+      infoWindow = new BMap.InfoWindow("地址：" + currentLocation.value, opts);
+      console.log("update info")
+    }
 
     function init(){
-      getCurrentPosition();
       let Bmap = window.BMapGL;
       var map = new BMap.Map("container");
-      console.log(geolocationData)
-      console.log(longitude)
       var point = new BMap.Point(longitude.value, latitude.value);
       map.centerAndZoom(point, 15);
+
+  
+      var geoc = new BMap.Geocoder();
 
       //添加标记在point的位置
       var marker = new BMap.Marker(point)
       map.addOverlay(marker); 
 
-      //添加信息窗口
-      var opts = {
-	      width : 200,     // 信息窗口宽度
-	      height: 100,     // 信息窗口高度
-	      title : "当前位置" , // 信息窗口标题
-	      message:"这里是你的位置"
-	    }
-      var infoWindow = new BMap.InfoWindow("地址：你的位置", opts);  // 创建信息窗口对象 
-      marker.addEventListener("click", function(){          
+      
+      geoc.getLocation(point, function(result){
+        opts.message = result.address
+        console.log(result)
+        
+        currentLocation.value = result.address + result.content.surround_poi.reduce((prev, current) =>
+          prev.distance < current.distance ? prev : current
+        ).name
+        update()
+      })
+      
+
+      
+      console.log(opts)
+
+      marker.addEventListener("click", function(){  
+        console.log(infoWindow.message)        
 		    map.openInfoWindow(infoWindow, point); //开启信息窗口
 	    }); 
       map.enableScrollWheelZoom(true);
     }
 
+    getCurrentPosition();
+
     onMounted(() => {
       init()
     });
+
   },
   components: {},
   // mounted() {
