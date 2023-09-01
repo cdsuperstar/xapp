@@ -14,11 +14,27 @@
                         background-color: white;
                     "
                 >
+                    <q-btn
+                        class="text-left"
+                        label="<-- 返回搜索"
+                        style="
+                            width: 100%;
+                            background-color: rgb(228, 228, 228);
+                            color: rgb(41, 133, 133);
+                        "
+                        unelevated
+                        dense
+                        size="15px"
+                        @click="goBack"
+                        padding="0px"
+                    />
+                    <q-separator />
                     <div
                         class="text-bold"
                         style="font-size: xx-large; padding: 10px"
                     >
                         活动名:{{ aaa.active.name }}
+                        <span class="text-right"> </span>
                     </div>
                     <div>
                         <q-item clickable v-ripple>
@@ -89,6 +105,19 @@
                             "
                             label="参加活动"
                             rounded
+                            v-if="!ShowElement"
+                        />
+
+                        <q-btn
+                            style="
+                                background: #ff0080;
+                                color: white;
+                                width: 80%;
+                            "
+                            @click="Cancle(this.aaa.id)"
+                            label="取消活动"
+                            rounded
+                            v-if="ShowElement"
                         />
                     </div>
 
@@ -305,7 +334,7 @@ export default {
                 this.myProfile = res.data.data;
                 //console.log(this.myProfile);
                 this.user_id = this.myProfile.user_id;
-                //console.log(this.user_id);
+                console.log(this.user_id);
             }
         });
     },
@@ -321,13 +350,35 @@ export default {
                 .post("/xapp1s1/activates/signupTheActivate/" + m)
                 .then((res) => {
                     if (res.data.success) {
+                        console.log(res);
                         this.$router.push({
                             path: "/user/xapp1s1SignUp/",
                             query: { active: JSON.stringify(e) },
                         });
                     } else {
+                        console.log("报名失败 人数已经满了");
                     }
                 });
+        },
+
+        Cancle(m) {
+            this.$api
+                .post("/xapp1s1/activates/giveupTheActivate/" + m)
+                .then((res) => {
+                    if (res.data.success) {
+                        console.log("取消报名成功");
+                    } else {
+                        console.log("取消报名失败");
+                    }
+                });
+        },
+        goBack() {
+            history.back();
+        },
+    },
+    computed: {
+        ShowElement() {
+            return this.user_id == this.aaa.user_id;
         },
     },
 };
