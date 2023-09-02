@@ -29,7 +29,7 @@
             <q-item clickable @click="del(active.id)">
               {{ $t("xapp1s1.activate.del") }}
             </q-item>
-            <q-item clickable @click="modify(active)">
+            <q-item clickable @click="modify(active.id)">
               {{ $t("xapp1s1.activate.fix") }}
             </q-item>
           </q-list>
@@ -364,9 +364,9 @@ export default {
     },
     modify(val) {
       this.$router.push({
-        name: "xapp1s1createactive",
-        params: {
-          active: JSON.stringify(val),
+        path: "xapp1s1createactive",
+        query: {
+          active: val,
         },
       });
     },

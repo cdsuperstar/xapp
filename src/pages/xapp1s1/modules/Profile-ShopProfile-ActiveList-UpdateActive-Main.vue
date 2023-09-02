@@ -500,32 +500,37 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.params.active) {
-      this.active = JSON.parse(this.$route.params.active);
-      if (this.active.timebegin) {
-        this.active.datebegin = date.formatDate(
-          this.active.timebegin.substring(0, 10),
-          "YYYY/MM/DD"
-        );
-        this.active.timebegin = this.active.timebegin.substring(11);
-      }
-      if (this.active.timeend) {
-        this.active.dateend = date.formatDate(
-          this.active.timeend.substring(0, 10),
-          "YYYY/MM/DD"
-        );
-        this.active.timeend = this.active.timeend.substring(11);
-      }
-      for (let i = 0; i < this.active.slots.length; i++) {
-        Object.keys(this.active.slots[i]).forEach((k) => {
-          try {
-            let tmp = JSON.parse(this.active.slots[i][k]);
-            if (typeof tmp != "number") this.active.slots[i][k] = tmp;
-          } catch (e) {}
+    if (this.$route.query.active) {
+      this.$api
+        .post(
+          "/xapp1s1/activates/getTheActivateDetail/" + this.$route.query.active
+        )
+        .then((res) => {
+          this.active = res.data.data[0];
+          if (this.active.timebegin) {
+            this.active.datebegin = date.formatDate(
+              this.active.timebegin.substring(0, 10),
+              "YYYY/MM/DD"
+            );
+            this.active.timebegin = this.active.timebegin.substring(11);
+          }
+          if (this.active.timeend) {
+            this.active.dateend = date.formatDate(
+              this.active.timeend.substring(0, 10),
+              "YYYY/MM/DD"
+            );
+            this.active.timeend = this.active.timeend.substring(11);
+          }
+          for (let i = 0; i < this.active.slots.length; i++) {
+            Object.keys(this.active.slots[i]).forEach((k) => {
+              try {
+                let tmp = JSON.parse(this.active.slots[i][k]);
+                if (typeof tmp != "number") this.active.slots[i][k] = tmp;
+              } catch (e) {}
+            });
+          }
+          this.activeInfo = this.active;
         });
-      }
-
-      this.activeInfo = this.active;
     } else {
       this.activeInfo = {
         name: "",
