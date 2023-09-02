@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import UserProfile from "components/UserProfile-Compoments";
+import UserProfile from "components/xapp1s1/UserProfile-Compoments";
 export default {
   name: "Profile",
   components: {

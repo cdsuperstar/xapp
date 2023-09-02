@@ -325,7 +325,7 @@
 </template>
 
 <script>
-import showPic from "components/showPic";
+import showPic from "components/xapp1s1/showPic";
 export default {
   name: "Active-list",
   data() {

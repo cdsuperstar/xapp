@@ -288,7 +288,7 @@
 </template>
 
 <script>
-import { province } from "components/province";
+import { province } from "components/xapp1s1/province";
 import { UpdateMedia } from "../../../components/vue-media-upload";
 
 export default {

@@ -1,6 +1,6 @@
 <template>
   <q-toolbar>
-    <q-btn flat round dense icon="keyboard_arrow_left" @click="goBack"/>
+    <q-btn flat round dense icon="keyboard_arrow_left" @click="goBack" />
   </q-toolbar>
   <shop-profile v-if="hasShop" :shop_id="shop_id"></shop-profile>
   <q-list v-else-if="!hasShop" bordered padding separator>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ShopProfile from "components/ShopProfile-Compoments";
+import ShopProfile from "components/xapp1s1/ShopProfile-Compoments";
 export default {
   name: "myShop",
   data() {
@@ -42,10 +42,10 @@ export default {
     });
   },
   methods: {
-  goBack() {
-    history.back();
-  }
-}
+    goBack() {
+      history.back();
+    },
+  },
 };
 </script>
 

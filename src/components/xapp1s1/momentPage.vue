@@ -117,9 +117,9 @@
 //动态页面，需要功能，
 // 查看{动态的头像，内容，图片}
 // 点赞，评论,点击图片,点击动态背景
-import showPic from "components/showPic";
-import commentMoment from "components/commentMoment";
-import thumbMoment from "components/thumbMoment";
+import showPic from "components/xapp1s1/showPic";
+import commentMoment from "components/xapp1s1/commentMoment";
+import thumbMoment from "components/xapp1s1/thumbMoment";
 export default {
   name: "momentPage",
   components: {

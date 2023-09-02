@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import showActiveCompoments from "components/showActive-Compoments";
+import showActiveCompoments from "components/xapp1s1/showActive-Compoments";
 export default {
   name: "Profile-ShopProfile-ActiveList",
   components: {
