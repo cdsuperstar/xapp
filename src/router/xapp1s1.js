@@ -136,17 +136,17 @@ const xapp1s1 = {
         ),
     },
     {
-      path:"/user/xapp1s1GroupDisplay",
+      path: "/user/xapp1s1GroupDisplay",
       name: "xapp1s1GroupDisplay",
-      component:()=>
+      component: () =>
         import(
           "src/pages/xapp1s1/modules/GroupDisplay.vue"
         )
     },
     {
-      path:"/user/xapp1s1SignUp",
+      path: "/user/xapp1s1SignUp",
       name: "xapp1s1SignUp",
-      component:()=>
+      component: () =>
         import(
           "src/pages/xapp1s1/modules/SignUp.vue"
         )
