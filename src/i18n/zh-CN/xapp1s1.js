@@ -3,7 +3,7 @@ export const xapp1s1 = {
     appName: "朋棚",
     home: "首页",
     explore: "搜索",
-    notify: "通知",
+    notify: "动态",
     message: "消息",
     personal: "我的",
   },
