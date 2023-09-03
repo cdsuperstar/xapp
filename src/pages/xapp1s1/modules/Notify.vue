@@ -3,102 +3,104 @@
       2-4 2*2
       5-9 3*3
 -->
-  <q-page class="q-pa-md" style="padding: 0">
-    <div class="row">
-      <q-card class="col-11">
-        <q-tabs
-          active-color="pink"
-          v-model="notifyTools"
-          dense
-          align="justify"
-          narrow-indicator
-          indicator-color="white"
-          active-bg-color="white"
-        >
-          <q-tab name="recommend" label="推荐" @click="load('R')" />
-          <q-tab name="followed" label="关注" @click="load('F')" />
-          <q-tab name="shop" label="周围的商铺" @click="load('S')" />
-        </q-tabs>
-      </q-card>
+  <keep-alive>
+    <q-page class="q-pa-md" style="padding: 0">
+      <div class="row">
+        <q-card class="col-11">
+          <q-tabs
+            active-color="pink"
+            v-model="notifyTools"
+            dense
+            align="justify"
+            narrow-indicator
+            indicator-color="white"
+            active-bg-color="white"
+          >
+            <q-tab name="recommend" label="推荐" @click="load('R')" />
+            <q-tab name="followed" label="关注" @click="load('F')" />
+            <q-tab name="shop" label="周围的商铺" @click="load('S')" />
+          </q-tabs>
+        </q-card>
+        <q-separator />
+        <q-btn class="col-1" icon="add" flat to="xapp1s1sendmoment" />
+      </div>
+
+      <q-tab-panels v-model="notifyTools" swipeable animated>
+        <q-tab-panel name="recommend">
+          <moment-page
+            v-for="moment in activeR"
+            :key="moment"
+            :moment="moment"
+          ></moment-page>
+          <q-btn
+            unelevated
+            fab-mini
+            dense
+            icon="my_location"
+            style="margin: 0%; padding: 0px"
+            >查看更多</q-btn
+          >
+        </q-tab-panel>
+
+        <q-tab-panel name="followed" class="q-pa-md">
+          <moment-page
+            v-for="moment in activeF"
+            :key="moment.id"
+            :moment="moment"
+          ></moment-page>
+          <label>我是有底线的！</label>
+        </q-tab-panel>
+
+        <q-tab-panel name="shop">
+          <moment-page
+            v-for="moment in activeS"
+            :key="moment"
+            :moment="moment"
+          ></moment-page>
+          <div class="q-pa-md row items-start" v-for="index in 8" :key="index">
+            <q-card class="my-card" flat bordered>
+              <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
+
+              <q-card-section>
+                <div class="text-overline text-orange-9">Overline</div>
+                <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+                <div class="text-caption text-grey">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </div>
+              </q-card-section>
+
+              <q-card-actions>
+                <q-btn flat color="dark" label="Share" />
+                <q-btn flat color="primary" label="Book" />
+
+                <q-space />
+
+                <q-btn
+                  color="grey"
+                  round
+                  flat
+                  dense
+                  :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+                  @click="expanded = !expanded"
+                />
+              </q-card-actions>
+
+              <q-slide-transition>
+                <div v-show="expanded">
+                  <q-separator />
+                  <q-card-section class="text-subitle2">
+                    {{ lorem }}
+                  </q-card-section>
+                </div>
+              </q-slide-transition>
+            </q-card>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
       <q-separator />
-      <q-btn class="col-1" icon="add" flat to="xapp1s1sendmoment" />
-    </div>
-
-    <q-tab-panels v-model="notifyTools" swipeable animated>
-      <q-tab-panel name="recommend">
-        <moment-page
-          v-for="moment in activeR"
-          :key="moment"
-          :moment="moment"
-        ></moment-page>
-        <q-btn
-          unelevated
-          fab-mini
-          dense
-          icon="my_location"
-          style="margin: 0%; padding: 0px"
-          >查看更多</q-btn
-        >
-      </q-tab-panel>
-
-      <q-tab-panel name="followed" class="q-pa-md">
-        <moment-page
-          v-for="moment in activeF"
-          :key="moment.id"
-          :moment="moment"
-        ></moment-page>
-        <label>我是有底线的！</label>
-      </q-tab-panel>
-
-      <q-tab-panel name="shop">
-        <moment-page
-          v-for="moment in activeS"
-          :key="moment"
-          :moment="moment"
-        ></moment-page>
-        <div class="q-pa-md row items-start" v-for="index in 8" :key="index">
-          <q-card class="my-card" flat bordered>
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
-
-            <q-card-section>
-              <div class="text-overline text-orange-9">Overline</div>
-              <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
-              <div class="text-caption text-grey">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </div>
-            </q-card-section>
-
-            <q-card-actions>
-              <q-btn flat color="dark" label="Share" />
-              <q-btn flat color="primary" label="Book" />
-
-              <q-space />
-
-              <q-btn
-                color="grey"
-                round
-                flat
-                dense
-                :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-                @click="expanded = !expanded"
-              />
-            </q-card-actions>
-
-            <q-slide-transition>
-              <div v-show="expanded">
-                <q-separator />
-                <q-card-section class="text-subitle2">
-                  {{ lorem }}
-                </q-card-section>
-              </div>
-            </q-slide-transition>
-          </q-card>
-        </div>
-      </q-tab-panel>
-    </q-tab-panels>
-    <q-separator />
-  </q-page>
+    </q-page>
+  </keep-alive>
 </template>
 
 <script>
@@ -117,9 +119,9 @@ export default {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     };
   },
-  mounted() {
+  created() {
     this.$api.get("xapp1s1/moments/getRecommMoments ").then((res) => {
-      this.got("R");
+      this.got("F");
     });
   },
   data() {
@@ -136,7 +138,7 @@ export default {
       activeF: null,
       activeS: null,
       //面板卡选项
-      notifyTools: "recommend",
+      notifyTools: "followed",
     };
   },
   methods: {

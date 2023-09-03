@@ -151,6 +151,14 @@ const xapp1s1 = {
           "src/pages/xapp1s1/modules/SignUp.vue"
         )
     },
+    {
+      path: "otherUserProfile",
+      name: "otherUserProfile",
+      component: () =>
+        import(
+          "src/pages/xapp1s1/modules/otherUserProfile.vue"
+        )
+    }
   ],
 };
 

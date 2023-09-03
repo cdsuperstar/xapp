@@ -2,9 +2,11 @@
   <div class="moment">
     <q-item>
       <q-item-section avatar>
-        <q-avatar>
-          <q-img :src="moment.user_pub.xapp1s1profile_pub.avatar" />
-        </q-avatar>
+        <avatar
+          :avatar="moment.user_pub.xapp1s1profile_pub.avatar"
+          :id="moment.user_pub.id"
+        >
+        </avatar>
       </q-item-section>
 
       <q-item-section>
@@ -120,12 +122,14 @@
 import showPic from "components/xapp1s1/showPic";
 import commentMoment from "components/xapp1s1/commentMoment";
 import thumbMoment from "components/xapp1s1/thumbMoment";
+import avatar from "components/xapp1s1/avatar.vue";
 export default {
   name: "momentPage",
   components: {
     showPic,
     commentMoment,
     thumbMoment,
+    avatar,
   },
   props: {
     moment: {},

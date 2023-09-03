@@ -3,9 +3,11 @@
     <q-item>
       <q-item-section />
       <q-item-section avatar side>
-        <q-avatar size="100px">
-          <q-img :src="myProfile.avatar"></q-img>
-        </q-avatar>
+        <q-btn round>
+          <q-avatar size="100px">
+            <q-img :src="myProfile.avatar"></q-img>
+          </q-avatar>
+        </q-btn>
       </q-item-section>
     </q-item>
 
@@ -176,7 +178,7 @@ export default {
       this.$api
         .get("xapp1s1/profile/getTheUserProfile/" + this.user_id)
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           if (res.data.success) {
             this.myProfile = res.data.data;
           } else {

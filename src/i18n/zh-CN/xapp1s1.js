@@ -141,4 +141,7 @@ export const xapp1s1 = {
     imgproducts: "产品图片",
     imgqualifications: "资质图片",
   },
+  button: {
+    back: "返回"
+  }
 };
