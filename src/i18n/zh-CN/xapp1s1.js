@@ -142,6 +142,8 @@ export const xapp1s1 = {
     imgqualifications: "资质图片",
   },
   button: {
-    back: "返回"
+    back: "返回",
+    follow: "关注",
+    alfollow: "已关注"
   }
 };
