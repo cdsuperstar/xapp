@@ -126,7 +126,7 @@
 
 <script>
 import { useQuasar } from 'quasar'
-import { ref, onBeforeUnmount} from 'vue'
+import { ref, onBeforeUnmount, getCurrentInstance } from 'vue'
 
 export default {
   name: "Phonecomlicaton",
@@ -152,6 +152,8 @@ export default {
   },
   setup() {
     //变量
+    const instance = getCurrentInstance()
+    const $auth = instance?.appContext.config.globalProperties.$auth
     const batteryStatus = ref('determining...') //电池状态
     const $q = useQuasar()
     const imageSrc = ref('') //图片路径
@@ -171,6 +173,10 @@ export default {
     
     //网络
     const netstate = ref(null)
+    
+    // 二维码相关
+    let barcodetype = null
+    let barcodetext = null
 
     //--------------------------Functions----------------------------
     //二维码扫描

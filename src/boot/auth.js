@@ -1,14 +1,14 @@
-import { boot } from "quasar/wrappers";
+import { boot } from 'quasar/wrappers'
 //import driverAuthBearer from "src/plugins/passport";
-import { api } from "boot/axios";
-import { createAuth } from "@websanova/vue-auth/dist/v3/vue-auth.js";
-import driverAuthBearer from "../plugins/passport.js";
-import driverHttpAxios from "@websanova/vue-auth/dist/drivers/http/axios.1.x.js";
-import driverRouterVueRouter from "@websanova/vue-auth/dist/drivers/router/vue-router.2.x.js";
+import { api } from 'boot/axios'
+import { createAuth } from '@websanova/vue-auth/dist/v3/vue-auth.js'
+import driverAuthBearer from '../plugins/passport.js'
+import driverHttpAxios from '@websanova/vue-auth/dist/drivers/http/axios.1.x.js'
+import driverRouterVueRouter from '@websanova/vue-auth/dist/drivers/router/vue-router.2.x.js'
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
-let auth;
+let auth
 export default boot(({ app, router } /* { app, router, ... } */) => {
   // something to do
 
@@ -24,51 +24,51 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
         router: driverRouterVueRouter,
       },
       options: {
-        rolesVar: "role",
-        tokenStore: ["localStorage", "cookie"],
-        tokenDefaultName: "xapp",
+        rolesVar: 'role',
+        tokenStore: ['localStorage', 'cookie'],
+        tokenDefaultName: 'xapp',
         // authRedirect: { path: '/user' },
         // forbiddenRedirect: { path: '/403' },
         // notFoundRedirect: { path: '/404' },
         registerData: {
-          url: "auth/register",
-          method: "POST",
-          redirect: "/login",
+          url: 'auth/register',
+          method: 'POST',
+          redirect: '/login',
         },
         loginData: {
-          url: "oauth/token",
-          method: "POST",
-          redirect: "/user/dashboard",
+          url: 'oauth/token',
+          method: 'POST',
+          redirect: '/user/dashboard',
           fetchUser: true,
           staySignedIn: true,
           data: {
-            grant_type: "password",
+            grant_type: 'password',
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
           },
         },
         logoutData: {
-          url: "auth/logout",
-          method: "POST",
-          redirect: "/login",
+          url: 'auth/logout',
+          method: 'POST',
+          redirect: '/login',
           makeRequest: true,
         },
         // fetchData: { url: 'auth/user', method: 'GET', enabled: false },
         refreshData: {
-          url: "oauth/token",
-          method: "POST",
+          url: 'oauth/token',
+          method: 'POST',
           enabled: true,
           interval: 55,
           checkExpiration: true,
           data: {
-            grant_type: "refresh_token",
+            grant_type: 'refresh_token',
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
           },
         },
         fetchData: {
-          url: "auth/user",
-          method: "GET",
+          url: 'auth/user',
+          method: 'GET',
           enabled: true,
         },
         // passportData: {
@@ -77,12 +77,12 @@ export default boot(({ app, router } /* { app, router, ... } */) => {
         // },
         // rolesKey: "type",
         // notFoundRedirect: { name: "landing" },
-        rolesKey: "name",
-        tokenDefaultKey: "access_token",
-        refreshTokenKey: "refresh_token",
-        tokenExpiresKey: "expires_in",
+        rolesKey: 'name',
+        tokenDefaultKey: 'access_token',
+        refreshTokenKey: 'refresh_token',
+        tokenExpiresKey: 'expires_in',
       },
-    })
-  );
-});
-export { auth };
+    }),
+  )
+})
+export { auth }

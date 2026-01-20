@@ -5,7 +5,7 @@
         <q-toolbar>
           <q-icon color="primary" size="30px" name="account_box" />
           <q-toolbar-title>
-            <span class="text-weight-bold"> {{ $t("users.adduser") }}</span>
+            <span class="text-weight-bold"> {{ $t('users.adduser') }}</span>
           </q-toolbar-title>
           <q-btn
             v-close-popup
@@ -65,46 +65,26 @@
     <q-dialog v-model="DaddPermission">
       <q-card class="q-dialog-plugin">
         <q-toolbar class="bg-primary text-white">
-          <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            :title="this.$t('buttons.close')"
-          />
+          <q-btn v-close-popup flat round dense icon="close" :title="this.$t('buttons.close')" />
           <q-toolbar-title>
             <span class="text-weight-bold">
-              {{ $t("users.setpermission") }}
+              {{ $t('users.setpermission') }}
             </span>
           </q-toolbar-title>
-          <q-btn
-            flat
-            icon="save"
-            :label="this.$t('buttons.confirm')"
-            @click="EditUserPermission"
-          />
+          <q-btn flat icon="save" :label="this.$t('buttons.confirm')" @click="EditUserPermission" />
         </q-toolbar>
         <q-separator color="accent" />
         <q-card-section style="max-height: 70vh" class="scroll">
           <q-list v-for="modeule in PermissData" :key="modeule.id" dense>
-            <q-item-label
-              header
-              style="text-align: left; border-bottom: 3px solid; padding: 12px"
-              ><q-icon
-                name="widgets"
-                size="25px"
-                color="warning"
-              />&nbsp;&nbsp;{{ modeule.title }}</q-item-label
+            <q-item-label header style="text-align: left; border-bottom: 3px solid; padding: 12px"
+              ><q-icon name="widgets" size="25px" color="warning" />&nbsp;&nbsp;{{
+                modeule.title
+              }}</q-item-label
             >
             <q-item
               v-for="per in modeule.permissions"
               :key="per.id"
-              style="
-                text-align: left;
-                border-bottom: 1px dashed #d6d6d6;
-                padding: 6px;
-              "
+              style="text-align: left; border-bottom: 1px dashed #d6d6d6; padding: 6px"
             >
               <q-item-section>{{ per.title }}</q-item-section>
               <q-item-section side>
@@ -131,13 +111,13 @@
       </q-card>
     </q-dialog>
     <div class="text-h5 q-ma-md text-secondary">
-      {{ $t("users.header") }}
+      {{ $t('users.header') }}
     </div>
     <q-separator color="accent" />
     <div class="row q-ma-md" style="margin: 16px 1px">
       <q-btn
         v-if="mPermissions['users.badd']"
-        color="addbtn"
+        color="primary"
         text-color="white"
         class="q-ma-xs"
         icon="post_add"
@@ -146,7 +126,7 @@
       />
       <q-btn
         v-if="mPermissions['users.bDelete']"
-        color="deldbtn"
+        color="negative"
         text-color="white"
         class="q-ma-xs"
         icon="delete_sweep"
@@ -155,18 +135,14 @@
       />
       <q-btn
         v-if="mPermissions['users.bmodify']"
-        color="savebtn"
+        color="positive"
         text-color="white"
         class="q-ma-xs"
         icon="save"
         :label="this.$t('buttons.save')"
         @click="saveItems()"
       />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
       <q-btn
         v-if="mPermissions['users.bsetrole']"
         color="warning"
@@ -178,7 +154,7 @@
       />
       <q-btn
         v-if="mPermissions['users.bsetpermission']"
-        color="expbtn"
+        color="accent"
         text-color="white"
         class="q-ma-xs"
         icon="settings"
@@ -186,11 +162,7 @@
         @click="SetUserPermisson"
       />
       <q-space />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
       <q-input
         v-model="quickFilter"
         dense
@@ -203,27 +175,22 @@
           <q-icon name="search" />
         </template>
       </q-input>
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
     </div>
     <div class="row q-ma-md" style="margin: 16px 1px">
       <div class="col-md-9 shadow-1">
         <ag-grid-vue
           style="min-width: 100%; height: 500px"
           class="ag-theme-balham User-agGrid"
-          row-selection="multiple"
-          row-multi-select-with-click="true"
+          ref="users_grid"
           :grid-options="gridOptions"
           :column-defs="columnDefs"
           :row-data="rowData"
           :default-col-def="defaultColDef"
           :pagination="true"
           :pagination-page-size="50"
-          :get-row-style="getRowStyle"
-          :locale-text="this.$t('aggrid')"
+          :getRowStyle="getRowStyle"
+          :locale-text="$tm('aggrid')"
           @cellValueChanged="oncellValueChanged"
           @grid-ready="onGridReady"
         >
@@ -237,7 +204,7 @@
         <q-item-label class="row" style="min-height: 20px">
           <div class="text-h7 text-weight-bold" style="padding: 15px 15px">
             <q-icon name="perm_identity" />
-            {{ $t("users.rolelist") }}
+            {{ $t('users.rolelist') }}
           </div>
           <q-space />
           <q-btn
@@ -271,15 +238,16 @@
 </template>
 
 <script>
-import { AgGridVue } from "ag-grid-vue3";
-import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import { email, required, minLength } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
-import { useZeroStore } from "stores/zero";
+import { AgGridVue } from 'ag-grid-vue3'
+import 'ag-grid-community/styles/ag-grid.css' // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css' // Optional theme CSS
+import { email, required, minLength } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+import { defineComponent } from 'vue'
+import { useZeroStore } from 'stores/zero'
 
-export default {
-  name: "Users",
+export default defineComponent({
+  name: 'Users',
   components: {
     AgGridVue,
   },
@@ -297,484 +265,674 @@ export default {
       columnDefs: null,
       rowData: null,
       getRowStyle: null,
-      changerowcolor: null,
       rolechecks: [],
       mPermissions: [],
       defaultColDef: null,
       Roleshow: false,
       data: {
         data: {
-          name: "",
-          email: "",
-          password: "",
+          name: '',
+          email: '',
+          password: '',
         },
       },
-    };
+      modifiedCells: new Map(), // 存储修改过的单元格
+      // 用于存储 cellStyle 函数的闭包引用
+      cellStyleFunctions: new Map(),
+    }
   },
   setup() {
-    const store = useZeroStore();
+    const store = useZeroStore()
     return {
       v$: useVuelidate(),
       store,
-    };
-  },
-  computed: {
-    // ...mapState("zero", ["ZPermissions"]),
+    }
   },
   created() {
     this.$api
-      .get("/users/")
+      .get('/users/')
       .then((res) => {
         if (res.data.success) {
-          // console.log(res.data.data)
-          this.rowData = res.data.data;
+          if (process.env.DEV_LOG) {
+            this.$zglobal.consoleLog(this, 'users data:', res.data.data)
+          }
+          this.rowData = res.data.data
         } else {
+          /* empty */
         }
       })
-      .catch((e) => {});
+      .catch((e) => {})
   },
   beforeMount() {
-    this.initGrid();
+    this.initGrid()
   },
   mounted() {
-    this.gridApi = this.gridOptions.api;
-    this.gridColumnApi = this.gridOptions.columnApi;
-    this.initPermissions();
+    this.initPermissions()
   },
   methods: {
-    // ...mapActions("zero", ["reqThePermission"]),
     initPermissions() {
       const preq = [
         {
-          module: "users",
-          name: "users.badd",
+          module: 'users',
+          name: 'users.badd',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("users.badd"),
+          title: this.$t('users.badd'),
         },
         {
-          module: "users",
-          name: "users.bDelete",
+          module: 'users',
+          name: 'users.bDelete',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("users.bDelete"),
+          title: this.$t('users.bDelete'),
         },
         {
-          module: "users",
-          name: "users.bmodify",
+          module: 'users',
+          name: 'users.bmodify',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("users.bmodify"),
+          title: this.$t('users.bmodify'),
         },
         {
-          module: "users",
-          name: "users.bsetrole",
+          module: 'users',
+          name: 'users.bsetrole',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("users.bsetrole"),
+          title: this.$t('users.bsetrole'),
         },
         {
-          module: "users",
-          name: "users.bsetpermission",
+          module: 'users',
+          name: 'users.bsetpermission',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("users.bsetpermission"),
+          title: this.$t('users.bsetpermission'),
         },
-      ];
+      ]
 
       this.store
         .reqThePermission(preq)
         .then((res) => {
-          this.mPermissions = res;
+          this.mPermissions = res
         })
         .catch((e) => {
           // console.log(e)
-        });
+        })
     },
     initGrid() {
       this.gridOptions = {
+        theme: 'legacy',
         rowHeight: 32,
         headerHeight: 32,
         allowShowChangeAfterFilter: true,
-      };
+        rowSelection: {
+          mode: 'multiRow',
+          checkboxes: true,
+          headerCheckbox: true,
+          selectAll: 'filtered',
+          enableSelectionWithoutKeys: true,
+        },
+      }
+
+      // 创建列定义
       this.columnDefs = [
         {
           editable: false,
-          headerName: "ID",
-          field: "id",
+          headerName: 'ID',
+          field: 'id',
           width: 70,
           minWidth: 70,
           maxWidth: 70,
           sortable: true,
-          checkboxSelection: true,
         },
         {
-          headerName: this.$t("users.name"),
-          field: "name",
+          headerName: this.$t('users.name'),
+          field: 'name',
           width: 100,
           minWidth: 100,
           maxWidth: 130,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('name'),
         },
         {
-          headerName: this.$t("users.email"),
-          field: "email",
+          headerName: this.$t('users.email'),
+          field: 'email',
           width: 120,
           minWidth: 120,
           maxWidth: 180,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('email'),
         },
         {
-          headerName: this.$t("users.password"),
-          field: "password",
+          headerName: this.$t('users.password'),
+          field: 'password',
           width: 120,
           minWidth: 120,
           maxWidth: 120,
           sortable: true,
-          valueFormatter: pwdMask,
+          valueFormatter: this.pwdMask,
           suppressSizeToFit: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('password'),
         },
         {
-          headerName: this.$t("users.usercfg"),
-          field: "usercfg",
+          headerName: this.$t('users.usercfg'),
+          field: 'usercfg',
           width: 120,
           minWidth: 120,
           maxWidth: 120,
           sortable: true,
           editable: false,
           filter: true,
+          cellStyle: this.createCellStyleFunction('usercfg'),
         },
         {
-          headerName: this.$t("dataAGgrid.created_at"),
-          field: "created_at",
+          headerName: this.$t('dataAGgrid.created_at'),
+          field: 'created_at',
           width: 160,
           minWidth: 160,
           editable: false,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('created_at'),
         },
         {
-          headerName: this.$t("dataAGgrid.updated_at"),
-          field: "updated_at",
+          headerName: this.$t('dataAGgrid.updated_at'),
+          field: 'updated_at',
           width: 160,
           minWidth: 160,
           editable: false,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('updated_at'),
         },
-      ];
+      ]
+
       this.defaultColDef = {
         editable: true,
         resizable: true,
-      };
-      this.getRowStyle = this.onchangerowcolor;
+      }
+      this.getRowStyle = this.onchangerowcolor
     },
+
+    // 创建 cellStyle 函数，确保正确的 this 绑定
+    createCellStyleFunction(field) {
+      // 如果已经创建过，直接返回
+      if (this.cellStyleFunctions.has(field)) {
+        return this.cellStyleFunctions.get(field)
+      }
+
+      const styleFunction = (params) => {
+        if (!params.data) return null
+
+        const rowId = params.data.id
+        if (!rowId) return null
+
+        const cellKey = `${rowId}_${field}`
+        if (this.modifiedCells.has(cellKey)) {
+          return { backgroundColor: 'orange' }
+        }
+        return null
+      }
+
+      // 存储函数引用
+      this.cellStyleFunctions.set(field, styleFunction)
+      return styleFunction
+    },
+
     onGridReady(params) {
-      params.api.sizeColumnsToFit();
+      this.gridApi = params.api
+      this.columnApi = params.columnApi
+      params.api.refreshCells({
+        force: true,
+      })
+      params.api.sizeColumnsToFit()
+      if (this.quickFilter) {
+        params.api.setQuickFilter(this.quickFilter)
+      }
     },
+
     onQuickFilterChanged() {
-      this.gridApi.setQuickFilter(this.quickFilter);
+      if (!this.gridApi) return
+      this.gridApi.setQuickFilter(this.quickFilter)
     },
+
+    // 密码掩码函数
+    pwdMask(params) {
+      return '******** '
+    },
+
     delItems() {
-      var selectedData = this.gridApi.getSelectedRows();
+      var selectedData = this.gridApi.getSelectedRows()
       if (selectedData.length > 0) {
         this.$q
           .dialog({
-            title: this.$t("buttons.comfirmtitle"),
-            message: this.$t("buttons.comfirmdialog"),
+            title: this.$t('buttons.comfirmtitle'),
+            message: this.$t('buttons.comfirmdialog'),
             html: true,
             cancel: true,
             persistent: true,
           })
           .onOk(() => {
             selectedData.forEach((val) => {
-              this.gridApi.updateRowData({ remove: [val] });
-              if (val.id === undefined) return false;
+              this.gridApi.applyTransaction({ remove: [val] })
+              if (val.id === undefined) return false
               this.$api
-                .delete("/users/" + val.id)
+                .delete('/users/' + val.id)
                 .then((res) => {
                   if (res.data.success) {
-                    // console.log(res.data.data)
-                    this.$zglobal.showMessage(
-                      "positive",
-                      "center",
-                      this.$t("operation.delsuccess")
-                    );
+                    // 删除该行的修改标记
+                    this.clearModifiedCellsForRow(val.id)
+                    this.$zglobal.showMessage('positive', 'center', this.$t('operation.delsuccess'))
                   } else {
-                    this.$zglobal.showMessage(
-                      "red-7",
-                      "center",
-                      this.$t("operation.delfailed")
-                    );
+                    this.$zglobal.showMessage('red-7', 'center', this.$t('operation.delfailed'))
                   }
                 })
-                .catch((e) => {});
-            });
+                .catch((e) => {})
+            })
           })
           .onCancel(() => {
             // console.log('>>>> Cancel')
           })
           .onDismiss(() => {
             // console.log('I am triggered on both OK and Cancel')
-          });
+          })
       }
     },
+
     onchangerowcolor() {
-      return { backgroundColor: this.changerowcolor };
+      // 不再返回固定背景色，让单元格样式单独控制
+      return null
     },
+
     oncellValueChanged(params) {
-      if (params.oldValue === null) params.oldValue = "";
+      if (params.oldValue === null) params.oldValue = ''
+
       if (params.newValue !== params.oldValue) {
-        this.changerowcolor = "#ffa195";
-        this.gridApi.redrawRows({
-          rowNodes: [this.gridApi.getDisplayedRowAtIndex(params.rowIndex)],
-        });
+        try {
+          const rowId = params.data.id
+          const columnId = params.column.getColId()
+
+          if (rowId) {
+            // 生成单元格的唯一标识符
+            const cellKey = `${rowId}_${columnId}`
+
+            // 标记该单元格已被修改
+            this.modifiedCells.set(cellKey, true)
+
+            // 强制更新 Vue 响应式系统
+            this.modifiedCells = new Map(this.modifiedCells)
+
+            // 刷新当前单元格
+            this.gridApi.refreshCells({
+              rowNodes: [params.node],
+              columns: [columnId],
+              force: true,
+            })
+
+            // 显示修改成功提示
+            this.$zglobal.showMessage('green-7', 'center', this.$t('operation.modifySuccess'))
+          }
+        } catch (error) {
+          console.error('单元格值变更错误:', error)
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.modifyFailed'))
+          // 回滚到旧值
+          params.node.setDataValue(params.column.getColId(), params.oldValue)
+        }
       }
-      this.changerowcolor = "";
     },
-    // Dialog start
+
     addItems() {
-      this.DaddUser = true;
+      this.DaddUser = true
     },
+
     aDDNewUser() {
-      // console.log(this.data.data)
       this.$api
-        .post("/users/", this.data.data)
+        .post('/users/', this.data.data)
         .then((res) => {
-          // console.log(res)
           if (res.data.success) {
-            this.gridApi.updateRowData({
+            this.gridApi.applyTransaction({
               add: [res.data.data],
-            });
-            this.$zglobal.showMessage(
-              "positive",
-              "center",
-              this.$t("operation.addsuccess")
-            );
+            })
+            this.$zglobal.showMessage('positive', 'center', this.$t('operation.addsuccess'))
+            // 重置表单
+            this.data.data = {
+              name: '',
+              email: '',
+              password: '',
+            }
           } else {
             if (res.status === 200) {
-              this.$zglobal.showMessage(
-                "red-7",
-                "center",
-                this.$t("auth.errors.adderror")
-              );
+              this.$zglobal.showMessage('red-7', 'center', this.$t('auth.errors.adderror'))
             } else {
-              this.$zglobal.showMessage(
-                "red-7",
-                "center",
-                this.$t("operation.addfailed")
-              );
+              this.$zglobal.showMessage('red-7', 'center', this.$t('operation.addfailed'))
             }
           }
         })
         .catch((e) => {
-          this.$zglobal.showMessage(
-            "red-7",
-            "center",
-            this.$t("operation.addfailed")
-          );
-        });
-      this.DaddUser = false;
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.addfailed'))
+        })
+      this.DaddUser = false
     },
-    // Dialog end
+
     saveItems() {
-      const selectedData = this.gridApi.getSelectedRows();
-      selectedData.forEach((val) => {
-        // console.log(val)
+      const selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('info', 'center', this.$t('modules.noSelection'))
+        return
+      }
+
+      // 收集需要刷新的行节点和列ID
+      const nodesToRefresh = []
+      const allRowIdsToClear = []
+      const columnIdsToRefresh = []
+
+      const promises = selectedData.map((val) => {
         if (val.id === undefined) {
-          this.$api
-            .post("/users/", val)
-            .then((res) => {
-              if (res.data.success) {
-                this.gridApi.updateRowData({
-                  update: [Object.assign(val, res.data.data)],
-                });
-                this.$zglobal.showMessage(
-                  "positive",
-                  "center",
-                  this.$t("operation.addsuccess")
-                );
-              } else {
-                this.$zglobal.showMessage(
-                  "red-7",
-                  "center",
-                  this.$t("operation.addfailed")
-                );
-              }
-            })
-            .catch((e) => {});
-        } else {
-          this.$api
-            .put("/users/" + val.id, val)
-            .then((res) => {
-              if (process.env.DEV) {
-                console.log("users vue:", val);
-              }
-              if (res.data.success) {
-                this.gridApi.updateRowData({
-                  update: [Object.assign(val, res.data.data)],
-                });
-                this.$zglobal.showMessage(
-                  "positive",
-                  "center",
-                  this.$t("operation.updatesuccess")
-                );
-                // console.log(res.data.data)
-              } else {
-                this.$zglobal.showMessage(
-                  "red-7",
-                  "center",
-                  this.$t("operation.updatefailed")
-                );
-              }
-            })
-            .catch((e) => {});
-        }
-      });
-    },
-    ShowRoletree() {
-      // this.rolechecks = [1, 2]
-      var selectedData = this.gridApi.getSelectedRows();
-      if (
-        (selectedData.length === 1 && selectedData[0].id !== undefined) ||
-        selectedData.length > 1
-      ) {
-        // 获取列表
-        this.$api
-          .get(
-            "/z_role/getSelfOrLowRoles/" +
-              this.store.ZPermissions?.currectrole?.id
-          )
-          .then((res) => {
+          // 新增行
+          return this.$api.post('/users/', val).then((res) => {
             if (res.data.success) {
-              this.Roledata = res.data.data;
-              this.Roleshow = true;
+              const updatedRow = Object.assign(val, res.data.data)
+              this.gridApi.applyTransaction({ update: [updatedRow] })
+              if (updatedRow.id) {
+                allRowIdsToClear.push(updatedRow.id)
+                this.gridApi.forEachNode((node) => {
+                  if (node.data && node.data.id === updatedRow.id) {
+                    nodesToRefresh.push(node)
+                  }
+                })
+              }
+              this.$zglobal.showMessage('positive', 'center', this.$t('operation.addsuccess'))
+              return { success: true }
+            } else {
+              this.$zglobal.showMessage('red-7', 'center', this.$t('operation.addfailed'))
+              return { success: false }
             }
-          });
-        // end
-        // 获得已有角色
-        this.$api
-          .get("/users/getUserRoles/" + selectedData[0].id)
-          .then((resmy) => {
-            if (resmy.data.success) {
-              this.rolechecks = resmy.data.data.map(({ name, id }) => id);
-              this.$zglobal.showMessage(
-                +"positive",
-                "center",
-                this.$t("roles.getrowssuccess")
-              );
+          })
+        } else {
+          // 更新行：收集需要刷新的列
+          allRowIdsToClear.push(val.id)
+          this.gridApi.forEachNode((node) => {
+            if (node.data && node.data.id === val.id) {
+              nodesToRefresh.push(node)
+              // 获取该行所有修改过的列
+              this.columnDefs.forEach((colDef) => {
+                const field = colDef.field
+                if (field) {
+                  const cellKey = `${val.id}_${field}`
+                  if (this.modifiedCells.has(cellKey)) {
+                    columnIdsToRefresh.push(field)
+                  }
+                }
+              })
             }
-          });
-      } else {
-        this.$zglobal.showMessage(
-          "red-7",
-          "center",
-          this.$t("operation.rowserror")
-        );
+          })
+
+          return this.$api.put('/users/' + val.id, val).then((res) => {
+            if (res.data.success) {
+              const updatedRow = Object.assign(val, res.data.data)
+              this.gridApi.applyTransaction({ update: [updatedRow] })
+              this.$zglobal.showMessage('positive', 'center', this.$t('operation.updatesuccess'))
+              return { success: true }
+            } else {
+              this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+              return { success: false }
+            }
+          })
+        }
+      })
+
+      // 批量处理所有请求
+      Promise.all(promises)
+        .then((results) => {
+          // 统一清除所有标记
+          allRowIdsToClear.forEach((rowId) => {
+            this.clearModifiedCellsForRow(rowId)
+          })
+
+          // 统一刷新所有节点
+          if (nodesToRefresh.length > 0) {
+            // 如果有特定的列需要刷新，使用这些列
+            if (columnIdsToRefresh.length > 0) {
+              const uniqueColumns = [...new Set(columnIdsToRefresh)]
+              this.gridApi.refreshCells({
+                rowNodes: nodesToRefresh,
+                columns: uniqueColumns,
+                force: true,
+              })
+            } else {
+              // 否则刷新所有列
+              this.gridApi.refreshCells({
+                rowNodes: nodesToRefresh,
+                force: true,
+              })
+            }
+          } else {
+            this.gridApi.refreshCells({ force: true })
+          }
+
+          // 清除选中状态
+          this.gridApi.deselectAll()
+        })
+        .catch((error) => {
+          console.error('Save error:', error)
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+        })
+    },
+
+    // 清除某行的修改标记
+    clearModifiedCellsForRow(rowId) {
+      if (!rowId) return
+
+      // 收集需要删除的键
+      const keysToDelete = []
+      this.modifiedCells.forEach((value, key) => {
+        if (key.startsWith(`${rowId}_`)) {
+          keysToDelete.push(key)
+        }
+      })
+
+      // 删除所有标记
+      keysToDelete.forEach((key) => {
+        this.modifiedCells.delete(key)
+      })
+
+      // 如果没有找到标记，直接返回
+      if (keysToDelete.length === 0) return
+
+      // 强制更新 Vue 响应式系统
+      this.modifiedCells = new Map(this.modifiedCells)
+
+      // 找到对应的行节点并刷新
+      let targetNode = null
+      this.gridApi.forEachNode((node) => {
+        if (node.data && node.data.id === rowId) {
+          targetNode = node
+        }
+      })
+
+      if (targetNode) {
+        // 提取所有修改过的字段
+        const modifiedFields = keysToDelete
+          .map((key) => {
+            const parts = key.split('_')
+            return parts.length > 1 ? parts.slice(1).join('_') : ''
+          })
+          .filter((field) => field)
+
+        // 刷新特定字段的单元格
+        if (modifiedFields.length > 0) {
+          this.gridApi.refreshCells({
+            rowNodes: [targetNode],
+            columns: modifiedFields,
+            force: true,
+          })
+        }
+
+        // 确保单元格样式被重新计算
+        setTimeout(() => {
+          this.gridApi.redrawRows({ rowNodes: [targetNode] })
+        }, 10)
       }
     },
+
+    ShowRoletree() {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      var selectedData = this.gridApi.getSelectedRows()
+
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      if (selectedData.length > 1) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      if (selectedData.length === 1 && selectedData[0].id !== undefined) {
+        // 获取列表
+        this.$api
+          .get('/z_role/getSelfOrLowRoles/' + this.store.ZPermissions?.currectrole?.id)
+          .then((res) => {
+            if (res.data.success) {
+              this.Roledata = res.data.data
+              this.Roleshow = true
+              this.$zglobal.showMessage('positive', 'center', this.$t('operation.getdatasuccess'))
+            }
+          })
+          .catch((error) => {
+            this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+          })
+
+        // 获得已有角色
+        this.$api
+          .get('/users/getUserRoles/' + selectedData[0].id)
+          .then((resmy) => {
+            if (resmy.data.success) {
+              this.rolechecks = resmy.data.data.map(({ name, id }) => id)
+              this.$zglobal.showMessage('positive', 'center', this.$t('roles.getrowssuccess'))
+            }
+          })
+          .catch((error) => {
+            this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+          })
+      } else {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+      }
+    },
+
     EditRolelist() {
-      var selectedData = this.gridApi.getSelectedRows();
-      const selectarr = selectedData.map(({ name, id }) => id);
-      // console.log(selectarr, '========', this.rolechecks)
+      var selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      const selectarr = selectedData.map(({ name, id }) => id)
       this.$api
-        .post("/users/setUsersRoles/", {
+        .post('/users/setUsersRoles/', {
           users: selectarr,
           roles: this.rolechecks,
         })
         .then((res) => {
           if (res.data.success) {
-            this.$zglobal.showMessage("positive", "center", this.$t("success"));
-            this.Roleshow = false;
+            this.$zglobal.showMessage('positive', 'center', this.$t('success'))
+            this.Roleshow = false
           }
         })
         .catch((error) => {
           if (error.status) {
-            this.$zglobal.showMessage(
-              "red-5",
-              "center",
-              this.$t("auth.register.invalid_data")
-            );
+            this.$zglobal.showMessage('red-5', 'center', this.$t('auth.register.invalid_data'))
           }
-        });
+        })
     },
+
     SetUserPermisson() {
-      var selectedData = this.gridApi.getSelectedRows();
-      if (
-        (selectedData.length === 1 && selectedData[0].id !== undefined) ||
-        selectedData.length > 1
-      ) {
-        // 开始处理
-        this.DaddPermission = true;
-        // 获得已有权限
-        var selectarr = selectedData.map(({ name, id }) => id);
-        this.$api
-          .post("/users/getUsersPermisstionCfgs/", {
-            users: selectarr,
-          })
-          .then((res) => {
-            if (res.data.success) {
-              this.PermissData = res.data.data;
-              if (res.data.success) {
-                this.$zglobal.showMessage(
-                  "positive",
-                  "center",
-                  this.$t("operation.getdatasuccess")
-                );
-              }
-            }
-          });
-      } else {
-        this.$zglobal.showMessage(
-          "red-7",
-          "center",
-          this.$t("operation.rowserror")
-        );
+      var selectedData = this.gridApi.getSelectedRows()
+
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
       }
-    },
-    EditUserPermission() {
-      // console.log(this.PermissData)
+
+      // 开始处理
+      this.DaddPermission = true
       // 获得已有权限
-      var selectedData = this.gridApi.getSelectedRows();
-      var selectarr = selectedData.map(({ name, id }) => id);
+      var selectarr = selectedData.map(({ name, id }) => id)
+      this.$api
+        .post('/users/getUsersPermisstionCfgs/', {
+          users: selectarr,
+        })
+        .then((res) => {
+          if (res.data.success) {
+            this.PermissData = res.data.data
+            this.$zglobal.showMessage('positive', 'center', this.$t('operation.getdatasuccess'))
+          }
+        })
+        .catch((error) => {
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+        })
+    },
+
+    EditUserPermission() {
+      if (!this.PermissData) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      var selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('red-7', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      var selectarr = selectedData.map(({ name, id }) => id)
       const per = Object.keys(this.PermissData)
         .map((k) =>
           this.PermissData[k].permissions.map(({ usrcfg, id }) => ({
             id,
             usrcfg,
-          }))
+          })),
         )
-        .flat();
+        .flat()
+
       this.$api
-        .post("/users/setUsersPermissionCfgs", {
+        .post('/users/setUsersPermissionCfgs', {
           users: selectarr,
           permissions: per,
         })
         .then((res) => {
           if (res.data.success) {
-            this.$zglobal.showMessage("positive", "center", this.$t("success"));
+            this.$zglobal.showMessage('positive', 'center', this.$t('success'))
+            this.DaddPermission = false
           } else {
-            this.$zglobal.showMessage("red-5", "center", this.$t("failed"));
+            this.$zglobal.showMessage('red-5', 'center', this.$t('failed'))
           }
-        });
+        })
+        .catch((error) => {
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+        })
     },
   },
   validations: {
@@ -794,10 +952,7 @@ export default {
       },
     },
   },
-};
-function pwdMask(params) {
-  return "******** ";
-}
+})
 </script>
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/

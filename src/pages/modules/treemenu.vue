@@ -41,35 +41,19 @@
       :caption="children.tip"
       :title="children.tip"
     >
-      <draggable
-        class="dragArea list-group"
-        :list="[children]"
-        :group="{
-          name: 'dragmod',
-          pull: 'clone',
-          put: false,
-          touchStartThreshold: 50,
-        }"
-        item-key="id"
-      >
-        <template #item="{ element }">
-          <div :key="element.id" class="list-group-item">
-            <q-item-section avatar>
-              <q-icon :name="element.icon" />
-            </q-item-section>
-          </div>
-        </template>
-      </draggable>
-
+      <!-- 暂时禁用 draggable，避免 Vue 3 兼容性问题 -->
+      <q-item-section avatar>
+        <q-icon :name="children.icon" />
+      </q-item-section>
       <q-item-section>{{ children.title }}</q-item-section>
     </q-item>
   </div>
 </template>
 <script>
-import draggable from "vuedraggable";
+// import draggable from "vuedraggable"; // 暂时禁用，v4.1.0 与 Vue 3 存在兼容性问题
 export default {
   name: "Treemenu",
-  components: { draggable },
+  // components: { draggable }, // 暂时禁用
   props: ["children", "depth"],
   data() {
     return {

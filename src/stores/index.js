@@ -1,6 +1,5 @@
-import { store } from "quasar/wrappers";
-import { createPinia } from "pinia";
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import { defineStore } from '#q-app/wrappers'
+import { createPinia } from 'pinia'
 
 /*
  * If not building with SSR mode, you can
@@ -10,16 +9,12 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-if (process.env.DEV) {
-  console.log("stores/index.js excuted");
-}
 
-export default store((/* { ssrContext } */) => {
-  const pinia = createPinia();
+export default defineStore((/* { ssrContext } */) => {
+  const pinia = createPinia()
 
   // You can add Pinia plugins here
   // pinia.use(SomePiniaPlugin)
-  pinia.use(piniaPluginPersistedstate);
 
-  return pinia;
-});
+  return pinia
+})

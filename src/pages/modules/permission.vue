@@ -2,38 +2,30 @@
   <q-page padding class="q-pa-ma">
     <q-dialog v-model="DJsonEditor" full-width full-height>
       <q-card class="q-dialog-plugin">
-        <q-toolbar>
+        <q-toolbar class="bg-primary text-white">
           <q-btn
             v-close-popup
             flat
             round
             dense
             icon="close"
-            color="negative"
+            color="white"
             :title="this.$t('buttons.close')"
           />
           <q-toolbar-title>
-            <span class="text-subtitle1 text-weight-bold">
-              {{ $t("jsoneditor.header") }}</span
-            >
+            <span class="text-subtitle1 text-weight-bold"> {{ $t('jsoneditor.header') }}</span>
           </q-toolbar-title>
           <q-btn
             flat
-            color="secondary"
+            color="white"
             icon="save"
             :label="this.$t('buttons.confirm')"
             @click="EditJSON()"
           />
         </q-toolbar>
         <q-separator color="accent" />
-        <q-card-section
-          style="min-height: 10vh; max-height: 80vh"
-          class="scroll"
-        >
-          <JsonEditorVue
-            v-model="jsonData"
-            style="border: 1px dashed #b5b5b5; padding-left: 1px"
-          >
+        <q-card-section style="min-height: 10vh; max-height: 80vh" class="scroll">
+          <JsonEditorVue v-model="jsonData" style="border: 1px dashed #b5b5b5; padding-left: 1px">
           </JsonEditorVue>
         </q-card-section>
         <q-separator color="accent" />
@@ -43,13 +35,13 @@
       </q-card>
     </q-dialog>
     <div class="text-h5 q-ma-md text-secondary">
-      {{ $t("permission.header") }}
+      {{ $t('permission.header') }}
     </div>
     <q-separator color="accent" />
     <div class="row q-ma-md" style="margin: 16px 1px">
       <q-btn
         v-if="mPermissions['permission.badd']"
-        color="addbtn"
+        color="primary"
         text-color="white"
         class="q-ma-xs"
         icon="post_add"
@@ -58,7 +50,7 @@
       />
       <q-btn
         v-if="mPermissions['permission.bDelete']"
-        color="deldbtn"
+        color="negative"
         text-color="white"
         class="q-ma-xs"
         icon="delete_sweep"
@@ -67,21 +59,17 @@
       />
       <q-btn
         v-if="mPermissions['permission.bmodify']"
-        color="savebtn"
+        color="positive"
         text-color="white"
         class="q-ma-xs"
         icon="save"
         :label="this.$t('buttons.save')"
         @click="saveItems()"
       />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
       <q-btn
         v-if="mPermissions['permission.bJsonedit']"
-        color="treebtn"
+        color="warning"
         text-color="white"
         class="q-ma-xs"
         icon="account_tree"
@@ -90,7 +78,7 @@
       />
       <q-btn
         v-if="mPermissions['permission.bexport']"
-        color="expbtn"
+        color="accent"
         text-color="white"
         class="q-ma-xs"
         icon="cloud_download"
@@ -98,35 +86,26 @@
         @click="ExportDataAsCVS()"
       />
       <q-space />
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
       <q-input
         v-model="quickFilter"
         dense
         style="max-width: 120px"
         class="q-ml-md"
         :label="this.$t('modules.searchall')"
-        @input="onQuickFilterChanged()"
+        @change="onQuickFilterChanged()"
       >
         <template v-slot:prepend>
           <q-icon name="search" />
         </template>
       </q-input>
-      <q-separator
-        v-if="!$q.screen.gt.xs"
-        class="col-10 q-ma-xs"
-        color="info"
-      />
+      <q-separator v-if="!$q.screen.gt.xs" class="col-10 q-ma-xs" color="info" />
     </div>
     <div class="shadow-1">
       <ag-grid-vue
         style="width: 100%; height: 500px"
         class="ag-theme-balham Permission-agGrid"
-        row-selection="multiple"
-        row-multi-select-with-click="true"
+        ref="permission_grid"
         :grid-options="gridOptions"
         :column-defs="columnDefs"
         :row-data="rowData"
@@ -134,7 +113,7 @@
         :pagination="true"
         :pagination-page-size="50"
         :get-row-style="getRowStyle"
-        :locale-text="this.$t('aggrid')"
+        :locale-text="$tm('aggrid')"
         @cellValueChanged="oncellValueChanged"
         @grid-ready="onGridReady"
       >
@@ -144,13 +123,14 @@
 </template>
 
 <script>
-import { AgGridVue } from "ag-grid-vue3";
-import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
-import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
-import { useZeroStore } from "stores/zero";
+import { AgGridVue } from 'ag-grid-vue3'
+import 'ag-grid-community/styles/ag-grid.css' // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css' // Optional theme CSS
+import { useZeroStore } from 'stores/zero'
+import { defineComponent } from 'vue'
 
-export default {
-  name: "Permission",
+export default defineComponent({
+  name: 'Permission',
   components: {
     AgGridVue,
   },
@@ -159,6 +139,7 @@ export default {
       loading: true,
       DJsonEditor: null,
       jsonData: null,
+      currentEditingRow: null, // 新增：当前正在编辑的行数据
       quickFilter: null,
       gridOptions: null,
       gridApi: null,
@@ -166,152 +147,164 @@ export default {
       columnDefs: null,
       rowData: null,
       getRowStyle: null,
-      changerowcolor: null,
       defaultColDef: null,
       mPermissions: [],
-    };
+      // 新增：存储修改过的单元格
+      modifiedCells: new Map(),
+      // 新增：存储 cellStyle 函数的闭包引用
+      cellStyleFunctions: new Map(),
+    }
   },
   setup() {
-    const store = useZeroStore();
+    const store = useZeroStore()
     return {
       store,
-    };
+    }
   },
   created() {
     this.$api
-      .get("/z_permission/")
+      .get('/z_permission/')
       .then((res) => {
         if (res.data.success) {
-          this.rowData = res.data.data;
-        } else {
+          this.rowData = res.data.data
         }
       })
-      .catch((e) => {});
+      .catch((e) => {
+        this.$zglobal.showMessage('negative', 'center', this.$t('operation.loadFailed'))
+      })
   },
   beforeMount() {
-    this.initGrid();
+    this.initGrid()
   },
   mounted() {
-    this.gridApi = this.gridOptions.api;
-    this.gridColumnApi = this.gridOptions.columnApi;
-    this.initPermissions();
+    this.initPermissions()
   },
   methods: {
     initPermissions() {
       const preq = [
         {
-          module: "permission",
-          name: "permission.badd",
+          module: 'permission',
+          name: 'permission.badd',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("permission.badd"),
+          title: this.$t('permission.badd'),
         },
         {
-          module: "permission",
-          name: "permission.bDelete",
+          module: 'permission',
+          name: 'permission.bDelete',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("permission.bDelete"),
+          title: this.$t('permission.bDelete'),
         },
         {
-          module: "permission",
-          name: "permission.bmodify",
+          module: 'permission',
+          name: 'permission.bmodify',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("permission.bmodify"),
+          title: this.$t('permission.bmodify'),
         },
         {
-          module: "permission",
-          name: "permission.bexport",
+          module: 'permission',
+          name: 'permission.bexport',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("permission.bexport"),
+          title: this.$t('permission.bexport'),
         },
         {
-          module: "permission",
-          name: "permission.bJsonedit",
+          module: 'permission',
+          name: 'permission.bJsonedit',
           syscfg: {
             required: false,
-            type: "Boolean",
+            type: 'Boolean',
             default: null,
           },
-          title: this.$t("permission.bJsonedit"),
+          title: this.$t('permission.bJsonedit'),
         },
-      ];
+      ]
 
       this.store
         .reqThePermission(preq)
         .then((res) => {
-          this.mPermissions = res;
+          this.mPermissions = res
         })
         .catch((e) => {
-          // console.log(e)
-        });
+          this.$zglobal.showMessage('negative', 'center', this.$t('operation.permissionLoadFailed'))
+        })
     },
     initGrid() {
       this.gridOptions = {
+        theme: 'legacy',
         rowHeight: 32,
         headerHeight: 32,
         allowShowChangeAfterFilter: true,
-      };
+        rowSelection: {
+          mode: 'multiRow',
+          headerCheckbox: true,
+          selectAll: 'filtered',
+          checkboxes: true,
+          enableSelectionWithoutKeys: true,
+        },
+        suppressCellSelection: true,
+        enableCellChangeFlash: true,
+      }
       this.columnDefs = [
         {
-          headerName: "ID",
-          field: "id",
+          headerName: 'ID',
+          field: 'id',
           width: 70,
           minWidth: 70,
           maxWidth: 70,
           sortable: true,
           editable: false,
-          headerCheckboxSelection: true,
-          headerCheckboxSelectionFilteredOnly: true,
-          checkboxSelection: true,
         },
         {
-          headerName: this.$t("permission.title"),
-          field: "title",
+          headerName: this.$t('permission.title'),
+          field: 'title',
           width: 200,
           minWidth: 200,
           maxWidth: 300,
           editable: true,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('title'),
         },
         {
-          headerName: this.$t("permission.name"),
-          field: "name",
+          headerName: this.$t('permission.name'),
+          field: 'name',
           width: 150,
           minWidth: 150,
           maxWidth: 200,
           editable: true,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('name'),
         },
         {
-          headerName: this.$t("permission.syscfg"),
-          field: "syscfg",
+          headerName: this.$t('permission.syscfg'),
+          field: 'syscfg',
           width: 120,
           minWidth: 120,
           maxWidth: 260,
           editable: true,
           sortable: true,
           filter: true,
+          cellStyle: this.createCellStyleFunction('syscfg'),
         },
         {
-          headerName: this.$t("dataAGgrid.created_at"),
-          field: "created_at",
+          headerName: this.$t('dataAGgrid.created_at'),
+          field: 'created_at',
           width: 110,
           minWidth: 110,
           maxWidth: 150,
@@ -319,166 +312,443 @@ export default {
           sortable: true,
           filter: true,
         },
-      ];
+      ]
       this.defaultColDef = {
         editable: true,
         resizable: true,
-      };
-      this.getRowStyle = this.onchangerowcolor;
-    },
-    onGridReady(params) {
-      params.api.sizeColumnsToFit();
-    },
-    onQuickFilterChanged() {
-      this.gridApi.setQuickFilter(this.quickFilter);
-    },
-    delItems() {
-      var selectedData = this.gridApi.getSelectedRows();
-      if (selectedData.length > 0) {
-        this.$q
-          .dialog({
-            title: this.$t("buttons.comfirmtitle"),
-            message: this.$t("buttons.comfirmdialog"),
-            html: true,
-            cancel: true,
-            persistent: true,
-          })
-          .onOk(() => {
-            selectedData.forEach((val) => {
-              this.gridApi.updateRowData({ remove: [val] });
-              if (val.id === undefined) return false;
-              this.$api
-                .delete("/z_permission/" + val.id)
-                .then((res) => {
-                  if (res.data.success) {
-                    // console.log(res.data.data)
-                    this.$zglobal.showMessage(
-                      "positive",
-                      "center",
-                      this.$t("operation.delsuccess")
-                    );
-                  } else {
-                    this.$zglobal.showMessage(
-                      "red-7",
-                      "center",
-                      this.$t("operation.delfailed")
-                    );
-                  }
-                })
-                .catch((e) => {});
-            });
-          })
-          .onCancel(() => {
-            // console.log('>>>> Cancel')
-          })
-          .onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
-          });
       }
+      this.getRowStyle = () => null // 不再使用行级样式，改为单元格级样式
     },
-    ExportDataAsCVS() {
-      var params = {
-        fileName: "permission.xls",
-        suppressQuotes: true,
-        columnSeparator: ",",
-      };
-      this.gridApi.exportDataAsCsv(params);
-    },
-    onchangerowcolor() {
-      return { backgroundColor: this.changerowcolor };
-    },
-    oncellValueChanged(params) {
-      if (params.oldValue === null) params.oldValue = "";
-      if (params.newValue !== params.oldValue) {
-        this.changerowcolor = "#ffa195";
-        this.gridApi.redrawRows({
-          rowNodes: [this.gridApi.getDisplayedRowAtIndex(params.rowIndex)],
-        });
+
+    // 新增：创建 cellStyle 函数
+    createCellStyleFunction(field) {
+      if (this.cellStyleFunctions.has(field)) {
+        return this.cellStyleFunctions.get(field)
       }
-      this.changerowcolor = "";
-    },
-    addItems() {
-      var newItems = [{}];
-      this.gridApi.updateRowData({ add: newItems });
-    },
-    saveItems() {
-      const selectedData = this.gridApi.getSelectedRows();
-      selectedData.forEach((val) => {
-        if (val.id === undefined) {
-          this.$api
-            .post("/z_permission/", val)
-            .then((res) => {
-              if (res.data.success) {
-                this.gridApi.updateRowData({
-                  update: [Object.assign(val, res.data.data)],
-                });
-                this.$zglobal.showMessage(
-                  "positive",
-                  "center",
-                  this.$t("operation.addsuccess")
-                );
-              } else {
-                this.$zglobal.showMessage(
-                  "red-7",
-                  "center",
-                  this.$t("operation.addfailed")
-                );
-              }
-            })
-            .catch((e) => {});
-        } else {
-          this.$api
-            .put("/z_permission/" + val.id, val)
-            .then((res) => {
-              if (res.data.success) {
-                this.gridApi.updateRowData({
-                  update: [Object.assign(val, res.data.data)],
-                });
-                this.$zglobal.showMessage(
-                  "positive",
-                  "center",
-                  this.$t("operation.updatesuccess")
-                );
-                // console.log(res.data.data)
-              } else {
-                this.$zglobal.showMessage(
-                  "red-7",
-                  "center",
-                  this.$t("operation.updatefailed")
-                );
-              }
-            })
-            .catch((e) => {});
+
+      const styleFunction = (params) => {
+        if (!params.data) return null
+
+        const rowId = params.data.id
+        if (!rowId) return null
+
+        const cellKey = `${rowId}_${field}`
+        if (this.modifiedCells.has(cellKey)) {
+          return { backgroundColor: 'orange' }
         }
-      });
+        return null
+      }
+
+      this.cellStyleFunctions.set(field, styleFunction)
+      return styleFunction
     },
+
+    onGridReady(params) {
+      this.gridApi = params.api
+      this.gridColumnApi = params.columnApi
+      params.api.sizeColumnsToFit()
+    },
+
+    onQuickFilterChanged() {
+      if (this.gridApi) {
+        this.gridApi.setQuickFilter(this.quickFilter)
+      }
+    },
+
+    delItems() {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化，请稍候再试')
+        return
+      }
+
+      const selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('info', 'center', this.$t('modules.noSelection'))
+        return
+      }
+
+      this.$q
+        .dialog({
+          title: this.$t('buttons.comfirmtitle'),
+          message: this.$t('buttons.comfirmdialog'),
+          html: true,
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          const promises = selectedData.map((val) => {
+            if (!val.id) return Promise.resolve()
+
+            // 清除该行的修改标记
+            this.clearModifiedCellsForRow(val.id)
+
+            return this.$api
+              .delete('/z_permission/' + val.id)
+              .then((res) => {
+                if (res.data.success) {
+                  this.gridApi.applyTransaction({ remove: [val] })
+                  this.$zglobal.showMessage('positive', 'center', this.$t('operation.delsuccess'))
+                  return { success: true }
+                } else {
+                  this.$zglobal.showMessage('red-7', 'center', this.$t('operation.delfailed'))
+                  return { success: false }
+                }
+              })
+              .catch((e) => {
+                this.$zglobal.showMessage('negative', 'center', this.$t('operation.deleteError'))
+                return { success: false }
+              })
+          })
+
+          Promise.all(promises)
+            .then(() => {
+              this.gridApi.deselectAll()
+            })
+            .catch((error) => {
+              console.error('删除操作错误:', error)
+            })
+        })
+        .onCancel(() => {
+          // 用户取消操作
+        })
+    },
+
+    ExportDataAsCVS() {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化，请稍候再试')
+        return
+      }
+
+      var params = {
+        fileName: 'permission.xls',
+        suppressQuotes: true,
+        columnSeparator: ',',
+      }
+      this.gridApi.exportDataAsCsv(params)
+    },
+
+    oncellValueChanged(params) {
+      if (params.oldValue === null) params.oldValue = ''
+
+      if (params.newValue !== params.oldValue) {
+        try {
+          const rowId = params.data.id
+          const columnId = params.column.getColId()
+
+          if (rowId) {
+            // 生成单元格的唯一标识符
+            const cellKey = `${rowId}_${columnId}`
+
+            // 标记该单元格已被修改
+            this.modifiedCells.set(cellKey, true)
+
+            // 强制更新 Vue 响应式系统
+            this.modifiedCells = new Map(this.modifiedCells)
+
+            // 刷新当前单元格
+            this.gridApi.refreshCells({
+              rowNodes: [params.node],
+              columns: [columnId],
+              force: true,
+            })
+
+            // 显示修改成功提示
+            this.$zglobal.showMessage('green-7', 'center', this.$t('operation.modifySuccess'))
+          } else {
+            // 对于没有id的新增行，显示不同提示
+            this.$zglobal.showMessage('info', 'center', this.$t('operation.newRowModified'))
+          }
+        } catch (error) {
+          console.error('单元格值变更错误:', error)
+          this.$zglobal.showMessage('red-7', 'center', this.$t('operation.modifyFailed'))
+          // 回滚到旧值
+          params.node.setDataValue(params.column.getColId(), params.oldValue)
+        }
+      }
+    },
+
+    addItems() {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化，请稍候再试')
+        return
+      }
+
+      const newItems = [{}]
+      this.gridApi.applyTransaction({ add: newItems })
+      this.$zglobal.showMessage('info', 'center', this.$t('operation.rowAdded'))
+    },
+
+    saveItems() {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化，请稍候再试')
+        return
+      }
+
+      const selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length === 0) {
+        this.$zglobal.showMessage('info', 'center', this.$t('modules.noSelection'))
+        return
+      }
+
+      // 收集需要刷新的行节点和列
+      const nodesToRefresh = []
+      const allRowIdsToClear = []
+      const columnIdsToRefresh = new Set()
+
+      const promises = selectedData.map((val) => {
+        if (!val.id) {
+          // 新增行
+          return this.$api
+            .post('/z_permission/', val)
+            .then((res) => {
+              if (res.data.success) {
+                const updatedRow = Object.assign(val, res.data.data)
+                this.gridApi.applyTransaction({ update: [updatedRow] })
+                if (updatedRow.id) {
+                  allRowIdsToClear.push(updatedRow.id)
+                  this.gridApi.forEachNode((node) => {
+                    if (node.data && node.data.id === updatedRow.id) {
+                      nodesToRefresh.push(node)
+                    }
+                  })
+                }
+                this.$zglobal.showMessage('positive', 'center', this.$t('operation.addsuccess'))
+                return { success: true }
+              } else {
+                this.$zglobal.showMessage('red-7', 'center', this.$t('operation.addfailed'))
+                return { success: false }
+              }
+            })
+            .catch((e) => {
+              this.$zglobal.showMessage('negative', 'center', this.$t('operation.addError'))
+              return { success: false }
+            })
+        } else {
+          // 更新行
+          allRowIdsToClear.push(val.id)
+
+          // 查找该行修改过的所有列
+          this.gridApi.forEachNode((node) => {
+            if (node.data && node.data.id === val.id) {
+              nodesToRefresh.push(node)
+
+              // 检查该行所有可编辑列是否被修改过
+              this.columnDefs.forEach((colDef) => {
+                if (colDef.field && colDef.field !== 'id' && colDef.editable !== false) {
+                  const cellKey = `${val.id}_${colDef.field}`
+                  if (this.modifiedCells.has(cellKey)) {
+                    columnIdsToRefresh.add(colDef.field)
+                  }
+                }
+              })
+            }
+          })
+
+          return this.$api
+            .put('/z_permission/' + val.id, val)
+            .then((res) => {
+              if (res.data.success) {
+                const updatedRow = Object.assign(val, res.data.data)
+                this.gridApi.applyTransaction({ update: [updatedRow] })
+                this.$zglobal.showMessage('positive', 'center', this.$t('operation.updatesuccess'))
+                return { success: true }
+              } else {
+                this.$zglobal.showMessage('red-7', 'center', this.$t('operation.updatefailed'))
+                return { success: false }
+              }
+            })
+            .catch((e) => {
+              this.$zglobal.showMessage('negative', 'center', this.$t('operation.updateError'))
+              return { success: false }
+            })
+        }
+      })
+
+      // 批量处理所有请求
+      Promise.all(promises)
+        .then((results) => {
+          // 统一清除所有标记
+          allRowIdsToClear.forEach((rowId) => {
+            this.clearModifiedCellsForRow(rowId)
+          })
+
+          // 统一刷新所有节点
+          if (nodesToRefresh.length > 0) {
+            // 如果有特定的列需要刷新，使用这些列
+            if (columnIdsToRefresh.size > 0) {
+              const uniqueColumns = Array.from(columnIdsToRefresh)
+              this.gridApi.refreshCells({
+                rowNodes: nodesToRefresh,
+                columns: uniqueColumns,
+                force: true,
+              })
+            } else {
+              // 否则刷新所有列
+              this.gridApi.refreshCells({
+                rowNodes: nodesToRefresh,
+                force: true,
+              })
+            }
+
+            // 额外确保样式重新计算
+            setTimeout(() => {
+              this.gridApi.redrawRows({ rowNodes: nodesToRefresh })
+            }, 100)
+          } else {
+            this.gridApi.refreshCells({ force: true })
+          }
+
+          // 清除选中状态
+          this.gridApi.deselectAll()
+        })
+        .catch((error) => {
+          console.error('保存操作错误:', error)
+          this.$zglobal.showMessage('negative', 'center', this.$t('operation.saveError'))
+        })
+    },
+
+    // 清除某行的修改标记
+    clearModifiedCellsForRow(rowId) {
+      if (!rowId) return
+
+      // 收集需要删除的键和对应的字段
+      const keysToDelete = []
+      const fieldsToRefresh = new Set()
+
+      this.modifiedCells.forEach((value, key) => {
+        if (key.startsWith(`${rowId}_`)) {
+          keysToDelete.push(key)
+          // 提取字段名
+          const parts = key.split('_')
+          if (parts.length > 1) {
+            fieldsToRefresh.add(parts.slice(1).join('_'))
+          }
+        }
+      })
+
+      // 删除所有标记
+      keysToDelete.forEach((key) => {
+        this.modifiedCells.delete(key)
+      })
+
+      // 如果没有找到标记，直接返回
+      if (keysToDelete.length === 0) return
+
+      // 强制更新 Vue 响应式系统
+      this.modifiedCells = new Map(this.modifiedCells)
+
+      // 找到对应的行节点
+      let targetNode = null
+      this.gridApi.forEachNode((node) => {
+        if (node.data && node.data.id === rowId) {
+          targetNode = node
+        }
+      })
+
+      if (targetNode) {
+        // 刷新特定字段的单元格
+        if (fieldsToRefresh.size > 0) {
+          this.gridApi.refreshCells({
+            rowNodes: [targetNode],
+            columns: Array.from(fieldsToRefresh),
+            force: true,
+          })
+
+          // 额外确保样式重新计算
+          setTimeout(() => {
+            this.gridApi.redrawRows({ rowNodes: [targetNode] })
+          }, 50)
+        }
+      }
+    },
+
     DJsonedit() {
-      this.loading = true;
-      this.DJsonEditor = true;
-      var selectedData = this.gridApi.getSelectedRows();
-      if (selectedData.length === 1 && selectedData[0].id !== undefined) {
-        this.loading = true;
-        this.jsonData = JSON.parse(selectedData[0].syscfg);
-      } else {
+      if (!this.gridApi) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化，请稍候再试')
+        return
+      }
+
+      const selectedData = this.gridApi.getSelectedRows()
+      if (selectedData.length !== 1 || !selectedData[0].id) {
+        this.$zglobal.showMessage('red-5', 'center', this.$t('operation.rowserror'))
+        return
+      }
+
+      this.loading = true
+      this.DJsonEditor = true
+      this.currentEditingRow = selectedData[0]
+
+      try {
+        // 处理 syscfg 可能为 null、undefined 或空字符串的情况
+        const syscfgStr = selectedData[0].syscfg
+        if (syscfgStr && typeof syscfgStr === 'string' && syscfgStr.trim() !== '') {
+          this.jsonData = JSON.parse(syscfgStr)
+        } else {
+          // 如果 syscfg 为空，初始化为空对象
+          this.jsonData = {}
+        }
+      } catch (error) {
+        // JSON 解析失败，显示错误信息并初始化为空对象
+        console.error('JSON parse error:', error)
         this.$zglobal.showMessage(
-          "red-5",
-          "center",
-          this.$t("operation.rowserror")
-        );
+          'red-5',
+          'center',
+          this.$t('operation.jsonparseerror') || 'JSON解析失败，已初始化为空对象',
+        )
+        this.jsonData = {}
       }
-      this.loading = false;
+      this.loading = false
     },
+
     EditJSON() {
-      var selectedData = this.gridApi.getSelectedRows();
-      if (selectedData.length === 1 && selectedData[0].id !== undefined) {
-        selectedData[0].syscfg = JSON.stringify(this.jsonData);
-        this.gridApi.refreshCells(selectedData[0]);
-        this.DJsonEditor = false;
+      if (!this.gridApi || !this.currentEditingRow) {
+        this.$zglobal.showMessage('red-5', 'center', '表格尚未初始化或没有选中行')
+        return
+      }
+
+      try {
+        // 将 JSON 对象转换为字符串
+        const syscfgStr = JSON.stringify(this.jsonData, null, 2)
+
+        // 更新当前编辑行的数据
+        this.currentEditingRow.syscfg = syscfgStr
+
+        // 标记 syscfg 单元格为已修改
+        const cellKey = `${this.currentEditingRow.id}_syscfg`
+        this.modifiedCells.set(cellKey, true)
+        this.modifiedCells = new Map(this.modifiedCells)
+
+        // 使用 applyTransaction 更新表格数据
+        this.gridApi.applyTransaction({
+          update: [this.currentEditingRow],
+        })
+
+        // 刷新 syscfg 列的单元格
+        this.gridApi.refreshCells({
+          rowNodes: [this.gridApi.getRowNode(this.currentEditingRow.id)],
+          columns: ['syscfg'],
+          force: true,
+        })
+
+        this.DJsonEditor = false
+        this.currentEditingRow = null
+
+        this.$zglobal.showMessage(
+          'positive',
+          'center',
+          this.$t('operation.jsonupdatesuccess') || 'JSON更新成功',
+        )
+      } catch (error) {
+        console.error('JSON stringify error:', error)
+        this.$zglobal.showMessage(
+          'red-5',
+          'center',
+          this.$t('operation.jsonstringifyerror') || 'JSON序列化失败',
+        )
       }
     },
-    // JSON format print
   },
-};
+})
 </script>
 <style>
 /*蓝色#006699 #339999 #666699  #336699  黄色#CC9933  紫色#996699  #990066 棕色#999966 #333300 红色#CC3333  绿色#009966  橙色#ff6600  其他*/
@@ -487,26 +757,37 @@ export default {
   color: #ffffff;
   font-size: 13px;
 }
+
 .Permission-agGrid .ag-cell {
   padding-left: 1px;
   font-size: 13px;
 }
+
 .ag-theme-balham .ag-ltr .ag-cell {
   padding-left: 1px;
   border-right: 1px solid rgba(233, 233, 233, 0.96);
 }
+
 .ag-theme-balham .ag-icon,
 .ag-header-icon .ag-sort-ascending-icon {
   color: #ffffff;
 }
+
 .ag-theme-balham .ag-paging-page-summary-panel .ag-icon,
 .ag-theme-balham .ag-paging-panel {
   color: #000000;
 }
+
 .ag-theme-balham .ag-icon-checkbox-unchecked {
   color: #cccccc;
 }
+
 .ag-theme-balham .ag-icon-checkbox-checked {
   color: var(--q-secondary);
+}
+
+/* 确保修改过的单元格样式优先级正确 */
+.ag-cell.ag-cell-not-inline-editing {
+  transition: background-color 0.3s ease;
 }
 </style>

@@ -1,12 +1,13 @@
 // import Vue from 'vue'
-import { boot } from "quasar/wrappers";
-import { Notify } from "quasar";
-import { useZeroStore } from "stores/zero";
-import print from "vue3-print-nb";
-import JsonEditorVue from "json-editor-vue";
+import { boot } from 'quasar/wrappers'
+import { Notify } from 'quasar'
+import { useZeroStore } from 'stores/zero'
+import print from 'vue3-print-nb'
+import JsonEditorVue from 'json-editor-vue'
+import { setupAgTestIds } from 'ag-grid-community'
 
-if (process.env.DEV) {
-  console.log("boot zglobl.js excuted");
+if (import.meta.env.DEV) {
+  console.log('boot zglobl.js excuted')
 }
 
 const zglobal = {
@@ -15,126 +16,126 @@ const zglobal = {
   },
   colors: {
     blue: [
-      { name: "primary", value: "#027BE3" },
-      { name: "secondary", value: "#26A69A" },
-      { name: "accent", value: "#9C27B0" },
-      { name: "positive", value: "#21BA45" },
-      { name: "negative", value: "#C10015" },
-      { name: "info", value: "#aceee6" },
-      { name: "warning", value: "#F2C037" },
-      { name: "addbtn", value: "#c0ca33" },
-      { name: "deldbtn", value: "#ff7043" },
-      { name: "savebtn", value: "#5c6bc0" },
-      { name: "treebtn", value: "#ab47bc" },
-      { name: "expbtn", value: "#4caf50" },
+      { name: 'primary', value: '#027BE3' },
+      { name: 'secondary', value: '#26A69A' },
+      { name: 'accent', value: '#9C27B0' },
+      { name: 'positive', value: '#21BA45' },
+      { name: 'negative', value: '#C10015' },
+      { name: 'info', value: '#aceee6' },
+      { name: 'warning', value: '#F2C037' },
+      { name: 'addbtn', value: '#c0ca33' },
+      { name: 'deldbtn', value: '#ff7043' },
+      { name: 'savebtn', value: '#5c6bc0' },
+      { name: 'treebtn', value: '#ab47bc' },
+      { name: 'expbtn', value: '#4caf50' },
     ],
     Bright: [
-      { name: "primary", value: "#666699" },
-      { name: "secondary", value: "#CC3399" },
-      { name: "accent", value: "#9C27B0" },
-      { name: "positive", value: "#21BA45" },
-      { name: "negative", value: "#C10015" },
-      { name: "info", value: "#dbcdec" },
-      { name: "warning", value: "#F2C037" },
-      { name: "addbtn", value: "#CCCC33" },
-      { name: "deldbtn", value: "#FF6600" },
-      { name: "savebtn", value: "#99CC66" },
-      { name: "treebtn", value: "#0099CC" },
-      { name: "expbtn", value: "#99CC33" },
+      { name: 'primary', value: '#666699' },
+      { name: 'secondary', value: '#CC3399' },
+      { name: 'accent', value: '#9C27B0' },
+      { name: 'positive', value: '#21BA45' },
+      { name: 'negative', value: '#C10015' },
+      { name: 'info', value: '#dbcdec' },
+      { name: 'warning', value: '#F2C037' },
+      { name: 'addbtn', value: '#CCCC33' },
+      { name: 'deldbtn', value: '#FF6600' },
+      { name: 'savebtn', value: '#99CC66' },
+      { name: 'treebtn', value: '#0099CC' },
+      { name: 'expbtn', value: '#99CC33' },
     ],
     simple: [
-      { name: "primary", value: "#0099CC" },
-      { name: "secondary", value: "#336699" },
-      { name: "accent", value: "#ABCDEF" },
-      { name: "positive", value: "#666666" },
-      { name: "negative", value: "#FF9933" },
-      { name: "info", value: "#CCCCCC" },
-      { name: "warning", value: "#FF9933" },
-      { name: "addbtn", value: "#CCCC33" },
-      { name: "deldbtn", value: "#FF9933" },
-      { name: "savebtn", value: "#99CC33" },
-      { name: "treebtn", value: "#ab47bc" },
-      { name: "expbtn", value: "#99CC33" },
+      { name: 'primary', value: '#0099CC' },
+      { name: 'secondary', value: '#336699' },
+      { name: 'accent', value: '#ABCDEF' },
+      { name: 'positive', value: '#666666' },
+      { name: 'negative', value: '#FF9933' },
+      { name: 'info', value: '#CCCCCC' },
+      { name: 'warning', value: '#FF9933' },
+      { name: 'addbtn', value: '#CCCC33' },
+      { name: 'deldbtn', value: '#FF9933' },
+      { name: 'savebtn', value: '#99CC33' },
+      { name: 'treebtn', value: '#ab47bc' },
+      { name: 'expbtn', value: '#99CC33' },
     ],
     fancy: [
-      { name: "primary", value: "#CC3399" },
-      { name: "secondary", value: "#9933CC" },
-      { name: "accent", value: "#CCCC99" },
-      { name: "positive", value: "#CC6699" },
-      { name: "negative", value: "#FFCC99" },
-      { name: "info", value: "#CCCCCC" },
-      { name: "warning", value: "#FF6666" },
-      { name: "addbtn", value: "#99CC66" },
-      { name: "deldbtn", value: "#FF6666" },
-      { name: "savebtn", value: "#339999" },
-      { name: "treebtn", value: "#cc7195" },
-      { name: "expbtn", value: "#FF33CC" },
+      { name: 'primary', value: '#CC3399' },
+      { name: 'secondary', value: '#9933CC' },
+      { name: 'accent', value: '#CCCC99' },
+      { name: 'positive', value: '#CC6699' },
+      { name: 'negative', value: '#FFCC99' },
+      { name: 'info', value: '#CCCCCC' },
+      { name: 'warning', value: '#FF6666' },
+      { name: 'addbtn', value: '#99CC66' },
+      { name: 'deldbtn', value: '#FF6666' },
+      { name: 'savebtn', value: '#339999' },
+      { name: 'treebtn', value: '#cc7195' },
+      { name: 'expbtn', value: '#FF33CC' },
     ],
   },
   showMessage(color, position, msgval) {
     Notify.create({
       message: msgval,
       color: color,
-      textColor: "white",
+      textColor: 'white',
       position: position,
       timeout: 2500,
-      actions: [{ icon: "close", color: "white" }],
-    });
+      actions: [{ icon: 'close', color: 'white' }],
+    })
+  },
+  consoleLog(o_src, ...msgval) {
+    if (process.env.DEV_LOG) {
+      console.log('[zglobal console log]>', '[' + o_src.$options.name + ']>', ...msgval)
+    }
   },
   flatten(arr) {
     return arr
-      ? arr.reduce(
-          (result, item) => [...result, item, ...this.flatten(item.children)],
-          []
-        )
-      : [];
+      ? arr.reduce((result, item) => [...result, item, ...this.flatten(item.children)], [])
+      : []
   },
   changethemecolor(val) {
-    console.log(val, "-----");
-    if (val === "blue") {
+    console.log(val, '-----')
+    if (val === 'blue') {
+      /* empty */
     }
   },
-};
+}
 export default boot(({ app, router, store }) => {
   // 每路由之前 every route.
   router.beforeEach((to, from, next) => {
-    if (process.env.DEV) {
+    if (import.meta.env.DEV) {
       console.log(
-        "boot/zglobal.js From-to check: ",
+        'boot/zglobal.js From-to check: ',
         from.name,
-        "-->",
+        '-->',
         to.name,
-        " Authed check: ",
-        app.config.globalProperties.$auth.check()
-      );
+        ' Authed check: ',
+        app.config.globalProperties.$auth.check(),
+      )
     }
-    const zero = useZeroStore();
+    const zero = useZeroStore()
     // 加入历史记录
-    zero.setZOptHist(to.name);
+    zero.setZOptHist(to.name)
     if (
       to.matched.some((record) => record.meta.requireAuth) &&
       !app.config.globalProperties.$auth.check()
     ) {
       // next({ name: "account-signin", query: { next: to.fullPath } });
-      next({ name: "login" });
-    } else if (
-      app.config.globalProperties.$auth.check() &&
-      to.name === "not-found"
-    ) {
+      next({ name: 'login' })
+    } else if (app.config.globalProperties.$auth.check() && to.name === 'not-found') {
       next({
-        name: "dashboard",
-      });
+        name: 'dashboard',
+      })
     } else {
-      console.log("boot/zglobal.js: Router in matched to:", to.name);
-      next();
+      console.log('boot/zglobal.js: Router in matched to:', to.name)
+      next()
     }
-  });
+  })
 
-  app.use(JsonEditorVue);
-  app.use(print);
+  app.use(JsonEditorVue)
+  app.use(print)
 
   // 后台推日志 log to backend server
-  if (process.env.BACKEND_LOG == "true") {
+  if (process.env.BACKEND_LOG == 'true') {
     app.config.errorHandler = (err, vm, info) => {
       // 处理错误
       // `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
@@ -142,20 +143,18 @@ export default boot(({ app, router, store }) => {
         message: err.message,
         stack: err.stack,
         info: info,
-      };
+      }
 
-      console.log("BACKEND_LOG(report to backend):", info, err.stack);
-      app.config.globalProperties.$api
-        .post("xapperr/storeLog/", tmpErr)
-        .then((res) => {
-          if (res.data.success) {
-            console.log("Err saved to backend successed.");
-          } else {
-            console.log("Err saved to backend failed.");
-          }
-        });
-    };
+      console.log('BACKEND_LOG(report to backend):', info, err.stack)
+      app.config.globalProperties.$api.post('xapperr/storeLog/', tmpErr).then((res) => {
+        if (res.data.success) {
+          console.log('Err saved to backend successed.')
+        } else {
+          console.log('Err saved to backend failed.')
+        }
+      })
+    }
   }
 
-  app.config.globalProperties.$zglobal = zglobal;
-});
+  app.config.globalProperties.$zglobal = zglobal
+})

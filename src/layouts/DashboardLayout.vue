@@ -5,52 +5,28 @@
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="row">
-          <q-avatar>
-            <img src="../assets/app-logo.jpg" />
-          </q-avatar>
+          <q-avatar icon="dashboard" color="white" text-color="primary" />
           <div v-if="$q.screen.gt.xs" style="margin-top: 5px">
             &nbsp;&nbsp;{{ $t("system.name") }}
           </div>
         </q-toolbar-title>
         <q-space />
-        <q-btn
-          flat
-          round
-          dense
-          icon="home"
-          :class="$auth.check() ? 'text-white' : 'text-warning'"
-          to="/user/dashboard"
-          :title="this.$t('buttons.home')"
-        />
+        <q-btn flat round dense icon="home" :class="$auth.check() ? 'text-white' : 'text-warning'" to="/user/dashboard"
+          :title="this.$t('buttons.home')" />
         <!-- 角色选择--->
-        <q-btn-dropdown
-          stretch
-          flat
-          :label="
-            currectRole === undefined
-              ? this.$t('roles.rolelist')
-              : currectRole.title
-          "
-          :title="this.$t('roles.rolelistheader')"
-        >
+        <q-btn-dropdown stretch flat :label="currectRole === undefined
+            ? this.$t('roles.rolelist')
+            : currectRole.title
+          " :title="this.$t('roles.rolelistheader')">
           <q-list dense>
-            <q-item
-              v-for="ro in MyRoleList"
-              :key="ro.id"
-              v-close-popup
-              clickable
-              style="
+            <q-item v-for="ro in MyRoleList" :key="ro.id" v-close-popup clickable style="
                 text-align: left;
                 border-bottom: 1px dashed #d6d6d6;
                 padding: 6px;
-              "
-              :class="
-                ro.name == store?.ZPermissions?.currectrole?.name
+              " :class="ro.name == store?.ZPermissions?.currectrole?.name
                   ? 'text-primary'
                   : 'text-grey-7'
-              "
-              @click="setRole(ro)"
-            >
+                " @click="setRole(ro)">
               <q-item-section avatar style="min-width: 30px">
                 <q-icon name="person" size="25px" />
               </q-item-section>
@@ -61,37 +37,20 @@
           </q-list>
         </q-btn-dropdown>
         <!-- 语言选择--->
-        <q-btn-dropdown
-          v-if="$q.screen.gt.xs"
-          stretch
-          flat
-          :label="
-            lang.label === undefined ? this.$t('langs.header') : lang.label
-          "
-        >
+        <q-btn-dropdown v-if="$q.screen.gt.xs" stretch flat :label="lang.label === undefined ? this.$t('langs.header') : lang.label
+          ">
           <q-list dense>
-            <q-item-label
-              header
-              style="
+            <q-item-label header style="
                 text-align: left;
                 border-bottom: 1px dashed #d6d6d6;
                 padding: 8px;
-              "
-              >{{ $t("langs.title") }}
+              ">{{ $t("langs.title") }}
             </q-item-label>
-            <q-item
-              v-for="n in langs"
-              :key="n.value"
-              v-close-popup
-              clickable
-              style="
+            <q-item v-for="n in langs" :key="n.value" v-close-popup clickable style="
                 text-align: left;
                 border-bottom: 1px dashed #d6d6d6;
                 padding: 6px;
-              "
-              :class="lang.value === n.value ? 'text-primary' : 'text-grey-7'"
-              @click="setlanguage(n)"
-            >
+              " :class="lang.value === n.value ? 'text-primary' : 'text-grey-7'" @click="setlanguage(n)">
               <q-item-section avatar style="min-width: 30px">
                 <q-icon size="25px" name="directions" />
               </q-item-section>
@@ -101,88 +60,34 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
-        <q-btn
-          v-if="$q.screen.gt.xs"
-          dense
-          flat
-          round
-          icon="apps"
-          @click="right = !right"
-        />
-        <q-btn
-          v-if="$q.screen.lt.sm"
-          flat
-          round
-          dense
-          icon="more_vert"
-          @click="right = !right"
-        />
+        <q-btn v-if="$q.screen.gt.xs" dense flat round icon="apps" @click="right = !right" />
+        <q-btn v-if="$q.screen.lt.sm" flat round dense icon="more_vert" @click="right = !right" />
       </q-toolbar>
     </q-header>
-    <q-drawer
-      v-model="left"
-      v-touch-swipe.mouse.left="handleleftSwipe"
-      bordered
-      side="left"
-      behavior="desktop"
-      :width="leftdrawer"
-      :mini="!left || miniState"
-      :overlay="!$q.screen.gt.xs ? true : false"
-      @click.capture="drawerClick"
-    >
+    <q-drawer v-model="left" v-touch-swipe.mouse.left="handleleftSwipe" bordered side="left" behavior="desktop"
+      :width="leftdrawer" :mini="!left || miniState" :overlay="!$q.screen.gt.xs ? true : false"
+      @click.capture="drawerClick">
       <!-- drawer content -->
       <q-list bordered link class="rounded-borders">
         <div v-for="menus in menutree" :key="menus.id">
-          <treemenu
-            v-for="item in menus.children"
-            :key="item.id"
-            :children="item"
-            :depth="1"
-          ></treemenu>
+          <treemenu v-for="item in menus.children" :key="item.id" :children="item" :depth="1"></treemenu>
         </div>
       </q-list>
       <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
-        <q-btn
-          dense
-          round
-          unelevated
-          color="info"
-          icon="chevron_left"
-          @click="miniState = true"
-        />
+        <q-btn dense round unelevated color="info" icon="chevron_left" @click="miniState = true" />
       </div>
     </q-drawer>
-    <q-drawer
-      v-model="right"
-      v-touch-swipe.mouse.right="handlerightSwipe"
-      behavior="desktop"
-      overlay
-      bordered
-      @hide="saveToServer"
-      side="right"
-      :width="rightdrawer"
-    >
+    <q-drawer v-model="right" v-touch-swipe.mouse.right="handlerightSwipe" behavior="desktop" overlay bordered
+      @hide="saveToServer" side="right" :width="rightdrawer">
       <!-- drawer content -->
       <!-- 语言选择--->
       <div class="q-mt-sm">
         <q-list>
-          <q-expansion-item
-            v-if="!$q.screen.gt.xs"
-            expand-separator
-            icon="language"
-            class="text-primary text-weight-bold"
-            :label="this.$t('langs.title')"
-          >
-            <q-item
-              v-for="n in langs"
-              :key="n.value"
-              v-close-popup
-              v-ripple
-              clickable
-              style="border-bottom: 1px dashed #b5b5b5"
-              :class="lang.value === n.value ? 'text-primary' : 'text-grey-7'"
-              @click="setlanguage(n)"
-            >
+          <q-expansion-item v-if="!$q.screen.gt.xs" expand-separator icon="language"
+            class="text-primary text-weight-bold" :label="this.$t('langs.title')">
+            <q-item v-for="n in langs" :key="n.value" v-close-popup v-ripple clickable
+              style="border-bottom: 1px dashed #b5b5b5" :class="lang.value === n.value ? 'text-primary' : 'text-grey-7'"
+              @click="setlanguage(n)">
               <q-item-section avatar>
                 <q-icon size="30px" name="directions" />
               </q-item-section>
@@ -196,32 +101,16 @@
       <!-- 颜色选择--->
       <div class="q-mt-sm">
         <q-list>
-          <q-expansion-item
-            expand-separator
-            icon="palette"
-            class="text-primary text-weight-bold"
-            :label="this.$t('theme.title')"
-          >
+          <q-expansion-item expand-separator icon="palette" class="text-primary text-weight-bold"
+            :label="this.$t('theme.title')">
             <q-item>
               <q-item-section>
-                <q-toggle
-                  v-model="usercfg.dark"
-                  :label="this.$t('theme.shieldeye')"
-                ></q-toggle>
+                <q-toggle v-model="usercfg.dark" :label="this.$t('theme.shieldeye')"></q-toggle>
               </q-item-section>
             </q-item>
-            <q-item
-              v-for="n in themeoptions"
-              :key="n.value"
-              v-close-popup
-              v-ripple
-              clickable
-              style="border-bottom: 1px dashed #b5b5b5"
-              :class="
-                usercfg.theme === n.value ? 'text-primary' : 'text-grey-7'
-              "
-              @click="setthemecolor(n.value)"
-            >
+            <q-item v-for="n in themeoptions" :key="n.value" v-close-popup v-ripple clickable
+              style="border-bottom: 1px dashed #b5b5b5" :class="usercfg.theme === n.value ? 'text-primary' : 'text-grey-7'
+                " @click="setthemecolor(n.value)">
               <q-item-section avatar>
                 <q-icon size="30px" name="directions" />
               </q-item-section>
@@ -235,22 +124,10 @@
       <!-- 历史记录--->
       <div class="q-mt-sm">
         <q-list>
-          <q-expansion-item
-            expand-separator
-            icon="history"
-            class="text-primary text-weight-bold"
-            :label="this.$t('history.title')"
-          >
-            <q-item
-              v-for="n in MyHistoryList"
-              :key="n.id"
-              v-close-popup
-              v-ripple
-              clickable
-              style="border-bottom: 1px dashed #b5b5b5"
-              class="text-grey-7"
-              :to="n.url"
-            >
+          <q-expansion-item expand-separator icon="history" class="text-primary text-weight-bold"
+            :label="this.$t('history.title')">
+            <q-item v-for="n in MyHistoryList" :key="n.id" v-close-popup v-ripple clickable
+              style="border-bottom: 1px dashed #b5b5b5" class="text-grey-7" :to="n.url">
               <q-item-section avatar>
                 <q-icon :name="n.icon" />
               </q-item-section>
@@ -274,29 +151,12 @@
     <q-footer reveal bordered class="bg-white text-primary">
       <q-toolbar>
         <q-toolbar-title></q-toolbar-title>
-        <q-btn-dropdown
-          stretch
-          flat
-          dense
-          icon="person_outline"
-          :title="this.$t('auth.personprfile')"
-        >
+        <q-btn-dropdown stretch flat dense icon="person_outline" :title="this.$t('auth.personprfile')">
           <q-list separator style="overflow: hidden">
             <div v-for="item in menuB" :key="item.id">
-              <q-item
-                v-if="item.ismenu.indexOf('B') !== -1"
-                v-ripple
-                clickable
-                tag="a"
-                :to="item.url"
-              >
+              <q-item v-if="item.ismenu.indexOf('B') !== -1" v-ripple clickable tag="a" :to="item.url">
                 <q-item-section avatar>
-                  <q-avatar
-                    color="secondary"
-                    text-color="white"
-                    :icon="item.icon"
-                    size="30px"
-                  ></q-avatar>
+                  <q-avatar color="secondary" text-color="white" :icon="item.icon" size="30px"></q-avatar>
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ item.title }}</q-item-label>
@@ -305,12 +165,7 @@
             </div>
             <q-item v-ripple clickable tag="a" @click="logout">
               <q-item-section avatar>
-                <q-avatar
-                  color="secondary"
-                  text-color="white"
-                  icon="exit_to_app"
-                  size="30px"
-                ></q-avatar>
+                <q-avatar color="secondary" text-color="white" icon="exit_to_app" size="30px"></q-avatar>
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{ $t("auth.logout.logout") }}</q-item-label>
@@ -326,7 +181,7 @@
 <script>
 // import NestedTest from "../pages/modules/nested-tree";
 import { useZeroStore } from "stores/zero";
-import treemenu from "../pages/modules/treemenu";
+import treemenu from "../pages/modules/treemenu.vue";
 import { setCssVar } from "quasar";
 import { defineComponent } from "vue";
 
@@ -339,7 +194,6 @@ export default defineComponent({
       MyRoleList: [],
       blRouterReady: false,
       usercfg: { theme: "blue", dark: false },
-      themeoptions: this.$tm("menu.themeoptions"),
       left: false,
       right: false,
       leftdrawer: 210,
@@ -356,7 +210,10 @@ export default defineComponent({
           value: "en-US",
         },
       ],
-      lang: this.$i18n.locale,
+      lang: {
+        label: "中文",
+        value: "zh-CN",
+      }, // 默认值，将在 mounted 中根据保存的设置更新
     };
   },
   setup() {
@@ -385,17 +242,23 @@ export default defineComponent({
         }
         return tmphistory;
       },
-      set(value) {},
+      set(value) { },
     },
     menuB: {
       get() {
         return this.store?.ZPermissions?.modules;
       },
-      set(value) {},
+      set(value) { },
     },
     currectRole: {
       get() {
         return this.store?.ZPermissions?.currectrole;
+      },
+    },
+    themeoptions: {
+      get() {
+        // 使用计算属性，使其随语言切换自动更新
+        return this.$tm("menu.themeoptions") || [];
       },
     },
   },
@@ -404,17 +267,49 @@ export default defineComponent({
       this.applydarkmode();
     },
     lang(lang) {
-      this.$i18n.locale = lang.value;
-      // set quasar's language too!!
-      import(`quasar/lang/${lang.value}`).then((language) => {
-        this.$q.lang.set(language.default);
-      });
+      if (lang && lang.value) {
+        this.$i18n.locale = lang.value;
+        // 保存到本地存储
+        this.$q.localStorage.set('locale', lang.value);
+        // set quasar's language too!!
+        const langMap = {
+          'zh-CN': () => import('quasar/lang/zh-CN'),
+          'en-US': () => import('quasar/lang/en-US'),
+        };
+        const langLoader = langMap[lang.value];
+        if (langLoader) {
+          langLoader().then((language) => {
+            this.$q.lang.set(language.default);
+          }).catch((err) => {
+            console.warn(`Quasar language pack for ${lang.value} not found, using default`, err);
+          });
+        } else {
+          console.warn(`Unsupported locale: ${lang.value}, using default`);
+        }
+      }
     },
   },
   mounted() {
     // cache the user id
-    this.userID = this.$auth.user().id;
-    this.lang = this.langs.filter((lan) => lan.value === this.lang)[0];
+    if (this.$auth.check()) {
+      this.userID = this.$auth.user().id;
+    }
+    // 从本地存储恢复语言设置
+    const savedLocale = this.$q.localStorage.getItem('locale') || this.$i18n.locale;
+    this.lang = this.langs.find((lan) => lan.value === savedLocale) || this.langs[0];
+    // 初始化 Quasar 语言包
+    const langMap = {
+      'zh-CN': () => import('quasar/lang/zh-CN'),
+      'en-US': () => import('quasar/lang/en-US'),
+    };
+    const langLoader = langMap[savedLocale];
+    if (langLoader) {
+      langLoader().then((language) => {
+        this.$q.lang.set(language.default);
+      }).catch((err) => {
+        console.warn(`Quasar language pack for ${savedLocale} not found, using default`, err);
+      });
+    }
     //如果登录了
     if (this.$auth.check()) {
       if (this.$auth.user().usercfg) {
@@ -456,7 +351,11 @@ export default defineComponent({
           });
       });
 
-      if (this.usercfg?.theme) this.applytheme(this.usercfg?.theme);
+      // 应用主题与暗色模式：
+      // 如果用户未配置主题，则默认使用 'blue'，以保证自定义按钮颜色（addbtn、deldbtn 等）始终可用
+      const theme = this.usercfg?.theme || 'blue';
+      this.applytheme(theme);
+
       if (this.usercfg?.dark) this.applydarkmode();
     }
   },

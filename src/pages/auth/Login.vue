@@ -165,10 +165,15 @@ export default {
         this.v$.data.$touch();
         if (!this.v$.data.$error) {
           console.log(this.data.data, "------");
-          var path =
-            cordova.file.externalRootDirectory + "AsmartApp/Login.json";
-          var reader = new FileReader();
-          reader.readAsText(path);
+          // 检查是否在 cordova 环境中
+          if (typeof cordova !== 'undefined' && cordova.file) {
+            var path =
+              cordova.file.externalRootDirectory + "AsmartApp/Login.json";
+            var reader = new FileReader();
+            reader.readAsText(path);
+          } else {
+            console.warn("Cordova is not available, offline login is not supported in this environment");
+          }
         }
       } else {
         // 在线登录
@@ -229,7 +234,8 @@ export default {
               }
               this.$q.localStorage.set("rememberMe", this.data.rememberMe);
               /* eslint-disable */
-              if (device.platform === "Android") {
+              // 检查是否在 cordova 环境中
+              if (typeof cordova !== 'undefined' && cordova.file && typeof device !== 'undefined' && device.platform === "Android") {
                 var path =
                   cordova.file.externalRootDirectory + "AsmartApp/Login.json";
                 let tmplogin = [];
@@ -240,6 +246,16 @@ export default {
               /* eslint-enable */
             })
             .catch((error) => {
+              // 处理网络连接错误
+              if (error.isNetworkError || !error.response) {
+                this.$q.dialog({
+                  title: this.$t("auth.network_error"),
+                  message: error.networkErrorMessage || this.$t("auth.network_connection_error"),
+                });
+                return;
+              }
+              
+              // 处理服务器响应错误
               if (error.response) {
                 if (error.response.status === 401) {
                   this.$q.dialog({

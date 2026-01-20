@@ -155,6 +155,21 @@ export default {
             });
           })
           .catch((error) => {
+            // 处理网络连接错误
+            if (error.isNetworkError || !error.response) {
+              this.$q.notify({
+                message: error.networkErrorMessage || this.$t("auth.network_connection_error"),
+                color: "red-5",
+                textColor: "white",
+                position: "center",
+                timeout: 5000,
+                multiLine: true,
+                actions: [{ icon: "close", color: "white" }],
+              });
+              return;
+            }
+            
+            // 处理服务器响应错误
             if (error.response) {
               if (error.response.status === 422) {
                 for (var key in error.response.data.error) {

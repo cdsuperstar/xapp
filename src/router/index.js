@@ -2,7 +2,6 @@ import { route } from "quasar/wrappers";
 
 import {
   createRouter,
-  useRoute,
   createMemoryHistory,
   createWebHistory,
   createWebHashHistory,
@@ -17,15 +16,14 @@ import routes from "./routes";
  * async/await or return a Promise which resolves
  * with the Router instance.
  */
-if (process.env.DEV) {
+if (import.meta.env.DEV) {
   console.log("router/index.js excuted");
 }
-const Route = useRoute();
 
 export default route(function (/* { store, ssrContext } */) {
-  const createHistory = process.env.SERVER
+  const createHistory = import.meta.env.SSR
     ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === "history"
+    : import.meta.env.VITE_ROUTER_MODE === "history"
     ? createWebHistory
     : createWebHashHistory;
 
@@ -37,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(
-      process.env.MODE === "ssr" ? void 0 : process.env.VUE_ROUTER_BASE
+      import.meta.env.MODE === "ssr" ? void 0 : import.meta.env.VITE_ROUTER_BASE
     ),
   });
 
