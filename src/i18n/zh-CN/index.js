@@ -135,6 +135,7 @@ export default {
     bexport: '[模块管理]是否有导出功能',
     bimport: '[模块管理]是否有导入功能',
     bSetTree: '[模块管理]是否有调整树功能',
+    noSelection: '未响应',
   },
   roles: {
     header: '角色管理',

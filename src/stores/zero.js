@@ -49,7 +49,7 @@ export const useZeroStore = defineStore('zero', {
 
         if (perm[0] === undefined) {
           iReq.syscfg = JSON.stringify(iReq.syscfg)
-          this.api
+          api
             .post('/zero/reqThePermission', iReq)
             .then((res) => {
               if (res.data.success) {
